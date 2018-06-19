@@ -2,14 +2,26 @@
 % Please edit documentation in R/seuratPlotly.R
 \name{GOBubblePlotly}
 \alias{GOBubblePlotly}
-\title{Title}
+\title{GOBubblePlotly}
 \usage{
-GOBubblePlotly(dataset, go_term, group.by = "ident", plot.height = 900,
-  plot.width = 900, filter = dataset@var.genes, ...)
+GOBubblePlotly(seuratObj, go_term, group.by = "ident", plot.height = 900,
+  plot.width = 900, filter = seuratObj@var.genes, ...)
 }
 \arguments{
-\item{...}{}
+\item{seuratObj}{Seurat object}
+
+\item{go_term}{Gene Ontology term identifier (i.e. GO:0046774)}
+
+\item{group.by}{Factor by which to group cells.  (default: ident)}
+
+\item{plot.height}{Plot height in pixels. (default: 900)}
+
+\item{plot.width}{Plot width in pixels. (default: 900)}
+
+\item{filter}{A list of gene names to filter the GO term members against. (default: seuratObj@var.genes)}
+
+\item{...options}{to pass to BubblePlotly}
 }
 \description{
-Title
+Produces a Bubble Plot for the genes of a given GO term.
 }

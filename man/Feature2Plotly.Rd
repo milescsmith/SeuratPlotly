@@ -2,17 +2,54 @@
 % Please edit documentation in R/seuratPlotly.R
 \name{Feature2Plotly}
 \alias{Feature2Plotly}
-\title{Title}
+\title{Feature2Plotly}
 \usage{
 Feature2Plotly(seuratObj, feature.1.use = NULL, feature.2.use = NULL,
-  do.return = FALSE, pt.scale = 1.5, pt.shape = "circle", alpha = 0.5,
+  do.return = FALSE, pt.scale = 1.5, pt.shape = "circle", opacity = 0.5,
   reduction.use = "tsne", dim.1 = 1, dim.2 = 2, colors.use.1 = "Reds",
   colors.use.2 = "Blues", bins = 10, plot.height = "750",
   plot.width = "750", pt.info = NULL, legend = TRUE)
 }
 \arguments{
-\item{legend}{}
+\item{seuratObj}{Seurat object}
+
+\item{feature.1.use}{First variable to display. Currently only works with gene names}
+
+\item{feature.2.use}{Second variable to display. Currently only works with gene names}
+
+\item{do.return}{Return the plot object instead of displaying it (default: FALSE)}
+
+\item{pt.scale}{Factor by which to multiply the size of the points (default: 5)}
+
+\item{pt.shape}{Shape to use for the points (default = circle)}
+
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+
+\item{reduction.use}{Dimensional reduction to display (default: umap)}
+
+\item{dim.1}{Dimension to display on the x-axis (default: 1)}
+
+\item{dim.2}{Dimension to display on the y-axis (default: 2)}
+
+\item{colors.use.1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)}
+
+\item{colors.use.2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)}
+
+\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+
+\item{plot.height}{Plot height in pixels (default: 600)}
+
+\item{plot.width}{Plot width in pixels (default: 600)}
+
+\item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
+
+\item{legend}{Display legend (default TRUE)}
+
+\item{plot.title}{Display title with the name of the feature? (default TRUE)}
 }
 \description{
-Title
+Create a scatterplot of a given dimensional reduction set for a Seurat object,
+coloring and sizing points by the expression level of two different features.
+Requrires a Seurat object with the reduction to be used in the corresponding
+seuratObj@dr slot
 }

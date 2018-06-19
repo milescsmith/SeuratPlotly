@@ -1,11 +1,4 @@
 #seuratPlotly.R: Functions replacing the ggplot2-based ploting functions of Seurat with those of Plot.ly
-require(Seurat)
-require(RColorBrewer)
-require(plotly)
-require(colorRamps)
-require(viridis)
-require(tidyverse)
-
 
 #' Plot dimensional reduction for a Seurat object
 #'
@@ -24,30 +17,31 @@ require(tidyverse)
 #' @param show.arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
 #' @param pt.size Size of the points in pixels (default: 2)
 #' @param pt.shape Shape to use for the points (default: circle)
-#' @param alpha Transparency level to use for the points on a 0-1 scale (default: 1)
-#' @param colors.use Color palette to use.  Palettes from RColorBrewer and vividian
+#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
+#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis
 #' @param plot.height Plot height in pixels (default: 600)
 #' @param plot.width Plot width in pixels (default: 600)
 #' @param legend Display legend (default TRUE)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #'
+#' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @importFrom Seurat GetDimReduction
 #' @importFrom Seurat FetchData
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom RColorBrewer brewer.pal.info
 #' @importFrom viridis viridis
-#' @importFrom dplyr group_by
-#' @importFrom dplyr summarize
 #' @importFrom plotly plot_ly
-#' @importFrom utils getFromNamespace
+#' @importFrom plotly layout
+#' @importFrom grDevices colorRampPalette
 #'
 #' @return plotly object
 #' @export
 #'
 #' @examples
 #' seuratObj <- RunTSNE(seuratObj)
-#' DimPlotly(seuratObj, group.by = 'ident', pt.size = 4, alpha = 0.5, plot.title = "Test Plot", reduction.use = "tsne")
+#' DimPlotly(seuratObj, group.by = 'ident', pt.size = 4, opacity = 0.5, plot.title = "Test Plot", reduction.use = "tsne")
 DimPlotly <- function(seuratObj,
                       group.by = "ident",
                       do.label = FALSE,
@@ -56,7 +50,7 @@ DimPlotly <- function(seuratObj,
                       do.return = FALSE,
                       pt.size = 2,
                       pt.shape = "circle",
-                      alpha = 1,
+                      opacity = 1,
                       reduction.use = "umap",
                       dim.1 = 1,
                       dim.2 = 2,
@@ -122,9 +116,9 @@ DimPlotly <- function(seuratObj,
 
   viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
   bins = length(unique(df[,'ident']))
-  getFromNamespace('colorRampPalette', 'colorRamps')
+
   if (colors.use %in% rownames(brewer.pal.info)){
-    pal <- colorRamps:::colorRampPalette(brewer.pal(brewer.pal.info[colors.use,]$maxcolors,colors.use))(bins)
+    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors.use,]$maxcolors,colors.use))(bins)
   } else if (colors.use %in% viridis_palettes){
     pal <- viridis(n = bins, option = colors.use)
   } else {
@@ -155,7 +149,7 @@ DimPlotly <- function(seuratObj,
                colors = pal,
                marker = list(symbol = pt.shape,
                              size = pt.size,
-                             opacity = alpha,
+                             opacity = opacity,
                              mode = "markers",
                              type = "scattergl"),
                width = plot.width,
@@ -198,8 +192,8 @@ DimPlotly <- function(seuratObj,
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #' @param pt.size Size of the points in pixels (default: 2)
 #' @param pt.shape Shape to use for the points (default: circle)
-#' @param alpha Transparency level to use for the points on a 0-1 scale (default: 1)
-#' @param colors.use Color palette to use.  Accepts palettes from RColorBrewer and vividian (default: Set1)
+#' @param opacity Transparency level to use for the points on a 0-1 scale (default: 1)
+#' @param colors.use Color palette to use.  Accepts palettes from RColorBrewer and viridis (default: Set1)
 #' @param plot.height Plot height in pixels (default: 600)
 #' @param plot.width Plot width in pixels (default: 600)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
@@ -208,10 +202,22 @@ DimPlotly <- function(seuratObj,
 #' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
 #' @param plot.grid Display the major unit tick marks? (default: FALSE)
 #'
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom Seurat GetDimReduction
+#' @importFrom Seurat FetchData
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom viridis viridis
+#' @importFrom plotly plot_ly
+#' @importFrom plotly layout
+#' @importFrom grDevices colorRampPalette
+#'
 #' @return plotly object
 #' @export
 #'
 #' @examples DimPlotly3D(seuratObj, group.by = "res.0.6", do.label = TRUE, show.arrow = FALSE)
+#'
 DimPlotly3D <- function(seuratObj,
                         group.by = "ident",
                         do.label = FALSE,
@@ -219,7 +225,7 @@ DimPlotly3D <- function(seuratObj,
                         do.return = FALSE,
                         pt.size = 2,
                         pt.shape = "circle",
-                        alpha = 1,
+                        opacity = 1,
                         reduction.use = "umap",
                         dim.1 = 1,
                         dim.2 = 2,
@@ -345,7 +351,7 @@ DimPlotly3D <- function(seuratObj,
                colors = pal,
                marker = list(symbol = pt.shape,
                              "size" = pt.size,
-                             opacity = alpha,
+                             opacity = opacity,
                              mode = "markers"),
                width = plot.width,
                height = plot.height,
@@ -386,26 +392,42 @@ DimPlotly3D <- function(seuratObj,
   }
 }
 
-#' Title
+#' FeaturePlotly
 #'
-#' @param seuratObj
-#' @param feature.use
-#' @param do.return
-#' @param pt.scale
-#' @param pt.shape
-#' @param alpha
-#' @param reduction.use
-#' @param dim.1
-#' @param dim.2
-#' @param colors.use
-#' @param bins
-#' @param plot.height
-#' @param plot.width
-#' @param plot.title
-#' @param pt.info
-#' @param legend
+#' Create a scatterplot of a given dimensional reduction set for a Seurat object,
+#' coloring and sizing points by the expression level of the chosen feature.
+#' Requrires a Seurat object with the reduction to be used in the corresponding
+#' seuratObj@@dr slot
 #'
-#' @return
+#' @param seuratObj Seurat object
+#' @param feature.use Variable to display. Currently only works with gene names
+#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param dim.1 Dimension to display on the x-axis (default: 1)
+#' @param dim.2 Dimension to display on the y-axis (default: 2)
+#' @param pt.scale Factor by which to multiply the size of the points (default: 5)
+#' @param pt.shape Shape to use for the points (default = circle)
+#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
+#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param bins Number of bins to use in dividing expression levels. (default: 10)
+#' @param plot.height Plot height in pixels (default: 600)
+#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.title  Display title with the name of the feature? (default TRUE)
+#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
+#' @param legend Display legend (default TRUE)
+#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#'
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom Seurat GetDimReduction
+#' @importFrom Seurat FetchData
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom viridis viridis
+#' @importFrom plotly plot_ly
+#' @importFrom plotly layout
+#' @importFrom grDevices colorRampPalette
+#'
+#' @return plotly object
 #' @export
 #'
 #' @examples
@@ -414,7 +436,7 @@ FeaturePlotly <- function(seuratObj,
                           do.return = TRUE,
                           pt.scale = 5,
                           pt.shape = "circle",
-                          alpha = 1,
+                          opacity = 1,
                           reduction.use = "umap",
                           dim.1 = 1,
                           dim.2 = 2,
@@ -507,7 +529,7 @@ FeaturePlotly <- function(seuratObj,
                size = ~size,
                sizes = c(0,max(df$size)),
                marker = list(symbol = pt.shape,
-                             opacity = alpha,
+                             opacity = opacity,
                              sizemode = "diameter"),
                width = plot.width,
                height = plot.height,
@@ -525,29 +547,45 @@ FeaturePlotly <- function(seuratObj,
   }
 }
 
-#' Title
+#' FeaturePlotly3D
 #'
-#' @param seuratObj
-#' @param feature.use
-#' @param do.return
-#' @param pt.scale
-#' @param pt.shape
-#' @param alpha
-#' @param reduction.use
-#' @param dim.1
-#' @param dim.2
-#' @param dim.3
-#' @param colors.use
-#' @param bins
-#' @param plot.height
-#' @param plot.width
-#' @param plot.title
-#' @param pt.info
-#' @param legend
-#' @param plot.grid
-#' @param plot.axes
+#' Create a scatterplot of a given dimensional reduction set for a Seurat object,
+#' coloring and sizing points by the expression level of the chosen feature.
+#' Requrires a Seurat object with the reduction to be used in the corresponding
+#' seuratObj@@dr slot
 #'
-#' @return
+#' @param seuratObj Seurat object
+#' @param feature.use Variable to display. Currently only works with gene names
+#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param dim.1 Dimension to display on the x-axis (default: 1)
+#' @param dim.2 Dimension to display on the y-axis (default: 2)
+#' @param dim.3 Dimension to display on the z-axis (default: 3)
+#' @param pt.scale Factor by which to multiply the size of the points (default: 5)
+#' @param pt.shape Shape to use for the points (default = circle)
+#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
+#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param bins Number of bins to use in dividing expression levels. (default: 10)
+#' @param plot.height Plot height in pixels (default: 600)
+#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.title  Display title with the name of the feature? (default TRUE)
+#' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
+#' @param plot.grid Display the major unit tick marks? (default: FALSE)
+#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
+#' @param legend Display legend (default TRUE)
+#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#'
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom Seurat GetDimReduction
+#' @importFrom Seurat FetchData
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom viridis viridis
+#' @importFrom plotly plot_ly
+#' @importFrom plotly layout
+#' @importFrom grDevices colorRampPalette
+#'
+#' @return If do.return is TRUE, a plotly object.
 #' @export
 #'
 #' @examples
@@ -556,7 +594,7 @@ FeaturePlotly3D <- function(seuratObj,
                             do.return = FALSE,
                             pt.scale = 0.1,
                             pt.shape = "circle",
-                            alpha = 1,
+                            opacity = 1,
                             reduction.use = "tsne",
                             dim.1 = 1,
                             dim.2 = 2,
@@ -653,7 +691,7 @@ FeaturePlotly3D <- function(seuratObj,
                size = ~size,
                sizes = c(0,max(df$size)),
                marker = list(symbol = pt.shape,
-                             opacity = alpha,
+                             opacity = opacity,
                              sizemode = "diameter"
                ),
                width = plot.width,
@@ -686,48 +724,64 @@ FeaturePlotly3D <- function(seuratObj,
 }
 
 # TODO: add more ways to sort/slice/dice!
-#' Title
+#' BubblePlotly
 #'
-#' @param object
-#' @param genes.plot
-#' @param colors.use
-#' @param col.min
-#' @param col.max
-#' @param dot.min
-#' @param dot.scale
-#' @param group.by
-#' @param plot.legend
-#' @param do.return
-#' @param x.lab.rot
-#' @param plot.width
-#' @param plot.height
-#' @param x.font.size
-#' @param y.font.size
-#' @param title.font.size
-#' @param legend.text.size
-#' @param scale
-#' @param opacity
-#' @param plot.title
-#' @param bins
-#' @param flip
-#' @param alphabetize
-#' @param pct.expr.thresh
-#' @param export.df
-#' @param use.scaled
-#' @param use.raw
-#' @param show.zeros
-#' @param add.group
-#' @param y.label.order
+#' Plot average expression levels and proportion expressing a feature arranged by given grouping.
+#' Color intensity of the markers indicates expression levels and size of the marker indicates
+#' the proportion of the group expressing the gene above a given threshold. By default, genes are arranged
+#' along the x-axis and groups along the y-axis.
 #'
-#' @return
+#' @param seuratObj Seurat object
+#' @param genes.plot A list of genes to plot for each group.
+#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param dot.min Minimium marker size, in pixels. (default: 0)
+#' @param dot.scale Factor by which to scale markers. (default: 2)
+#' @param group.by Factor by which to group cells.  (default: ident)
+#' @param legend Display legend. (currently nonfunctional) (default TRUE)
+#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#' @param x.lab.rot Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)
+#' @param plot.height Plot height in pixels. (default: 600)
+#' @param plot.width Plot width in pixels. (default: 600)
+#' @param x.font.size Size of the x-axis titles. (default: 10)
+#' @param y.font.size Size of the y-axis titles. (default: 10)
+#' @param title.font.size Size of the plot title. (default: 12)
+#' @param legend.text.size Size of the legend text. (default: 10)
+#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
+#' @param plot.title  Display title with the name of the feature? (default TRUE)
+#' @param bins Number of bins to use in dividing expression levels. (default: 10)
+#' @param flip Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. (default: false)
+#' @param alphabetize Alphabetize the display order of genes. (default: TRUE)
+#' @param pct.expr.thresh Hide a gene if there is no group that expresses at or above this percentage. (default: 0)
+#' @param export.df Return the generated data frame underlying the graph. (default: FALSE)
+#' @param use.scaled Use scaled data. (default: FALSE)
+#' @param use.raw Use raw data. (default: FALSE)
+#' @param show.zeros Display comparison groups for which there there was no data? (default: FALSE)
+#' @param add.group Add a null comparison group.  Will be initialized with zeros.
+#' @param y.label.order List of labels to use for the comparison groups.  Will be displayed in order of their index.
+#'
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom tidyr gather
+#' @importFrom tibble rownames_to_column
+#' @importFrom Seurat GetDimReduction
+#' @importFrom Seurat FetchData
+#' @importFrom Seurat SetAllIdent
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom viridis viridis
+#' @importFrom compositions normalize
+#' @importFrom plotly plot_ly
+#' @importFrom plotly layout
+#' @importFrom grDevices colorRampPalette
+#'
+#' @return if do.return is TRUE, a plotly object.
+#' @return if export.df is TRUE, a data frame.
 #' @export
 #'
 #' @examples
-BubblePlotly <- function (object,
+BubblePlotly <- function (seuratObj,
                           genes.plot,
                           colors.use = "Blues",
-                          col.min = 0,
-                          col.max = 10,
                           dot.min = 0,
                           dot.scale = 2,
                           group.by,
@@ -740,7 +794,6 @@ BubblePlotly <- function (object,
                           y.font.size = 10,
                           title.font.size = 12,
                           legend.text.size = 10,
-                          scale = 10,
                           opacity = 1,
                           plot.title = NULL,
                           bins = 50,
@@ -756,12 +809,12 @@ BubblePlotly <- function (object,
 {
 
   if (!missing(x = group.by)) {
-    object <- Seurat::SetAllIdent(object = object, id = group.by)
+    seuratObj <- SetAllIdent(object = seuratObj, id = group.by)
   }
 
   #screen out any genes that are not in our dataset and print them
   original_genes_to_plot <- genes.plot
-  genes.plot <- (genes.plot %>% as_tibble() %>% dplyr::filter(value %in% rownames(object@data)))$value
+  genes.plot <- (genes.plot %>% as_tibble() %>% dplyr::filter(value %in% rownames(seuratObj@data)))$value
   not_found <- original_genes_to_plot[!original_genes_to_plot %in% genes.plot]
   print(not_found)
 
@@ -772,15 +825,15 @@ BubblePlotly <- function (object,
   }
 
   if(isTRUE(use.scaled)){
-    data.to.plot <- data.frame(Seurat::FetchData(object = object,
+    data.to.plot <- data.frame(FetchData(object = seuratObj,
                                                  vars.all = genes.plot,
                                                  use.scaled = TRUE))
   } else if(isTRUE(use.raw)){
-    data.to.plot <- data.frame(Seurat::FetchData(object = object,
+    data.to.plot <- data.frame(FetchData(object = seuratObj,
                                                  vars.all = genes.plot,
                                                  use.scaled = FALSE))
   } else {
-    data.to.plot <- data.frame(Seurat::FetchData(object = object,
+    data.to.plot <- data.frame(FetchData(object = seuratObj,
                                                  vars.all = genes.plot))
   }
 
@@ -793,13 +846,10 @@ BubblePlotly <- function (object,
 
   data.to.plot <- rownames_to_column(df = data.to.plot, var = "cell")
 
-  data.to.plot$id <- object@ident
-
+  data.to.plot$id <- seuratObj@ident
 
   data.to.plot <- data.to.plot %>% gather(key = genes.plot,
                                           value = expression, -c(cell, id))
-
-
 
   data.to.plot <- data.to.plot %>% group_by(id, genes.plot) %>%
     summarize(avg.exp = mean(expm1(x = expression)),
@@ -811,7 +861,7 @@ BubblePlotly <- function (object,
   }
 
   data.to.plot <- data.to.plot %>% ungroup() %>% group_by(genes.plot) %>%
-    mutate(avg.exp.scale = compositions::normalize(x = avg.exp))
+    mutate(avg.exp.scale = normalize(x = avg.exp))
 
 
   data.to.plot$genes.plot <- factor(x = data.to.plot$genes.plot,
@@ -823,21 +873,10 @@ BubblePlotly <- function (object,
 
   data.to.plot <- as.data.frame(data.to.plot)
 
-  # cut.avg.exp.scale.data <-
-  #   as.factor(
-  #     as.numeric(
-  #       x = cut(
-  #         x = data.to.plot$avg.exp.scale,
-  #         breaks = bins
-  #       )
-  #     )
-  #   )
-
   cut.avg.exp.scale.data <- factor(round(data.to.plot$avg.exp.scale*100,0)+1)
 
-
   data.to.plot[,"feature"] <- cut.avg.exp.scale.data
-  data.to.plot[,"scaled.size"] <- data.to.plot$pct.exp *scale
+  data.to.plot[,"size"] <- data.to.plot$pct.exp
 
   if(!is.null(add.group)){
     for(i in add.group){
@@ -849,7 +888,7 @@ BubblePlotly <- function (object,
                      pct.exp = 0,
                      n = 0,
                      avg.exp.scale=0,
-                     scaled.size=0,
+                     size=0,
                      feature=factor(1))) %>%
           distinct()
       }
@@ -892,7 +931,7 @@ BubblePlotly <- function (object,
                colors = pal,
                cmin = pal[1],
                cmax = pal[100],
-               size = ~scaled.size,
+               size = ~size,
                sizes = c(0,10)*dot.scale,
                marker = list(opacity = opacity,
                              symbol = 'circle',
@@ -920,12 +959,13 @@ BubblePlotly <- function (object,
   # print(length(unique(data.to.plot$genes.plot)))
 }
 
-#' Title
+#' PercentAbove
 #'
-#' @param x
-#' @param threshold
+#' Return the percentage of a list that is above a threshold
+#' @param x A list of numeric values.
+#' @param threshold A numeric threshold value.
 #'
-#' @return
+#' @return double
 #' @export
 #'
 #' @examples
@@ -933,25 +973,42 @@ PercentAbove <- function(x, threshold){
   return(length(x = x[x > threshold]) / length(x = x))
 }
 
-#' Title
+#' Feature2Plotly
 #'
-#' @param seuratObj
-#' @param feature.1.use
-#' @param feature.2.use
-#' @param do.return
-#' @param pt.scale
-#' @param pt.shape
-#' @param alpha
-#' @param reduction.use
-#' @param dim.1
-#' @param dim.2
-#' @param colors.use.1
-#' @param colors.use.2
-#' @param bins
-#' @param plot.height
-#' @param plot.width
-#' @param pt.info
-#' @param legend
+#' Create a scatterplot of a given dimensional reduction set for a Seurat object,
+#' coloring and sizing points by the expression level of two different features.
+#' Requrires a Seurat object with the reduction to be used in the corresponding
+#' seuratObj@@dr slot
+#'
+#' @param seuratObj Seurat object
+#' @param feature.1.use First variable to display. Currently only works with gene names
+#' @param feature.2.use Second variable to display. Currently only works with gene names
+#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param dim.1 Dimension to display on the x-axis (default: 1)
+#' @param dim.2 Dimension to display on the y-axis (default: 2)
+#' @param pt.scale Factor by which to multiply the size of the points (default: 5)
+#' @param pt.shape Shape to use for the points (default = circle)
+#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
+#' @param colors.use.1 Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param colors.use.2 Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param bins Number of bins to use in dividing expression levels. (default: 10)
+#' @param plot.height Plot height in pixels (default: 600)
+#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.title  Display title with the name of the feature? (default TRUE)
+#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
+#' @param legend Display legend (default TRUE)
+#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#'
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom Seurat GetDimReduction
+#' @importFrom Seurat FetchData
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom viridis viridis
+#' @importFrom plotly plot_ly
+#' @importFrom plotly layout
+#' @importFrom grDevices colorRampPalette
 #'
 #' @return
 #' @export
@@ -963,7 +1020,7 @@ Feature2Plotly <- function(seuratObj,
                            do.return = FALSE,
                            pt.scale = 1.5,
                            pt.shape = "circle",
-                           alpha = 0.5,
+                           opacity = 0.5,
                            reduction.use = "tsne",
                            dim.1 = 1,
                            dim.2 = 2,
@@ -1069,7 +1126,7 @@ Feature2Plotly <- function(seuratObj,
                size = ~size.1,
                sizes = c(0,max(df$size.1)),
                marker = list(symbol = pt.shape,
-                             opacity = alpha,
+                             opacity = opacity,
                              sizemode = "diameter"
                ),
                width = plot.width,
@@ -1085,7 +1142,7 @@ Feature2Plotly <- function(seuratObj,
               size = ~size.2,
               sizes = c(0,max(df$size.2)),
               marker = list(symbol = pt.shape,
-                            opacity = alpha,
+                            opacity = opacity,
                             sizemode = "diameter"),
               showlegend = legend) %>%
     layout(title = paste(feature.1.use, feature.2.use, sep = " x "),
@@ -1112,30 +1169,47 @@ Feature2Plotly <- function(seuratObj,
   }
 }
 
-#' Title
+#' Feature2Plotly3D
 #'
-#' @param seuratObj
-#' @param feature.1.use
-#' @param feature.2.use
-#' @param do.return
-#' @param pt.scale
-#' @param pt.shape
-#' @param alpha
-#' @param reduction.use
-#' @param dim.1
-#' @param dim.2
-#' @param dim.3
-#' @param colors.use.1
-#' @param colors.use.2
-#' @param bins
-#' @param plot.height
-#' @param plot.width
-#' @param pt.info
-#' @param legend
-#' @param plot.grid
-#' @param plot.axes
+#' Create a scatterplot of a given dimensional reduction set for a Seurat object,
+#' coloring and sizing points by the expression level of the chosen feature.
+#' Requrires a Seurat object with the reduction to be used in the corresponding
+#' seuratObj@@dr slot
 #'
-#' @return
+#' @param seuratObj Seurat object
+#' @param feature.1.use First variable to display. Currently only works with gene names
+#' @param feature.2.use Second variable to display. Currently only works with gene names
+#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param dim.1 Dimension to display on the x-axis (default: 1)
+#' @param dim.2 Dimension to display on the y-axis (default: 2)
+#' @param dim.3 Dimension to display on the z-axis (default: 3)
+#' @param pt.scale Factor by which to multiply the size of the points (default: 5)
+#' @param pt.shape Shape to use for the points (default = circle)
+#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
+#' @param colors.use.1 Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param colors.use.2 Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param bins Number of bins to use in dividing expression levels. (default: 10)
+#' @param plot.height Plot height in pixels (default: 600)
+#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.title  Display title with the name of the feature? (default TRUE)
+#' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
+#' @param plot.grid Display the major unit tick marks? (default: FALSE)
+#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
+#' @param legend Display legend (default TRUE)
+#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#'
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+#' @importFrom Seurat GetDimReduction
+#' @importFrom Seurat FetchData
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom viridis viridis
+#' @importFrom plotly plot_ly
+#' @importFrom plotly layout
+#' @importFrom grDevices colorRampPalette
+#'
+#' @return If do.return is TRUE, a plotly object.
 #' @export
 #'
 #' @examples
@@ -1145,7 +1219,7 @@ Feature2Plotly3D <- function(seuratObj,
                              do.return = FALSE,
                              pt.scale = 0.5,
                              pt.shape = "circle",
-                             alpha = 1,
+                             opacity = 1,
                              reduction.use = "tsne",
                              dim.1 = 1,
                              dim.2 = 2,
@@ -1257,7 +1331,7 @@ Feature2Plotly3D <- function(seuratObj,
                size = ~size.1,
                sizes = c(0,max(df$size.1)),
                marker = list(symbol = pt.shape,
-                             opacity = alpha,
+                             opacity = opacity,
                              sizemode = "diameter"),
                width = plot.width,
                height = plot.height,
@@ -1273,7 +1347,7 @@ Feature2Plotly3D <- function(seuratObj,
               size = ~size.2,
               sizes = c(0,max(df$size.2)),
               marker = list(symbol = pt.shape,
-                            opacity = alpha,
+                            opacity = opacity,
                             sizemode = "diameter"),
               showlegend = legend) %>%
     layout(title = paste(feature.1.use, feature.2.use, sep = " x "),
@@ -1304,51 +1378,71 @@ Feature2Plotly3D <- function(seuratObj,
   }
 }
 
-#' Title
+#' retrieveGO
 #'
-#' @param term
+#' Retrieve the HUGO Gene Nomenclature Committee names associated with a GeneOntology term.
 #'
-#' @return
+#' @param term GO ID to retreive names for.
+#' @param mart Biomart database to use (default: 'ensembl')
+#' @param dataset Biomart dataset to use (default: 'hsapiens_gene_ensembl')
+#'
+#' @importFrom biomaRt useMart
+#' @importFrom biomaRt getBM
+#' @return A list of HCGN names.
 #' @export
 #'
-#' @examples
-retrieveGO <- function(term){
-  library(biomaRt)
-  ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl") #uses human ensembl annotations
-  #gets gene symbol, transcript_id and go_id for all genes annotated with GO:0007507
+#' @examples genes_to_plot <- retrieveGO('GO:0046774')
+#'
+retrieveGO <- function(term, mart = 'ensembl', dataset='hsapiens_gene_ensembl'){
   gene.data <- getBM(attributes=c('hgnc_symbol', 'ensembl_transcript_id', 'go_id'),
-                     filters = 'go', values = term, mart = ensembl)
+                     filters = 'go',
+                     values = term,
+                     mart = useMart(mart,dataset=dataset)
+                     )
   return(gene.data)
 }
 
-#' Title
+#' GOBubblePlotly
 #'
-#' @param dataset
-#' @param go_term
-#' @param group.by
-#' @param plot.height
-#' @param plot.width
-#' @param filter
-#' @param ...
+#' Produces a Bubble Plot for the genes of a given GO term.
+#'
+#' @param seuratObj Seurat object
+#' @param go_term Gene Ontology term identifier (i.e. GO:0046774)
+#' @param group.by Factor by which to group cells.  (default: ident)
+#' @param plot.height Plot height in pixels. (default: 900)
+#' @param plot.width Plot width in pixels. (default: 900)
+#' @param filter A list of gene names to filter the GO term members against. (default: seuratObj@var.genes)
+#' @param ...options to pass to BubblePlotly
+#'
+#' @import dplyr
+#' @importFrom magrittr "%>%"
 #'
 #' @return
 #' @export
 #'
 #' @examples
-GOBubblePlotly <- function(dataset,
+GOBubblePlotly <- function(seuratObj,
                            go_term,
                            group.by = "ident",
                            plot.height = 900,
                            plot.width = 900,
-                           filter = dataset@var.genes,
+                           filter = seuratObj@var.genes,
                            ...){
-  BubblePlotly(dataset,
-               genes.plot = (retrieveGO(go_term) %>%
-                               dplyr::select(hgnc_symbol) %>%
-                               distinct() %>%
-                               filter(hgnc_symbol %in% filter))$hgnc_symbol,
-               group.by = group.by,
-               plot.height = plot.height,
-               plot.width = plot.width,
-               ...)
+
+  go_genes_to_plot <- retrieveGO(go_term) %>%
+                      select(hgnc_symbol) %>%
+                      distinct() %>%
+                      filter(hgnc_symbol %in% filter)
+
+  if(length(go_genes_to_plot) > 0){
+    BubblePlotly(seuratObj,
+                 genes.plot = go_genes_to_plot$hgnc_symbol,
+                 group.by = group.by,
+                 plot.height = plot.height,
+                 plot.width = plot.width,
+                 ...)
+  } else {
+    print("No genes for that term are expressed in the dataset.")
+  }
+
 }

@@ -2,21 +2,80 @@
 % Please edit documentation in R/seuratPlotly.R
 \name{BubblePlotly}
 \alias{BubblePlotly}
-\title{Title}
+\title{BubblePlotly}
 \usage{
-BubblePlotly(object, genes.plot, colors.use = "Blues", col.min = 0,
-  col.max = 10, dot.min = 0, dot.scale = 2, group.by,
-  plot.legend = FALSE, do.return = FALSE, x.lab.rot = -45,
-  plot.width = 600, plot.height = 600, x.font.size = 10,
-  y.font.size = 10, title.font.size = 12, legend.text.size = 10,
-  scale = 10, opacity = 1, plot.title = NULL, bins = 50, flip = FALSE,
-  alphabetize = TRUE, pct.expr.thresh = NULL, export.df = FALSE,
-  use.scaled = FALSE, use.raw = FALSE, show.zeros = FALSE,
-  add.group = NULL, y.label.order = NULL)
+BubblePlotly(seuratObj, genes.plot, colors.use = "Blues", dot.min = 0,
+  dot.scale = 2, group.by, plot.legend = FALSE, do.return = FALSE,
+  x.lab.rot = -45, plot.width = 600, plot.height = 600,
+  x.font.size = 10, y.font.size = 10, title.font.size = 12,
+  legend.text.size = 10, opacity = 1, plot.title = NULL, bins = 50,
+  flip = FALSE, alphabetize = TRUE, pct.expr.thresh = NULL,
+  export.df = FALSE, use.scaled = FALSE, use.raw = FALSE,
+  show.zeros = FALSE, add.group = NULL, y.label.order = NULL)
 }
 \arguments{
-\item{y.label.order}{}
+\item{seuratObj}{Seurat object}
+
+\item{genes.plot}{A list of genes to plot for each group.}
+
+\item{colors.use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
+
+\item{dot.min}{Minimium marker size, in pixels. (default: 0)}
+
+\item{dot.scale}{Factor by which to scale markers. (default: 2)}
+
+\item{group.by}{Factor by which to group cells.  (default: ident)}
+
+\item{do.return}{Return the plot object instead of displaying it (default: FALSE)}
+
+\item{x.lab.rot}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)}
+
+\item{plot.width}{Plot width in pixels. (default: 600)}
+
+\item{plot.height}{Plot height in pixels. (default: 600)}
+
+\item{x.font.size}{Size of the x-axis titles. (default: 10)}
+
+\item{y.font.size}{Size of the y-axis titles. (default: 10)}
+
+\item{title.font.size}{Size of the plot title. (default: 12)}
+
+\item{legend.text.size}{Size of the legend text. (default: 10)}
+
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+
+\item{plot.title}{Display title with the name of the feature? (default TRUE)}
+
+\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+
+\item{flip}{Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. (default: false)}
+
+\item{alphabetize}{Alphabetize the display order of genes. (default: TRUE)}
+
+\item{pct.expr.thresh}{Hide a gene if there is no group that expresses at or above this percentage. (default: 0)}
+
+\item{export.df}{Return the generated data frame underlying the graph. (default: FALSE)}
+
+\item{use.scaled}{Use scaled data. (default: FALSE)}
+
+\item{use.raw}{Use raw data. (default: FALSE)}
+
+\item{show.zeros}{Display comparison groups for which there there was no data? (default: FALSE)}
+
+\item{add.group}{Add a null comparison group.  Will be initialized with zeros.}
+
+\item{y.label.order}{List of labels to use for the comparison groups.  Will be displayed in order of their index.}
+
+\item{legend}{Display legend. (currently nonfunctional) (default TRUE)}
+}
+\value{
+if do.return is TRUE, a plotly object.
+
+if export.df is TRUE, a data frame.
 }
 \description{
-Title
+Plot average expression levels and proportion expressing a feature arranged by given grouping.
+Color intensity of the markers indicates expression levels and size of the marker indicates
+the proportion of the group expressing the gene above a given threshold. By default, genes are arranged
+along the x-axis and groups along the y-axis.
 }

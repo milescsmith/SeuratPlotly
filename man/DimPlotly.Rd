@@ -6,7 +6,7 @@
 \usage{
 DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
   label.size = 12, show.arrow = FALSE, do.return = FALSE, pt.size = 2,
-  pt.shape = "circle", alpha = 1, reduction.use = "umap", dim.1 = 1,
+  pt.shape = "circle", opacity = 1, reduction.use = "umap", dim.1 = 1,
   dim.2 = 2, colors.use = "Set1", plot.height = "600",
   plot.width = "600", pt.info = NULL, legend = TRUE)
 }
@@ -27,7 +27,7 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{pt.shape}{Shape to use for the points (default: circle)}
 
-\item{alpha}{Transparency level to use for the points on a 0-1 scale (default: 1)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
 \item{reduction.use}{Dimensional reduction to display (default: umap)}
 
@@ -35,7 +35,7 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{dim.2}{Dimension to display on the y-axis (default: 2)}
 
-\item{colors.use}{Color palette to use.  Palettes from RColorBrewer and vividian}
+\item{colors.use}{Color palette to use.  Palettes from RColorBrewer and viridis}
 
 \item{plot.height}{Plot height in pixels (default: 600)}
 
@@ -56,5 +56,5 @@ seuratObj@dr slot
 }
 \examples{
 seuratObj <- RunTSNE(seuratObj)
-DimPlotly(seuratObj, group.by = 'ident', pt.size = 4, alpha = 0.5, plot.title = "Test Plot", reduction.use = "tsne")
+DimPlotly(seuratObj, group.by = 'ident', pt.size = 4, opacity = 0.5, plot.title = "Test Plot", reduction.use = "tsne")
 }

@@ -2,13 +2,24 @@
 % Please edit documentation in R/seuratPlotly.R
 \name{retrieveGO}
 \alias{retrieveGO}
-\title{Title}
+\title{retrieveGO}
 \usage{
-retrieveGO(term)
+retrieveGO(term, mart = "ensembl", dataset = "hsapiens_gene_ensembl")
 }
 \arguments{
-\item{term}{}
+\item{term}{GO ID to retreive names for.}
+
+\item{mart}{Biomart database to use (default: 'ensembl')}
+
+\item{dataset}{Biomart dataset to use (default: 'hsapiens_gene_ensembl')}
+}
+\value{
+A list of HCGN names.
 }
 \description{
-Title
+Retrieve the HUGO Gene Nomenclature Committee names associated with a GeneOntology term.
+}
+\examples{
+genes_to_plot <- retrieveGO('GO:0046774')
+
 }

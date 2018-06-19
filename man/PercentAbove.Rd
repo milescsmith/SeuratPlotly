@@ -2,13 +2,18 @@
 % Please edit documentation in R/seuratPlotly.R
 \name{PercentAbove}
 \alias{PercentAbove}
-\title{Title}
+\title{PercentAbove}
 \usage{
 PercentAbove(x, threshold)
 }
 \arguments{
-\item{threshold}{}
+\item{x}{A list of numeric values.}
+
+\item{threshold}{A numeric threshold value.}
+}
+\value{
+double
 }
 \description{
-Title
+Return the percentage of a list that is above a threshold
 }

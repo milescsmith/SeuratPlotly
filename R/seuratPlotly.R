@@ -9,7 +9,7 @@
 #'
 #' @param seuratObj Seurat object
 #' @param group.by Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
-#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
 #' @param dim.2 Dimension to display on the y-axis (default: 2)
 #' @param do.label Add a label showing thr group name to the graph (default: FALSE)
@@ -19,8 +19,8 @@
 #' @param pt.shape Shape to use for the points (default: circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
 #' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis
-#' @param plot.height Plot height in pixels (default: 600)
-#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.height Plot height in pixels (default: 900)
+#' @param plot.width Plot width in pixels (default: 900)
 #' @param legend Display legend (default TRUE)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
@@ -51,12 +51,12 @@ DimPlotly <- function(seuratObj,
                       pt.size = 2,
                       pt.shape = "circle",
                       opacity = 1,
-                      reduction.use = "umap",
+                      reduction.use = "tsne",
                       dim.1 = 1,
                       dim.2 = 2,
                       colors.use = "Set1",
-                      plot.height = "600",
-                      plot.width = "600",
+                      plot.height = 900,
+                      plot.width = 900,
                       pt.info = NULL,
                       legend = TRUE){
 
@@ -182,7 +182,7 @@ DimPlotly <- function(seuratObj,
 #'
 #' @param seuratObj Seurat object
 #' @param group.by Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
-#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
 #' @param dim.2 Dimension to display on the y-axis (default: 2)
 #' @param dim.3 Dimension to display on the z-axis (default: 3)
@@ -194,8 +194,8 @@ DimPlotly <- function(seuratObj,
 #' @param pt.shape Shape to use for the points (default: circle)
 #' @param opacity Transparency level to use for the points on a 0-1 scale (default: 1)
 #' @param colors.use Color palette to use.  Accepts palettes from RColorBrewer and viridis (default: Set1)
-#' @param plot.height Plot height in pixels (default: 600)
-#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.height Plot height in pixels (default: 900)
+#' @param plot.width Plot width in pixels (default: 900)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param legend Display legend (default: TRUE)
 #' @param plot.title Plot title (default: reduction.use)
@@ -226,13 +226,13 @@ DimPlotly3D <- function(seuratObj,
                         pt.size = 2,
                         pt.shape = "circle",
                         opacity = 1,
-                        reduction.use = "umap",
+                        reduction.use = "tsne",
                         dim.1 = 1,
                         dim.2 = 2,
                         dim.3 = 3,
                         colors.use = "Set1",
-                        plot.height = "600",
-                        plot.width = "600",
+                        plot.height = 900,
+                        plot.width = 900,
                         plot.title = NULL,
                         pt.info = NULL,
                         show.arrow = FALSE,
@@ -376,7 +376,7 @@ DimPlotly3D <- function(seuratObj,
       )
     )
 
-  if(!is.null(info)){
+  if(!is.null(pt.info)){
     p <- p %>% add_markers(hoverpt.info = "text",
                            hovertext = ~meta.info,
                            showlegend = FALSE
@@ -401,7 +401,7 @@ DimPlotly3D <- function(seuratObj,
 #'
 #' @param seuratObj Seurat object
 #' @param feature.use Variable to display. Currently only works with gene names
-#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
 #' @param dim.2 Dimension to display on the y-axis (default: 2)
 #' @param pt.scale Factor by which to multiply the size of the points (default: 5)
@@ -409,8 +409,8 @@ DimPlotly3D <- function(seuratObj,
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
 #' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
-#' @param plot.height Plot height in pixels (default: 600)
-#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.height Plot height in pixels (default: 900)
+#' @param plot.width Plot width in pixels (default: 900)
 #' @param plot.title  Display title with the name of the feature? (default TRUE)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param legend Display legend (default TRUE)
@@ -437,13 +437,13 @@ FeaturePlotly <- function(seuratObj,
                           pt.scale = 5,
                           pt.shape = "circle",
                           opacity = 1,
-                          reduction.use = "umap",
+                          reduction.use = "tsne",
                           dim.1 = 1,
                           dim.2 = 2,
                           colors.use = "Reds",
                           bins = 10,
-                          plot.height = "600",
-                          plot.width = "600",
+                          plot.height = 900,
+                          plot.width = 900,
                           plot.title = FALSE,
                           pt.info = NULL,
                           legend = TRUE){
@@ -466,7 +466,10 @@ FeaturePlotly <- function(seuratObj,
   )
 
   dim.code <- c(dim.axes[[dim.1]], dim.axes[[dim.2]])
+  df <- df[,dim.code]
   cell_names <- rownames(df)
+  ident <- as.factor(x = seuratObj@ident)
+
 
   df$x <- df[,1]
   df$y <- df[,2]
@@ -485,7 +488,7 @@ FeaturePlotly <- function(seuratObj,
     meta.info <- unlist(meta.info)
     df$meta.info <- meta.info
   } else {
-    df$meta.info <- NULL
+    df$meta.info <- seuratObj@ident
   }
 
   if (is.null(feature.use)){ stop("No gene or feature given") }
@@ -556,7 +559,7 @@ FeaturePlotly <- function(seuratObj,
 #'
 #' @param seuratObj Seurat object
 #' @param feature.use Variable to display. Currently only works with gene names
-#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
 #' @param dim.2 Dimension to display on the y-axis (default: 2)
 #' @param dim.3 Dimension to display on the z-axis (default: 3)
@@ -565,8 +568,8 @@ FeaturePlotly <- function(seuratObj,
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
 #' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
-#' @param plot.height Plot height in pixels (default: 600)
-#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.height Plot height in pixels (default: 900)
+#' @param plot.width Plot width in pixels (default: 900)
 #' @param plot.title  Display title with the name of the feature? (default TRUE)
 #' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
 #' @param plot.grid Display the major unit tick marks? (default: FALSE)
@@ -592,7 +595,7 @@ FeaturePlotly <- function(seuratObj,
 FeaturePlotly3D <- function(seuratObj,
                             feature.use = NULL,
                             do.return = FALSE,
-                            pt.scale = 0.1,
+                            pt.scale = 0.5,
                             pt.shape = "circle",
                             opacity = 1,
                             reduction.use = "tsne",
@@ -601,8 +604,8 @@ FeaturePlotly3D <- function(seuratObj,
                             dim.3 = 3,
                             colors.use = "Reds",
                             bins = 10,
-                            plot.height = "600",
-                            plot.width = "600",
+                            plot.height = 900,
+                            plot.width = 900,
                             plot.title = FALSE,
                             pt.info = NULL,
                             legend = TRUE,
@@ -647,7 +650,7 @@ FeaturePlotly3D <- function(seuratObj,
       meta.info <- c(meta.info, rowinfo)
     }
     meta.info <- unlist(meta.info)
-    df$meta.info <- meta.info
+    df$meta.info <- seuratObj@ident
   }
 
   if (is.null(feature.use)){ stop("No gene or feature given") }
@@ -740,8 +743,8 @@ FeaturePlotly3D <- function(seuratObj,
 #' @param legend Display legend. (currently nonfunctional) (default TRUE)
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #' @param x.lab.rot Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)
-#' @param plot.height Plot height in pixels. (default: 600)
-#' @param plot.width Plot width in pixels. (default: 600)
+#' @param plot.height Plot height in pixels. (default: 900)
+#' @param plot.width Plot width in pixels. (default: 900)
 #' @param x.font.size Size of the x-axis titles. (default: 10)
 #' @param y.font.size Size of the y-axis titles. (default: 10)
 #' @param title.font.size Size of the plot title. (default: 12)
@@ -983,7 +986,7 @@ PercentAbove <- function(x, threshold){
 #' @param seuratObj Seurat object
 #' @param feature.1.use First variable to display. Currently only works with gene names
 #' @param feature.2.use Second variable to display. Currently only works with gene names
-#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
 #' @param dim.2 Dimension to display on the y-axis (default: 2)
 #' @param pt.scale Factor by which to multiply the size of the points (default: 5)
@@ -992,8 +995,8 @@ PercentAbove <- function(x, threshold){
 #' @param colors.use.1 Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param colors.use.2 Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
-#' @param plot.height Plot height in pixels (default: 600)
-#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.height Plot height in pixels (default: 900)
+#' @param plot.width Plot width in pixels (default: 900)
 #' @param plot.title  Display title with the name of the feature? (default TRUE)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param legend Display legend (default TRUE)
@@ -1057,6 +1060,23 @@ Feature2Plotly <- function(seuratObj,
   df$y <- df[,2]
 
   #if (is.null(feature)){ stop("No gene or feature given") }
+  viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
+
+  if (colors.use.1 %in% rownames(brewer.pal.info)){
+    pal.1 <- colorRampPalette(brewer.pal(brewer.pal.info[colors.use.1,]$maxcolors,colors.use.1))(bins)
+  } else if (colors.use.1 %in% viridis_palettes){
+    pal.1 <- viridis(n = bins, option = colors.use.1)
+  } else {
+    pal.1 <- colors.use.1
+  }
+
+  if (colors.use.2 %in% rownames(brewer.pal.info)){
+    pal.2 <- colorRampPalette(brewer.pal(brewer.pal.info[colors.use.2,]$maxcolors,colors.use.2))(bins)
+  } else if (colors.use.2 %in% viridis_palettes){
+    pal.2 <- viridis(n = bins, option = colors.use.2)
+  } else {
+    pal.2 <- colors.use.2
+  }
 
   feature.1.data <- FetchData(object = seuratObj,
                               vars.all = feature.1.use,
@@ -1099,27 +1119,9 @@ Feature2Plotly <- function(seuratObj,
     df$meta.info <- meta.info
   }
 
-  viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
-
-  if (colors.use.1 %in% rownames(brewer.pal.info)){
-    pal.1 <- colorRampPalette(brewer.pal(brewer.pal.info[colors.use.1,]$maxcolors,colors.use.1))(bins)
-  } else if (colors.use.1 %in% viridis_palettes){
-    pal.1 <- viridis(n = bins, option = colors.use.1)
-  } else {
-    pal.1 <- colors.use.1
-  }
-
-  if (colors.use.2 %in% rownames(brewer.pal.info)){
-    pal.2 <- colorRampPalette(brewer.pal(brewer.pal.info[colors.use.2,]$maxcolors,colors.use.2))(bins)
-  } else if (colors.use.2 %in% viridis_palettes){
-    pal.2 <- viridis(n = bins, option = colors.use.2)
-  } else {
-    pal.2 <- colors.use.2
-  }
-
   p <- plot_ly(df,
-               x = ~get(dim.code[1]),
-               y = ~get(dim.code[2]),
+               x = ~x,
+               y = ~y,
                color = ~feature.1,
                mode = 'markers',
                colors = c(pal.1,pal.2),
@@ -1132,10 +1134,12 @@ Feature2Plotly <- function(seuratObj,
                width = plot.width,
                height = plot.height,
                type = 'scattergl',
-               showlegend = legend) %>%
+               legendgroup = 1,
+               showlegend = legend,
+               name = feature.1.use) %>%
     add_trace(df,
-              x = ~get(dim.code[1]),
-              y = ~get(dim.code[2]),
+              x = ~x,
+              y = ~y,
               color = ~feature.2,
               mode = 'markers',
               type = 'scattergl',
@@ -1144,12 +1148,12 @@ Feature2Plotly <- function(seuratObj,
               marker = list(symbol = pt.shape,
                             opacity = opacity,
                             sizemode = "diameter"),
-              showlegend = legend) %>%
+              legendgroup = 1,
+              showlegend = legend,
+              name = feature.2.use) %>%
     layout(title = paste(feature.1.use, feature.2.use, sep = " x "),
-           scene = list(
-             xaxis = list(title = dim.axes[as.numeric(dim.1)]),
-             yaxis = list(title = dim.axes[as.numeric(dim.2)])
-           ),
+           xaxis = list(title = dim.axes[as.numeric(dim.1)]),
+           yaxis = list(title = dim.axes[as.numeric(dim.2)]),
            margin = c(100,NA,NA,NA)
     )
 
@@ -1179,7 +1183,7 @@ Feature2Plotly <- function(seuratObj,
 #' @param seuratObj Seurat object
 #' @param feature.1.use First variable to display. Currently only works with gene names
 #' @param feature.2.use Second variable to display. Currently only works with gene names
-#' @param reduction.use Dimensional reduction to display (default: umap)
+#' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
 #' @param dim.2 Dimension to display on the y-axis (default: 2)
 #' @param dim.3 Dimension to display on the z-axis (default: 3)
@@ -1189,8 +1193,8 @@ Feature2Plotly <- function(seuratObj,
 #' @param colors.use.1 Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param colors.use.2 Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
-#' @param plot.height Plot height in pixels (default: 600)
-#' @param plot.width Plot width in pixels (default: 600)
+#' @param plot.height Plot height in pixels (default: 900)
+#' @param plot.width Plot width in pixels (default: 900)
 #' @param plot.title  Display title with the name of the feature? (default TRUE)
 #' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
 #' @param plot.grid Display the major unit tick marks? (default: FALSE)

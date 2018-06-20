@@ -6,9 +6,9 @@
 \usage{
 DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
   label.size = 12, show.arrow = FALSE, do.return = FALSE, pt.size = 2,
-  pt.shape = "circle", opacity = 1, reduction.use = "umap", dim.1 = 1,
-  dim.2 = 2, colors.use = "Set1", plot.height = "600",
-  plot.width = "600", pt.info = NULL, legend = TRUE)
+  pt.shape = "circle", opacity = 1, reduction.use = "tsne", dim.1 = 1,
+  dim.2 = 2, colors.use = "Set1", plot.height = 900, plot.width = 900,
+  pt.info = NULL, legend = TRUE)
 }
 \arguments{
 \item{seuratObj}{Seurat object}
@@ -29,7 +29,7 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
-\item{reduction.use}{Dimensional reduction to display (default: umap)}
+\item{reduction.use}{Dimensional reduction to display (default: tsne)}
 
 \item{dim.1}{Dimension to display on the x-axis (default: 1)}
 
@@ -37,9 +37,9 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{colors.use}{Color palette to use.  Palettes from RColorBrewer and viridis}
 
-\item{plot.height}{Plot height in pixels (default: 600)}
+\item{plot.height}{Plot height in pixels (default: 900)}
 
-\item{plot.width}{Plot width in pixels (default: 600)}
+\item{plot.width}{Plot width in pixels (default: 900)}
 
 \item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
 

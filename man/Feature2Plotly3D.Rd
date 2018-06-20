@@ -26,7 +26,7 @@ Feature2Plotly3D(seuratObj, feature.1.use = NULL, feature.2.use = NULL,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
-\item{reduction.use}{Dimensional reduction to display (default: umap)}
+\item{reduction.use}{Dimensional reduction to display (default: tsne)}
 
 \item{dim.1}{Dimension to display on the x-axis (default: 1)}
 
@@ -40,9 +40,9 @@ Feature2Plotly3D(seuratObj, feature.1.use = NULL, feature.2.use = NULL,
 
 \item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
 
-\item{plot.height}{Plot height in pixels (default: 600)}
+\item{plot.height}{Plot height in pixels (default: 900)}
 
-\item{plot.width}{Plot width in pixels (default: 600)}
+\item{plot.width}{Plot width in pixels (default: 900)}
 
 \item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
 

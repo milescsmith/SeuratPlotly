@@ -6,11 +6,10 @@
 \usage{
 DimPlotly3D(seuratObj, group.by = "ident", do.label = FALSE,
   label.size = 12, do.return = FALSE, pt.size = 2, pt.shape = "circle",
-  opacity = 1, reduction.use = "umap", dim.1 = 1, dim.2 = 2,
-  dim.3 = 3, colors.use = "Set1", plot.height = "600",
-  plot.width = "600", plot.title = NULL, pt.info = NULL,
-  show.arrow = FALSE, legend = TRUE, plot.grid = FALSE,
-  plot.axes = FALSE)
+  opacity = 1, reduction.use = "tsne", dim.1 = 1, dim.2 = 2,
+  dim.3 = 3, colors.use = "Set1", plot.height = 900, plot.width = 900,
+  plot.title = NULL, pt.info = NULL, show.arrow = FALSE, legend = TRUE,
+  plot.grid = FALSE, plot.axes = FALSE)
 }
 \arguments{
 \item{seuratObj}{Seurat object}
@@ -29,7 +28,7 @@ DimPlotly3D(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{opacity}{Transparency level to use for the points on a 0-1 scale (default: 1)}
 
-\item{reduction.use}{Dimensional reduction to display (default: umap)}
+\item{reduction.use}{Dimensional reduction to display (default: tsne)}
 
 \item{dim.1}{Dimension to display on the x-axis (default: 1)}
 
@@ -39,9 +38,9 @@ DimPlotly3D(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{colors.use}{Color palette to use.  Accepts palettes from RColorBrewer and viridis (default: Set1)}
 
-\item{plot.height}{Plot height in pixels (default: 600)}
+\item{plot.height}{Plot height in pixels (default: 900)}
 
-\item{plot.width}{Plot width in pixels (default: 600)}
+\item{plot.width}{Plot width in pixels (default: 900)}
 
 \item{plot.title}{Plot title (default: reduction.use)}
 

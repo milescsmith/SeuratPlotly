@@ -30,9 +30,9 @@ BubblePlotly(seuratObj, genes.plot, colors.use = "Blues", dot.min = 0,
 
 \item{x.lab.rot}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)}
 
-\item{plot.width}{Plot width in pixels. (default: 600)}
+\item{plot.width}{Plot width in pixels. (default: 900)}
 
-\item{plot.height}{Plot height in pixels. (default: 600)}
+\item{plot.height}{Plot height in pixels. (default: 900)}
 
 \item{x.font.size}{Size of the x-axis titles. (default: 10)}
 

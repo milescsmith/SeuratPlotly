@@ -6,9 +6,9 @@
 \usage{
 FeaturePlotly(seuratObj, feature.use = NULL, do.return = TRUE,
   pt.scale = 5, pt.shape = "circle", opacity = 1,
-  reduction.use = "umap", dim.1 = 1, dim.2 = 2, colors.use = "Reds",
-  bins = 10, plot.height = "600", plot.width = "600",
-  plot.title = FALSE, pt.info = NULL, legend = TRUE)
+  reduction.use = "tsne", dim.1 = 1, dim.2 = 2, colors.use = "Reds",
+  bins = 10, plot.height = 900, plot.width = 900, plot.title = FALSE,
+  pt.info = NULL, legend = TRUE)
 }
 \arguments{
 \item{seuratObj}{Seurat object}
@@ -23,7 +23,7 @@ FeaturePlotly(seuratObj, feature.use = NULL, do.return = TRUE,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
-\item{reduction.use}{Dimensional reduction to display (default: umap)}
+\item{reduction.use}{Dimensional reduction to display (default: tsne)}
 
 \item{dim.1}{Dimension to display on the x-axis (default: 1)}
 
@@ -33,9 +33,9 @@ FeaturePlotly(seuratObj, feature.use = NULL, do.return = TRUE,
 
 \item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
 
-\item{plot.height}{Plot height in pixels (default: 600)}
+\item{plot.height}{Plot height in pixels (default: 900)}
 
-\item{plot.width}{Plot width in pixels (default: 600)}
+\item{plot.width}{Plot width in pixels (default: 900)}
 
 \item{plot.title}{Display title with the name of the feature? (default TRUE)}
 

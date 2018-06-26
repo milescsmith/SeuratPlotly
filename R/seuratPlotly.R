@@ -377,7 +377,7 @@ DimPlotly3D <- function(seuratObj,
     )
 
   if(!is.null(pt.info)){
-    p <- p %>% add_markers(hoverpt.info = "text",
+    p <- p %>% add_markers(hoverinfo = "text",
                            hovertext = ~meta.info,
                            showlegend = FALSE
     )

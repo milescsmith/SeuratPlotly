@@ -290,6 +290,8 @@ DimPlotly3D <- function(seuratObj,
     }
     meta.info <- unlist(meta.info)
     df$meta.info <- meta.info
+  } else {
+    df$meta.info <- df$ident
   }
 
   viridis_palettes = c("viridis","inferno","magma","plasma","cividis")

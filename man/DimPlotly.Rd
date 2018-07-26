@@ -8,7 +8,7 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
   label.size = 12, show.arrow = FALSE, do.return = FALSE, pt.size = 2,
   pt.shape = "circle", opacity = 1, reduction.use = "tsne", dim.1 = 1,
   dim.2 = 2, colors.use = "Set1", plot.height = 900, plot.width = 900,
-  pt.info = NULL, legend = TRUE)
+  pt.info = NULL, legend = TRUE, legend.font.size = 12)
 }
 \arguments{
 \item{seuratObj}{Seurat object}
@@ -43,7 +43,9 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
 
-\item{legend}{Display legend (default TRUE)}
+\item{legend}{Display legend? (default: TRUE)}
+
+\item{legend.font.size}{Legend font size (default: 12)}
 }
 \value{
 plotly object

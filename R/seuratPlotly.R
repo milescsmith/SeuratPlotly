@@ -21,7 +21,8 @@
 #' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis
 #' @param plot.height Plot height in pixels (default: 900)
 #' @param plot.width Plot width in pixels (default: 900)
-#' @param legend Display legend (default TRUE)
+#' @param legend Display legend? (default: TRUE)
+#' @param legend.font.size Legend font size (default: 12)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #'
@@ -58,7 +59,8 @@ DimPlotly <- function(seuratObj,
                       plot.height = 900,
                       plot.width = 900,
                       pt.info = NULL,
-                      legend = TRUE){
+                      legend = TRUE,
+                      legend.font.size = 12){
 
   df <- as.data.frame(GetDimReduction(object = seuratObj,
                                       reduction.type = reduction.use,
@@ -164,9 +166,14 @@ DimPlotly <- function(seuratObj,
            yaxis = list(title = dim.axes[as.numeric(dim.2)]))
 
   if(isTRUE(do.label)){
-    p <- p %>% layout(annotations = labels)
+    p <- p %>% layout(annotations = labels,
+                      legend = list(
+                        font = list(
+                          size = legend.font.size)))
   } else {
-    p <- p %>% layout()
+    p <- p %>% layout(legend = list(
+                        font = list(
+                          size = legend.font.size)))
   }
 
 
@@ -197,7 +204,8 @@ DimPlotly <- function(seuratObj,
 #' @param plot.height Plot height in pixels (default: 900)
 #' @param plot.width Plot width in pixels (default: 900)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend (default: TRUE)
+#' @param legend Display legend? (default: TRUE)
+#' @param legend.font.size Legend font size (default: 12)
 #' @param plot.title Plot title (default: reduction.use)
 #' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
 #' @param plot.grid Display the major unit tick marks? (default: FALSE)
@@ -237,6 +245,7 @@ DimPlotly3D <- function(seuratObj,
                         pt.info = NULL,
                         show.arrow = FALSE,
                         legend = TRUE,
+                        legend.font.size = 12,
                         plot.grid = FALSE,
                         plot.axes = FALSE){
 
@@ -385,7 +394,9 @@ DimPlotly3D <- function(seuratObj,
     )
   }
 
-  p <- p %>% layout()
+  p <- p %>% layout(legend = list(
+                      font = list(
+                        size = legend.font.size)))
 
   if (isTRUE(do.return)){
     return(p)
@@ -415,7 +426,8 @@ DimPlotly3D <- function(seuratObj,
 #' @param plot.width Plot width in pixels (default: 900)
 #' @param plot.title  Display title with the name of the feature? (default TRUE)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend (default TRUE)
+#' @param legend Display legend? (default: TRUE)
+#' @param legend.font.size Legend font size (default: 12)
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #'
 #' @import dplyr
@@ -448,7 +460,8 @@ FeaturePlotly <- function(seuratObj,
                           plot.width = 900,
                           plot.title = FALSE,
                           pt.info = NULL,
-                          legend = TRUE){
+                          legend = TRUE,
+                          legend.font.size = 12){
 
   df <- as.data.frame(GetDimReduction(object = seuratObj,
                                       reduction.type = reduction.use,
@@ -548,7 +561,9 @@ FeaturePlotly <- function(seuratObj,
   if (isTRUE(do.return)){
     return(p)
   } else {
-    p
+    p %>% layout(legend = list(
+      font = list(
+        size = legend.font.size)))
   }
 }
 
@@ -576,7 +591,8 @@ FeaturePlotly <- function(seuratObj,
 #' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
 #' @param plot.grid Display the major unit tick marks? (default: FALSE)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend (default TRUE)
+#' @param legend Display legend? (default: TRUE)
+#' @param legend.font.size Legend font size (default: 12)
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #'
 #' @import dplyr
@@ -611,6 +627,7 @@ FeaturePlotly3D <- function(seuratObj,
                             plot.title = FALSE,
                             pt.info = NULL,
                             legend = TRUE,
+                            legend.font.size = 12,
                             plot.grid = FALSE,
                             plot.axes = FALSE){
 
@@ -714,12 +731,14 @@ FeaturePlotly3D <- function(seuratObj,
   if(!is.null(pt.info)){
     p <- p %>% add_markers(hoverinfo = "text",
                            hovertext = paste(~meta.info, ~feature),
+                           showlegend = FALSE,
 
-                           showlegend = FALSE
     )
   }
 
-  p <- p %>% layout()
+  p <- p %>% layout(legend = list(
+    font = list(
+      size = legend.font.size)))
 
   if (isTRUE(do.return)){
     return(p)
@@ -1001,7 +1020,8 @@ PercentAbove <- function(x, threshold){
 #' @param plot.width Plot width in pixels (default: 900)
 #' @param plot.title  Display title with the name of the feature? (default TRUE)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend (default TRUE)
+#' @param legend Display legend? (default: TRUE)
+#' @param legend.font.size Legend font size (default: 12)
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #'
 #' @import dplyr
@@ -1035,7 +1055,8 @@ Feature2Plotly <- function(seuratObj,
                            plot.height = "750",
                            plot.width = "750",
                            pt.info = NULL,
-                           legend = TRUE){
+                           legend = TRUE,
+                           legend.font.size = 12){
 
   df <- as.data.frame(GetDimReduction(object = seuratObj,
                                       reduction.type = reduction.use,
@@ -1166,7 +1187,9 @@ Feature2Plotly <- function(seuratObj,
     )
   }
 
-  p <- p %>% layout()
+  p <- p %>% layout(legend = list(
+    font = list(
+      size = legend.font.size)))
 
   if (isTRUE(do.return)){
     return(p)
@@ -1201,7 +1224,8 @@ Feature2Plotly <- function(seuratObj,
 #' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
 #' @param plot.grid Display the major unit tick marks? (default: FALSE)
 #' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend (default TRUE)
+#' @param legend Display legend? (default: TRUE)
+#' @param legend.font.size Legend font size (default: 12)
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #'
 #' @import dplyr
@@ -1237,6 +1261,7 @@ Feature2Plotly3D <- function(seuratObj,
                              plot.width = "750",
                              pt.info = NULL,
                              legend = TRUE,
+                             legend.font.size = 12,
                              plot.grid = FALSE,
                              plot.axes = FALSE){
 
@@ -1375,7 +1400,9 @@ Feature2Plotly3D <- function(seuratObj,
                            showlegend = FALSE
     )
   }
-  p <- p %>% layout()
+  p <- p %>% layout(legend = list(
+    font = list(
+      size = legend.font.size)))
 
   if (isTRUE(do.return)){
     return(p)

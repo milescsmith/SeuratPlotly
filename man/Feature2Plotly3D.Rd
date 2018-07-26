@@ -9,7 +9,8 @@ Feature2Plotly3D(seuratObj, feature.1.use = NULL, feature.2.use = NULL,
   reduction.use = "tsne", dim.1 = 1, dim.2 = 2, dim.3 = 3,
   colors.use.1 = "Reds", colors.use.2 = "Blues", bins = 10,
   plot.height = "750", plot.width = "750", pt.info = NULL,
-  legend = TRUE, plot.grid = FALSE, plot.axes = FALSE)
+  legend = TRUE, legend.font.size = 12, plot.grid = FALSE,
+  plot.axes = FALSE)
 }
 \arguments{
 \item{seuratObj}{Seurat object}
@@ -46,7 +47,9 @@ Feature2Plotly3D(seuratObj, feature.1.use = NULL, feature.2.use = NULL,
 
 \item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
 
-\item{legend}{Display legend (default TRUE)}
+\item{legend}{Display legend? (default: TRUE)}
+
+\item{legend.font.size}{Legend font size (default: 12)}
 
 \item{plot.grid}{Display the major unit tick marks? (default: FALSE)}
 

@@ -8,7 +8,8 @@ Feature2Plotly(seuratObj, feature.1.use = NULL, feature.2.use = NULL,
   do.return = FALSE, pt.scale = 1.5, pt.shape = "circle", opacity = 0.5,
   reduction.use = "tsne", dim.1 = 1, dim.2 = 2, colors.use.1 = "Reds",
   colors.use.2 = "Blues", bins = 10, plot.height = "750",
-  plot.width = "750", pt.info = NULL, legend = TRUE)
+  plot.width = "750", pt.info = NULL, legend = TRUE,
+  legend.font.size = 12)
 }
 \arguments{
 \item{seuratObj}{Seurat object}
@@ -43,7 +44,9 @@ Feature2Plotly(seuratObj, feature.1.use = NULL, feature.2.use = NULL,
 
 \item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
 
-\item{legend}{Display legend (default TRUE)}
+\item{legend}{Display legend? (default: TRUE)}
+
+\item{legend.font.size}{Legend font size (default: 12)}
 
 \item{plot.title}{Display title with the name of the feature? (default TRUE)}
 }

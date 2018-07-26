@@ -9,7 +9,7 @@ DimPlotly3D(seuratObj, group.by = "ident", do.label = FALSE,
   opacity = 1, reduction.use = "tsne", dim.1 = 1, dim.2 = 2,
   dim.3 = 3, colors.use = "Set1", plot.height = 900, plot.width = 900,
   plot.title = NULL, pt.info = NULL, show.arrow = FALSE, legend = TRUE,
-  plot.grid = FALSE, plot.axes = FALSE)
+  legend.font.size = 12, plot.grid = FALSE, plot.axes = FALSE)
 }
 \arguments{
 \item{seuratObj}{Seurat object}
@@ -48,7 +48,9 @@ DimPlotly3D(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{show.arrow}{Offset the position of the labels and instead point to each group with an arrow (default: FALSE)}
 
-\item{legend}{Display legend (default: TRUE)}
+\item{legend}{Display legend? (default: TRUE)}
+
+\item{legend.font.size}{Legend font size (default: 12)}
 
 \item{plot.grid}{Display the major unit tick marks? (default: FALSE)}
 

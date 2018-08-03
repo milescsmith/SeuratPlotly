@@ -15,6 +15,7 @@
 #' @param do.label Add a label showing thr group name to the graph (default: FALSE)
 #' @param label.size Label font size (default: 12)
 #' @param show.arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
+#' @param label.color Color for label border and arrow.  Need hex value. (default = '000000')
 #' @param pt.size Size of the points in pixels (default: 2)
 #' @param pt.shape Shape to use for the points (default: circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
@@ -48,6 +49,7 @@ DimPlotly <- function(seuratObj,
                       do.label = FALSE,
                       label.size = 12,
                       show.arrow = FALSE,
+                      label.color = '000000',
                       do.return = FALSE,
                       pt.size = 4,
                       pt.shape = "circle",
@@ -136,7 +138,7 @@ DimPlotly <- function(seuratObj,
                    text = centers$ident,
                    font = list(size = label.size),
                    showarrow = show.arrow,
-                   bordercolor='000000',
+                   bordercolor=label.color,
                    bgcolor='FFFFFF',
                    opacity=1
     )
@@ -196,6 +198,7 @@ DimPlotly <- function(seuratObj,
 #' @param do.label Add a label showing thr group name to the graph (default: FALSE)
 #' @param label.size Label font size (default: 12)
 #' @param show.arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
+#' @param label.color Color for label border and arrow.  Need hex value. (default = '000000')
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #' @param pt.size Size of the points in pixels (default: 2)
 #' @param pt.shape Shape to use for the points (default: circle)
@@ -230,6 +233,8 @@ DimPlotly3D <- function(seuratObj,
                         group.by = "ident",
                         do.label = FALSE,
                         label.size = 12,
+                        label.color = '000000',
+                        show.arrow = FALSE,
                         do.return = FALSE,
                         pt.size = 2,
                         pt.shape = "circle",
@@ -243,7 +248,6 @@ DimPlotly3D <- function(seuratObj,
                         plot.width = 900,
                         plot.title = NULL,
                         pt.info = NULL,
-                        show.arrow = FALSE,
                         legend = TRUE,
                         legend.font.size = 12,
                         plot.grid = FALSE,
@@ -318,7 +322,7 @@ DimPlotly3D <- function(seuratObj,
     compiled.labels = list()
 
     if(isTRUE(show.arrow)){
-      border.color = '000000'
+      border.color = label.color
       bg.color = 'FFFFFF'
     } else {
       border.color = 'FFFFFF'

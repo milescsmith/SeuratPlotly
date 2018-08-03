@@ -136,7 +136,7 @@ DimPlotly <- function(seuratObj,
                    text = centers$ident,
                    font = list(size = label.size),
                    showarrow = show.arrow,
-                   bordercolor='888888',
+                   bordercolor='000000',
                    bgcolor='FFFFFF',
                    opacity=1
     )
@@ -318,7 +318,7 @@ DimPlotly3D <- function(seuratObj,
     compiled.labels = list()
 
     if(isTRUE(show.arrow)){
-      border.color = '888888'
+      border.color = '000000'
       bg.color = 'FFFFFF'
     } else {
       border.color = 'FFFFFF'

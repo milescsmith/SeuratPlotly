@@ -1,16 +1,20 @@
 #' @title PrepDf
 #'
-#' @param seuratObj
-#' @param reduction.use
-#' @param dim.1
-#' @param dim.2
-#' @param dim.3
-#' @param ident
+#' @description Helper function to extract dimensional reduction data from a Seurat object
+#' and format it into a data frame for use in plotting.
+#'
+#' @param seuratObj Seurat object
+#' @param reduction.use dimensional reduction to extract
+#' @param dim.1 Dimension one.  X-axis data.
+#' @param dim.2 Dimension two.  Y-axis data.
+#' @param dim.3 Dimension three.  Z-axis data.
+#' @param group.by Identity information to use for grouping.
+#'   Permissible values include meta.data column names.
 #'
 #' @import magrittr
 #' @importFrom Seurat GetDimReduction FetchData
 #'
-#' @return
+#' @return data.frame
 #' @export
 #'
 #' @examples
@@ -20,8 +24,6 @@ PrepDf <- function(seuratObj,
                    dim.2 = 2,
                    dim.3 = NULL,
                    group.by) {
-  titles <- letters[24:26]
-
   df <- GetDimReduction(
     object = seuratObj,
     reduction.type = reduction.use,
@@ -61,14 +63,18 @@ PrepDf <- function(seuratObj,
   ident <- seuratObj@ident %>% as.factor()
   if (group.by != "ident") {
     ident <- FetchData(
-        object = seuratObj,
-        vars.all = group.by)[, 1] %>%
-    as.factor()
+      object = seuratObj,
+      vars.all = group.by
+    )[, 1] %>%
+      as.factor()
   }
 
-  colnames(df) <- letters[c(dim.1,
-                            dim.2,
-                            dim.3)]
+  column.titles <- letters[24:26]
+  colnames(df) <- column.titles[c(
+    dim.1,
+    dim.2,
+    dim.3
+  )]
   rownames(df) <- cell_names
   df$ident <- ident
 
@@ -81,19 +87,18 @@ PrepDf <- function(seuratObj,
 #' each row that compiles the indicated pt.info from the meta.data
 #' slot along with the necessary html tags and column names
 #'
-#' @param seuratObj
-#' @param pt.info
-#' @param df
+#' @param seuratObj Seurat object to extract data from
+#' @param pt.info A list of meta.data columns to add to the hoverinfo popup.
+#' @param df Plotting data frame to which to add the popup data.
 #'
 #' @import magrittr
 #' @importFrom glue glue
 #'
-#' @return
+#' @return data.frame
 #' @export
 #'
 #' @examples
 PrepInfo <- function(seuratObj, pt.info, df) {
-
   if (!is.null(pt.info)) {
     meta.info <- list()
     # for each row
@@ -115,33 +120,42 @@ PrepInfo <- function(seuratObj, pt.info, df) {
 
 #' @title PrepPalette
 #'
-#' @param df
-#' @param palette.use
+#' @description Given a palette name and data frame with clustering or grouping
+#' information in an 'ident' column, return a palette containing a color for each
+#' unique cluster identity.
 #'
-#' @return
+#' @param df A graphing data.frame (from PrepDf) containing a column named 'ident'
+#'   with group identities.
+#' @param palette.use The name of a palette to use.  Must be a palette available in
+#'   the Paletteer package.  If there are more unique identities than colors in the
+#'   palette, additional values will be created by interpolation.
+#'
+#' @return A list containing color values.
 #' @export
 #'
 #' @import paletteer
 #' @import magrittr
+#' @importFrom grDevices colorRampPalette
 #'
 #' @examples
-PrepPalette <- function(df, palette.use){
+PrepPalette <- function(df, palette.use) {
+  bins <- length(unique(df[, "ident"]))
 
-  bins = length(unique(df[,'ident']))
-
-  if (palette.use %in% palettes_d_names$palette){
+  if (palette.use %in% palettes_d_names$palette) {
     color.package <- palettes_d_names$package[which(palette.use == palettes_d_names$palette)]
-    pal <- paletteer_d(package = !!color.package,
-                       palette = !!palette.use,
-                       n = bins)
-  } else if (palette.use %in% palettes_c_names$palette){
+    pal <- paletteer_d(
+      package = !!color.package,
+      palette = !!palette.use
+    )
+  } else if (palette.use %in% palettes_c_names$palette) {
     color.package <- palettes_c_names$package[which(palette.use == palettes_c_names$palette)]
-    pal <- paletteer_c(package = !!color.package,
-                       palette = !!palette.use,
-                       n = bins)
+    pal <- paletteer_c(
+      package = !!color.package,
+      palette = !!palette.use
+    )
   } else {
     pal <- palette.use
   }
-
+  pal <- colorRampPalette(pal)(bins)
   return(pal)
 }

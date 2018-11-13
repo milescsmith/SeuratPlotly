@@ -1,6 +1,6 @@
 Package: seuratPlotly
 Title: Plotly-based methods for displaying Seurat data
-Version: 1.0.0.1000
+Version: 1.0.2.0000
 Authors@R: person("Miles", "Smith", email = "miles-smith@omrf.org", role = c("aut", "cre"))
 Description: Provides replacements, enhancements, and additional methods for ploting data in Seurat objects using the Plotly library.
 Depends: R (>= 3.5.0),
@@ -14,8 +14,10 @@ Depends: R (>= 3.5.0),
   grDevices,
   tidyr,
   tibble,
-  compositions
+  compositions,
+  glue,
+  paletteer
 License: BSD
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

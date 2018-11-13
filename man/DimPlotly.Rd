@@ -8,8 +8,9 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
   label.size = 12, show.arrow = FALSE, label.color = "000000",
   do.return = FALSE, pt.size = 4, pt.shape = "circle",
   opacity = 0.75, reduction.use = "tsne", dim.1 = 1, dim.2 = 2,
-  colors.use = "Set1", plot.height = 900, plot.width = 900,
-  pt.info = NULL, legend = TRUE, legend.font.size = 12)
+  palette.use = "default_ucscgb", plot.height = 900,
+  plot.width = 900, plot.title = NULL, pt.info = NULL,
+  legend = TRUE, legend.font.size = 12)
 }
 \arguments{
 \item{seuratObj}{Seurat object}
@@ -38,7 +39,7 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{dim.2}{Dimension to display on the y-axis (default: 2)}
 
-\item{colors.use}{Color palette to use.  Palettes from RColorBrewer and viridis}
+\item{palette.use}{Color palette to use.  Must be a palette available in the Paletteer package}
 
 \item{plot.height}{Plot height in pixels (default: 900)}
 

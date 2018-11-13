@@ -32,162 +32,177 @@
 #' @return plotly object
 #' @export
 #'
-#' @examples DimPlotly3D(seuratObj, group.by = "res.0.6", do.label = TRUE, show.arrow = FALSE)
-#'
-DimPlotly3D <- function(seuratObj,
-                        group.by = "ident",
-                        do.label = FALSE,
-                        label.size = 12,
-                        label.color = '000000',
-                        show.arrow = FALSE,
-                        do.return = FALSE,
-                        pt.size = 2,
-                        pt.shape = "circle",
-                        opacity = 1,
-                        reduction.use = "tsne",
-                        dim.1 = 1,
-                        dim.2 = 2,
-                        dim.3 = 3,
-                        palette.use = "Set1",
-                        plot.height = 900,
-                        plot.width = 900,
-                        plot.title = NULL,
-                        pt.info = NULL,
-                        legend = TRUE,
-                        legend.font.size = 12,
-                        plot.grid = FALSE,
-                        plot.axes = FALSE){
-
+#' @examples
+#' DimPlotly3D(seuratObj, group.by = "res.0.6", do.label = TRUE, show.arrow = FALSE)
+DimPlotly3d <- DimPlotly3D <- function(seuratObj,
+                                       group.by = "ident",
+                                       do.label = FALSE,
+                                       label.size = 12,
+                                       label.color = "000000",
+                                       show.arrow = FALSE,
+                                       do.return = FALSE,
+                                       pt.size = 2,
+                                       pt.shape = "circle",
+                                       opacity = 1,
+                                       reduction.use = "tsne",
+                                       dim.1 = 1,
+                                       dim.2 = 2,
+                                       dim.3 = 3,
+                                       palette.use = "Set1",
+                                       plot.height = 900,
+                                       plot.width = 900,
+                                       plot.title = NULL,
+                                       pt.info = NULL,
+                                       legend = TRUE,
+                                       legend.font.size = 12,
+                                       plot.grid = FALSE,
+                                       plot.axes = FALSE) {
   df <- PrepDf(seuratObj,
-               reduction.use,
-               dim.1 = dim.1,
-               dim.2 = dim.2,
-               dim.3 = dim.3,
-               ident = group.by)
+    reduction.use,
+    dim.1 = dim.1,
+    dim.2 = dim.2,
+    dim.3 = dim.3,
+    group.by = group.by
+  )
 
-  df <- PrepInfo(seuratObj = seuratObj,
-                 pt.info = pt.info,
-                 df = df)
+  df <- PrepInfo(
+    seuratObj = seuratObj,
+    pt.info = pt.info,
+    df = df
+  )
 
   if (do.label) {
     df %>%
       dplyr::group_by(ident) %>%
-      centers <- summarize(
-        x = median(x = x),
-        y = median(x = y),
-        z = median(x = z)
-      )
-      labels <- list(x = centers$x,
-                     y = centers$y,
-                     z = centers$z,
-                     text = centers$ident,
-                     font = list(size = label.size)
-      )
-      compiled.labels = list()
+      centers() <- summarize(
+      x = median(x = x),
+      y = median(x = y),
+      z = median(x = z)
+    )
+    labels <- list(
+      x = centers$x,
+      y = centers$y,
+      z = centers$z,
+      text = centers$ident,
+      font = list(size = label.size)
+    )
+    compiled.labels <- list()
 
-      if (isTRUE(show.arrow)) {
-        border.color = label.color
-        bg.color = 'FFFFFF'
-      } else {
-        border.color = 'FFFFFF'
-        bg.color = 'FFFFFF'
-      }
-      for (k in 1:length(unique(ident))) {
-        tmp <- list(
-          showarrow = show.arrow,
-          x = labels$x[k],
-          y = labels$y[k],
-          z = labels$z[k],
-          text = labels$text[k],
-          font = list(size = label.size),
-          bordercolor=border.color,
-          bgcolor=bg.color,
-          opacity=0.8)
-        compiled.labels <- c(compiled.labels, list(tmp))
-      }
+    if (isTRUE(show.arrow)) {
+      border.color <- label.color
+      bg.color <- "FFFFFF"
+    } else {
+      border.color <- "FFFFFF"
+      bg.color <- "FFFFFF"
+    }
+    for (k in 1:length(unique(ident))) {
+      tmp <- list(
+        showarrow = show.arrow,
+        x = labels$x[k],
+        y = labels$y[k],
+        z = labels$z[k],
+        text = labels$text[k],
+        font = list(size = label.size),
+        bordercolor = border.color,
+        bgcolor = bg.color,
+        opacity = 0.8
+      )
+      compiled.labels <- c(compiled.labels, list(tmp))
+    }
   } else {
     compiled.labels <- NULL
   }
 
-  if (is.null(plot.title)){
+  if (is.null(plot.title)) {
     plot.title <- reduction.use
   }
 
-  pal <- PrepPalette(df = df,
-                     palette.use = palette.use)
+  pal <- PrepPalette(
+    df = df,
+    palette.use = palette.use
+  )
 
   p <- plot_ly(df,
-               x = ~x,
-               y = ~y,
-               z = ~z,
-               color = ~ident,
-               colors = pal,
-               marker = list(
-                 symbol = pt.shape,
-                 size = pt.size,
-                 opacity = opacity,
-                 mode = "markers"
-               ),
-               width = plot.width,
-               height = plot.height,
-               type = "scatter3d",
-               mode = "markers",
-               showlegend = legend
+    x = ~x,
+    y = ~y,
+    z = ~z,
+    color = ~ident,
+    colors = pal,
+    marker = list(
+      symbol = pt.shape,
+      size = pt.size,
+      opacity = opacity,
+      mode = "markers"
+    ),
+    width = plot.width,
+    height = plot.height,
+    type = "scatter3d",
+    mode = "markers",
+    showlegend = legend
   ) %>%
     layout(
       title = plot.title,
       scene = list(
-        aspectratio = list(x = 0,
-                           y = 0,
-                           z = -1),
+        aspectratio = list(
+          x = 0,
+          y = 0,
+          z = -1
+        ),
         camera = list(
-          center = list(x = 0,
-                        y = 0,
-                        z = 0
+          center = list(
+            x = 0,
+            y = 0,
+            z = 0
           ),
-          eye = list(x = 2,
-                     y = -1,
-                     z = 0.5
+          eye = list(
+            x = 2,
+            y = -1,
+            z = 0.5
           ),
-          up = list(x = 1,
-                    y = 0,
-                    z = 0
+          up = list(
+            x = 1,
+            y = 0,
+            z = 0
           )
         ),
         dragmode = "turnable",
-        xaxis = list(title = dim.axes[as.numeric(dim.1)],
-                     type = "double",
-                     showgrid = plot.grid,
-                     visible = plot.axes
+        xaxis = list(
+          title = dim.axes[as.numeric(dim.1)],
+          type = "double",
+          showgrid = plot.grid,
+          visible = plot.axes
         ),
-        yaxis = list(title = dim.axes[as.numeric(dim.2)],
-                     type = "double",
-                     showgrid = plot.grid,
-                     visible = plot.axes
+        yaxis = list(
+          title = dim.axes[as.numeric(dim.2)],
+          type = "double",
+          showgrid = plot.grid,
+          visible = plot.axes
         ),
-        zaxis = list(title = dim.axes[as.numeric(dim.3)],
-                     type = "double",
-                     showgrid = plot.grid,
-                     visible = plot.axes
+        zaxis = list(
+          title = dim.axes[as.numeric(dim.3)],
+          type = "double",
+          showgrid = plot.grid,
+          visible = plot.axes
         ),
         annotations = compiled.labels
       )
     )
 
-  if(!is.null(pt.info)){
-    p <- p %>% add_markers(hoverinfo = "text",
-                           hovertext = ~meta.info,
-                           showlegend = FALSE
+  if (!is.null(pt.info)) {
+    p <- p %>% add_markers(
+      hoverinfo = "text",
+      hovertext = ~meta.info,
+      showlegend = FALSE
     )
   }
 
   p <- p %>% layout(legend = list(
     font = list(
-      size = legend.font.size)
-  )
-  )
+      size = legend.font.size
+    )
+  ))
 
-  if (isTRUE(do.return)){
+  if (isTRUE(do.return)) {
     return(p)
   } else {
     p

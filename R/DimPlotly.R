@@ -44,7 +44,7 @@ DimPlotly <- function(seuratObj,
                       do.label = FALSE,
                       label.size = 12,
                       show.arrow = FALSE,
-                      label.color = '000000',
+                      label.color = "000000",
                       do.return = FALSE,
                       pt.size = 4,
                       pt.shape = "circle",
@@ -52,7 +52,7 @@ DimPlotly <- function(seuratObj,
                       reduction.use = "tsne",
                       dim.1 = 1,
                       dim.2 = 2,
-                      palette.use = "Set1",
+                      palette.use = "default_ucscgb",
                       plot.height = 900,
                       plot.width = 900,
                       plot.title = NULL,
@@ -85,9 +85,9 @@ DimPlotly <- function(seuratObj,
                      text = centers$ident,
                      font = list(size = label.size),
                      showarrow = show.arrow,
-                     bordercolor=label.color,
-                     bgcolor='FFFFFF',
-                     opacity=1
+                     bordercolor = label.color,
+                     bgcolor = "FFFFFF",
+                     opacity = 1
       )
   } else {
     labels <- NULL
@@ -118,8 +118,8 @@ DimPlotly <- function(seuratObj,
   ) %>%
     layout(
       title = plot.title,
-      xaxis = list(title = dim.axes[as.numeric(dim.1)]),
-      yaxis = list(title = dim.axes[as.numeric(dim.2)]),
+      xaxis = list(title = glue("{reduction.use}_{dim.1}")),
+      yaxis = list(title = glue("{reduction.use}_{dim.2}")),
       annotations = labels
     )
 

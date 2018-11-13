@@ -167,19 +167,19 @@ DimPlotly3d <- DimPlotly3D <- function(seuratObj,
         ),
         dragmode = "turnable",
         xaxis = list(
-          title = dim.axes[as.numeric(dim.1)],
+          title = glue("{reduction.use}_{dim.1}"),
           type = "double",
           showgrid = plot.grid,
           visible = plot.axes
         ),
         yaxis = list(
-          title = dim.axes[as.numeric(dim.2)],
+          title = glue("{reduction.use}_{dim.2}"),
           type = "double",
           showgrid = plot.grid,
           visible = plot.axes
         ),
         zaxis = list(
-          title = dim.axes[as.numeric(dim.3)],
+          title = glue("{reduction.use}_{dim.3}"),
           type = "double",
           showgrid = plot.grid,
           visible = plot.axes

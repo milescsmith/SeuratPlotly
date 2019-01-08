@@ -4,9 +4,9 @@
 #' Create a scatterplot of a given dimensional reduction set for a Seurat object,
 #' coloring points by the given grouping variable
 #' Requrires a Seurat object with the reduction to be used in the corresponding
-#' seuratObj@@dr slot
+#' object@@dr slot
 #'
-#' @param seuratObj Seurat object
+#' @param object Seurat object
 #' @param group.by Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
 #' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
@@ -28,8 +28,6 @@
 #'
 #' @import dplyr
 #' @importFrom magrittr "%>%"
-#' @importFrom Seurat GetDimReduction
-#' @importFrom Seurat FetchData
 #' @importFrom plotly plot_ly
 #' @importFrom plotly layout
 #'
@@ -37,9 +35,9 @@
 #' @export
 #'
 #' @examples
-#' seuratObj <- RunTSNE(seuratObj)
-#' DimPlotly(seuratObj, group.by = 'ident', pt.size = 4, opacity = 0.5, plot.title = "Test Plot", reduction.use = "tsne")
-DimPlotly <- function(seuratObj,
+#' object <- RunTSNE(object)
+#' DimPlotly(object, group.by = 'ident', pt.size = 4, opacity = 0.5, plot.title = "Test Plot", reduction.use = "tsne")
+DimPlotly <- function(object,
                       group.by = "ident",
                       do.label = FALSE,
                       label.size = 12,
@@ -60,13 +58,13 @@ DimPlotly <- function(seuratObj,
                       legend = TRUE,
                       legend.font.size = 12){
 
-  df <- PrepDf(seuratObj,
+  df <- PrepDf(object,
                reduction.use,
                dim.1 = dim.1,
                dim.2 = dim.2,
                group.by = group.by)
 
-  df <- PrepInfo(seuratObj = seuratObj,
+  df <- PrepInfo(object = object,
                  pt.info = pt.info,
                  df = df)
 

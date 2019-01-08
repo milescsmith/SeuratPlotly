@@ -3,17 +3,17 @@
 #' Create a scatterplot of a given dimensional reduction set for a Seurat object,
 #' coloring and sizing points by the expression level of the chosen feature.
 #' Requrires a Seurat object with the reduction to be used in the corresponding
-#' seuratObj@@dr slot
+#' object@@dr slot
 #'
-#' @param seuratObj Seurat object
-#' @param feature.use Variable to display. Currently only works with gene names
+#' @param object Seurat object
+#' @param feature Variable to display. Currently only works with gene names
 #' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
 #' @param dim.2 Dimension to display on the y-axis (default: 2)
 #' @param pt.scale Factor by which to multiply the size of the points (default: 5)
 #' @param pt.shape Shape to use for the points (default = circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
 #' @param plot.height Plot height in pixels (default: 900)
 #' @param plot.width Plot width in pixels (default: 900)
@@ -38,8 +38,10 @@
 #' @export
 #'
 #' @examples
-FeaturePlotly <- function(seuratObj,
-                          feature.use = NULL,
+FeaturePlotly <- function(object,
+                          feature = NULL,
+                          assay.use = "RNA",
+                          slot.use = "data",
                           do.return = TRUE,
                           pt.scale = 5,
                           pt.shape = "circle",
@@ -47,7 +49,8 @@ FeaturePlotly <- function(seuratObj,
                           reduction.use = "tsne",
                           dim.1 = 1,
                           dim.2 = 2,
-                          colors.use = "Reds",
+                          colors.use = c("blue","red"),
+                          reverse.color.scale = FALSE,
                           bins = 10,
                           plot.height = 900,
                           plot.width = 900,
@@ -56,106 +59,70 @@ FeaturePlotly <- function(seuratObj,
                           legend = TRUE,
                           legend.font.size = 12){
 
-  df <- as.data.frame(GetDimReduction(object = seuratObj,
-                                      reduction.type = reduction.use,
-                                      slot = "cell.embeddings"))
-  dim.code <- GetDimReduction(
-    object = seuratObj,
-    reduction.type = reduction.use,
-    slot = "key"
-  )
+  df <- PrepDf(object,
+               reduction.use,
+               dim.1 = dim.1,
+               dim.2 = dim.2)
 
-  dim.axes <- colnames(
-    GetDimReduction(
-      object = seuratObj,
-      reduction.type = reduction.use,
-      slot = "cell.embeddings"
-    )
-  )
+  df <- PrepInfo(object = object,
+                 pt.info = c(feature),
+                 df = df)
 
-  dim.code <- c(dim.axes[[dim.1]], dim.axes[[dim.2]])
-  df <- df[,dim.code]
-  cell_names <- rownames(df)
-  ident <- as.factor(x = seuratObj@ident)
+  if (is.null(feature)){ stop("No gene or feature given") }
 
+  df <- GetFeatureValues(object = object,
+                         df = df,
+                         feature = feature,
+                         assay.use,
+                         slot.use)
 
-  df$x <- df[,1]
-  df$y <- df[,2]
+  cut.feature.data <- as.numeric(as.factor(x = cut(x = as.numeric(df[,feature]), breaks = bins)))
 
-  if(!is.null(pt.info)){
-    meta.info <- list()
-    # for each row
-    for(i in seq(dim(df)[1])){
-      # for each member of pt.info
-      rowinfo = ""
-      for(j in 1:length(pt.info)){
-        rowinfo <- paste0(rowinfo, " </br> ", pt.info[j], ": ", seuratObj@meta.data[i, pt.info[j]])
-      }
-      meta.info <- c(meta.info, rowinfo)
-    }
-    meta.info <- unlist(meta.info)
-    df$meta.info <- meta.info
-  } else {
-    df$meta.info <- seuratObj@ident
-  }
-
-  if (is.null(feature.use)){ stop("No gene or feature given") }
-
-  feature.data <- FetchData(object = seuratObj,
-                            vars.all = feature.use,
-                            use.scaled = TRUE)
-  size.data <- FetchData(object = seuratObj,
-                         vars.all = feature.use,
-                         use.scaled = TRUE)
-  feature.data[,1][feature.data[,1] == 0] <- NA
-  feature.data <- as.matrix(feature.data)
-  cut.feature.data <- as.numeric(as.factor(x = cut(x = as.numeric(feature.data), breaks = bins)))
-
-  df[,"feature"] <- cut.feature.data
-  df[,"size"] <- size.data[,1] * pt.scale
-
-  viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
-
-  if (colors.use %in% rownames(brewer.pal.info)){
-    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors.use,]$maxcolors,colors.use))(bins)
-  } else if (colors.use %in% viridis_palettes){
-    pal <- viridis(n = bins, option = colors.use)
-  } else {
-    pal <- colors.use
-  }
+  df[,"size"] <- df[,feature] * pt.scale
 
   if (isTRUE(plot.title)){
-    plot.title = feature.use
+    plot.title = feature
   } else {
     plot.title = NULL
   }
 
   p <- plot_ly(df,
-               x = ~get(dim.code[1]),
-               y = ~get(dim.code[2]),
-               color = ~feature,
-               colors = pal,
+               x = ~x,
+               y = ~y,
                mode = 'markers',
                type = "scattergl",
                size = ~size,
                sizes = c(0,max(df$size)),
                marker = list(symbol = pt.shape,
                              opacity = opacity,
-                             sizemode = "diameter"),
+                             color = ~get(feature),
+                             line = list(width = 0),
+                             colorscale=colors.use,
+                             reversescale = reverse.color.scale,
+                             cmin = 0,
+                             cmax = 1,
+                             sizemode = "diameter",
+                             colorbar = list(title = feature)),
                width = plot.width,
                height = plot.height,
                showlegend = legend,
                hoverinfo = "text",
                text = ~meta.info) %>%
-    layout(title = plot.title,
-           xaxis = list(title = dim.axes[as.numeric(dim.1)]),
-           yaxis = list(title = dim.axes[as.numeric(dim.2)]))
+    layout(
+      title = plot.title,
+      xaxis = list(title = glue("{reduction.use}_{dim.1}")),
+      yaxis = list(title = glue("{reduction.use}_{dim.2}"))
+    )
+
+  p <- p %>% layout(legend = list(
+    font = list(
+      size = legend.font.size)
+    )
+  )
 
   if (isTRUE(do.return)){
     return(p)
   } else {
-    p %>% layout(legend = list(
-      font = list(
-        size = legend.font.size)))
+    p
   }
 }

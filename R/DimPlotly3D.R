@@ -1,6 +1,6 @@
 #' DimPlotly3D
 #'
-#' @param seuratObj Seurat object
+#' @param object Seurat object
 #' @param group.by Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
 #' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
@@ -33,8 +33,8 @@
 #' @export
 #'
 #' @examples
-#' DimPlotly3D(seuratObj, group.by = "res.0.6", do.label = TRUE, show.arrow = FALSE)
-DimPlotly3d <- DimPlotly3D <- function(seuratObj,
+#' DimPlotly3D(object, group.by = "res.0.6", do.label = TRUE, show.arrow = FALSE)
+DimPlotly3d <- DimPlotly3D <- function(object,
                                        group.by = "ident",
                                        do.label = FALSE,
                                        label.size = 12,
@@ -57,7 +57,7 @@ DimPlotly3d <- DimPlotly3D <- function(seuratObj,
                                        legend.font.size = 12,
                                        plot.grid = FALSE,
                                        plot.axes = FALSE) {
-  df <- PrepDf(seuratObj,
+  df <- PrepDf(object,
     reduction.use,
     dim.1 = dim.1,
     dim.2 = dim.2,
@@ -66,7 +66,7 @@ DimPlotly3d <- DimPlotly3D <- function(seuratObj,
   )
 
   df <- PrepInfo(
-    seuratObj = seuratObj,
+    object = object,
     pt.info = pt.info,
     df = df
   )

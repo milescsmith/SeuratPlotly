@@ -4,21 +4,21 @@
 \alias{PrepDf}
 \title{PrepDf}
 \usage{
-PrepDf(seuratObj, reduction.use, dim.1 = 1, dim.2 = 2, dim.3 = NULL,
-  group.by)
+PrepDf(object, reduction_use, dim_1 = 1, dim_2 = 2, dim_3 = NULL,
+  grouping)
 }
 \arguments{
-\item{seuratObj}{Seurat object}
+\item{object}{Seurat object}
 
-\item{reduction.use}{dimensional reduction to extract}
+\item{reduction_use}{dimensional reduction to extract}
 
-\item{dim.1}{Dimension one.  X-axis data.}
+\item{dim_1}{Dimension one.  X-axis data.}
 
-\item{dim.2}{Dimension two.  Y-axis data.}
+\item{dim_2}{Dimension two.  Y-axis data.}
 
-\item{dim.3}{Dimension three.  Z-axis data.}
+\item{dim_3}{Dimension three.  Z-axis data.}
 
-\item{group.by}{Identity information to use for grouping.
+\item{grouping}{Identity information to use for grouping.
 Permissible values include meta.data column names.}
 }
 \value{

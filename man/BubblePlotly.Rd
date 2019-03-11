@@ -4,35 +4,35 @@
 \alias{BubblePlotly}
 \title{BubblePlotly}
 \usage{
-BubblePlotly(seuratObj, genes.plot, colors.use = "Blues", dot.min = 0,
-  dot.scale = 2, group.by, plot.legend = FALSE, do.return = FALSE,
-  x.lab.rot = -45, plot.width = 600, plot.height = 600,
+BubblePlotly(object, genes.plot, colors_use = "Blues", dot.min = 0,
+  dot.scale = 2, grouping, plot.legend = FALSE, return = FALSE,
+  x.lab.rot = -45, plot_width = 600, plot_height = 600,
   x.font.size = 10, y.font.size = 10, title.font.size = 12,
-  legend.text.size = 10, opacity = 1, plot.title = NULL, bins = 50,
+  legend.text.size = 10, opacity = 1, plot_title = NULL, bins = 50,
   flip = FALSE, alphabetize = TRUE, pct.expr.thresh = NULL,
   export.df = FALSE, use.scaled = FALSE, use.raw = FALSE,
   show.zeros = FALSE, add.group = NULL, y.label.order = NULL)
 }
 \arguments{
-\item{seuratObj}{Seurat object}
+\item{object}{Seurat object}
 
 \item{genes.plot}{A list of genes to plot for each group.}
 
-\item{colors.use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
 
 \item{dot.min}{Minimium marker size, in pixels. (default: 0)}
 
 \item{dot.scale}{Factor by which to scale markers. (default: 2)}
 
-\item{group.by}{Factor by which to group cells.  (default: ident)}
+\item{grouping}{Factor by which to group cells.  (default: ident)}
 
-\item{do.return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{return}{Return the plot object instead of displaying it (default: FALSE)}
 
 \item{x.lab.rot}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)}
 
-\item{plot.width}{Plot width in pixels. (default: 900)}
+\item{plot_width}{Plot width in pixels. (default: 900)}
 
-\item{plot.height}{Plot height in pixels. (default: 900)}
+\item{plot_height}{Plot height in pixels. (default: 900)}
 
 \item{x.font.size}{Size of the x-axis titles. (default: 10)}
 
@@ -44,7 +44,7 @@ BubblePlotly(seuratObj, genes.plot, colors.use = "Blues", dot.min = 0,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
-\item{plot.title}{Display title with the name of the feature? (default TRUE)}
+\item{plot_title}{Display title with the name of the feature? (default TRUE)}
 
 \item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
 
@@ -69,7 +69,7 @@ BubblePlotly(seuratObj, genes.plot, colors.use = "Blues", dot.min = 0,
 \item{legend}{Display legend. (currently nonfunctional) (default TRUE)}
 }
 \value{
-if do.return is TRUE, a plotly object.
+if return is TRUE, a plotly object.
 
 if export.df is TRUE, a data frame.
 }

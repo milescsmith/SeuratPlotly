@@ -1,28 +1,28 @@
 #' DimPlotly3D
 #'
 #' @param object Seurat object
-#' @param group.by Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
-#' @param reduction.use Dimensional reduction to display (default: tsne)
-#' @param dim.1 Dimension to display on the x-axis (default: 1)
-#' @param dim.2 Dimension to display on the y-axis (default: 2)
-#' @param dim.3 Dimension to display on the z-axis (default: 3)
+#' @param grouping Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
+#' @param reduction_use Dimensional reduction to display (default: tsne)
+#' @param dim_1 Dimension to display on the x-axis (default: 1)
+#' @param dim_2 Dimension to display on the y-axis (default: 2)
+#' @param dim_3 Dimension to display on the z-axis (default: 3)
 #' @param do.label Add a label showing thr group name to the graph (default: FALSE)
 #' @param label.size Label font size (default: 12)
 #' @param show.arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
 #' @param label.color Color for label border and arrow.  Need hex value. (default = '000000')
-#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#' @param return Return the plot object instead of displaying it (default: FALSE)
 #' @param pt.size Size of the points in pixels (default: 2)
-#' @param pt.shape Shape to use for the points (default: circle)
+#' @param pt_shape Shape to use for the points (default: circle)
 #' @param opacity Transparency level to use for the points on a 0-1 scale (default: 1)
 #' @param palette.use Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')
-#' @param plot.height Plot height in pixels (default: 900)
-#' @param plot.width Plot width in pixels (default: 900)
-#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
+#' @param plot_height Plot height in pixels (default: 900)
+#' @param plot_width Plot width in pixels (default: 900)
+#' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param legend Display legend? (default: TRUE)
-#' @param legend.font.size Legend font size (default: 12)
-#' @param plot.title Plot title (default: reduction.use)
-#' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
-#' @param plot.grid Display the major unit tick marks? (default: FALSE)
+#' @param legend_font_size Legend font size (default: 12)
+#' @param plot_title Plot title (default: reduction_use)
+#' @param plot_axes Display the major x, y, and z axes? (default: FALSE)
+#' @param plot_grid Display the major unit tick marks? (default: FALSE)
 #'
 #' @import dplyr
 #' @importFrom magrittr "%>%"
@@ -33,41 +33,41 @@
 #' @export
 #'
 #' @examples
-#' DimPlotly3D(object, group.by = "res.0.6", do.label = TRUE, show.arrow = FALSE)
+#' DimPlotly3D(object, grouping = "res.0.6", do.label = TRUE, show.arrow = FALSE)
 DimPlotly3d <- DimPlotly3D <- function(object,
-                                       group.by = "ident",
+                                       grouping = "ident",
                                        do.label = FALSE,
                                        label.size = 12,
                                        label.color = "000000",
                                        show.arrow = FALSE,
-                                       do.return = FALSE,
+                                       return = FALSE,
                                        pt.size = 2,
-                                       pt.shape = "circle",
+                                       pt_shape = "circle",
                                        opacity = 1,
-                                       reduction.use = "tsne",
-                                       dim.1 = 1,
-                                       dim.2 = 2,
-                                       dim.3 = 3,
+                                       reduction_use = "tsne",
+                                       dim_1 = 1,
+                                       dim_2 = 2,
+                                       dim_3 = 3,
                                        palette.use = "Set1",
-                                       plot.height = 900,
-                                       plot.width = 900,
-                                       plot.title = NULL,
-                                       pt.info = NULL,
+                                       plot_height = 900,
+                                       plot_width = 900,
+                                       plot_title = NULL,
+                                       pt_info = NULL,
                                        legend = TRUE,
-                                       legend.font.size = 12,
-                                       plot.grid = FALSE,
-                                       plot.axes = FALSE) {
+                                       legend_font_size = 12,
+                                       plot_grid = FALSE,
+                                       plot_axes = FALSE) {
   df <- PrepDf(object,
-    reduction.use,
-    dim.1 = dim.1,
-    dim.2 = dim.2,
-    dim.3 = dim.3,
-    group.by = group.by
+    reduction_use,
+    dim_1 = dim_1,
+    dim_2 = dim_2,
+    dim_3 = dim_3,
+    grouping = grouping
   )
 
   df <- PrepInfo(
     object = object,
-    pt.info = pt.info,
+    pt_info = pt_info,
     df = df
   )
 
@@ -113,8 +113,8 @@ DimPlotly3d <- DimPlotly3D <- function(object,
     compiled.labels <- NULL
   }
 
-  if (is.null(plot.title)) {
-    plot.title <- reduction.use
+  if (is.null(plot_title)) {
+    plot_title <- reduction_use
   }
 
   pal <- PrepPalette(
@@ -129,19 +129,19 @@ DimPlotly3d <- DimPlotly3D <- function(object,
     color = ~ident,
     colors = pal,
     marker = list(
-      symbol = pt.shape,
+      symbol = pt_shape,
       size = pt.size,
       opacity = opacity,
       mode = "markers"
     ),
-    width = plot.width,
-    height = plot.height,
+    width = plot_width,
+    height = plot_height,
     type = "scatter3d",
     mode = "markers",
     showlegend = legend
   ) %>%
     layout(
-      title = plot.title,
+      title = plot_title,
       scene = list(
         aspectratio = list(
           x = 0,
@@ -167,28 +167,28 @@ DimPlotly3d <- DimPlotly3D <- function(object,
         ),
         dragmode = "turnable",
         xaxis = list(
-          title = glue("{reduction.use}_{dim.1}"),
+          title = glue("{reduction_use}_{dim_1}"),
           type = "double",
-          showgrid = plot.grid,
-          visible = plot.axes
+          showgrid = plot_grid,
+          visible = plot_axes
         ),
         yaxis = list(
-          title = glue("{reduction.use}_{dim.2}"),
+          title = glue("{reduction_use}_{dim_2}"),
           type = "double",
-          showgrid = plot.grid,
-          visible = plot.axes
+          showgrid = plot_grid,
+          visible = plot_axes
         ),
         zaxis = list(
-          title = glue("{reduction.use}_{dim.3}"),
+          title = glue("{reduction_use}_{dim_3}"),
           type = "double",
-          showgrid = plot.grid,
-          visible = plot.axes
+          showgrid = plot_grid,
+          visible = plot_axes
         ),
         annotations = compiled.labels
       )
     )
 
-  if (!is.null(pt.info)) {
+  if (!is.null(pt_info)) {
     p <- p %>% add_markers(
       hoverinfo = "text",
       hovertext = ~meta.info,
@@ -198,11 +198,11 @@ DimPlotly3d <- DimPlotly3D <- function(object,
 
   p <- p %>% layout(legend = list(
     font = list(
-      size = legend.font.size
+      size = legend_font_size
     )
   ))
 
-  if (isTRUE(do.return)) {
+  if (isTRUE(return)) {
     return(p)
   } else {
     p

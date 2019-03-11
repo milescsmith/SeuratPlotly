@@ -4,12 +4,12 @@
 \alias{PrepInfo}
 \title{PrepInfo}
 \usage{
-PrepInfo(seuratObj, pt.info, df)
+PrepInfo(object, pt_info, df)
 }
 \arguments{
-\item{seuratObj}{Seurat object to extract data from}
+\item{object}{Seurat object to extract data from}
 
-\item{pt.info}{A list of meta.data columns to add to the hoverinfo popup.}
+\item{pt_info}{A list of meta.data columns to add to the hoverinfo popup.}
 
 \item{df}{Plotting data frame to which to add the popup data.}
 }
@@ -17,7 +17,7 @@ PrepInfo(seuratObj, pt.info, df)
 data.frame
 }
 \description{
-Using the members of pt.info, build a string for
-each row that compiles the indicated pt.info from the meta.data
+Using the members of pt_info, build a string for
+each row that compiles the indicated pt_info from the meta.data
 slot along with the necessary html tags and column names
 }

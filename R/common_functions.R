@@ -5,10 +5,10 @@
 #'
 #' @param object scRNA-seq data object
 #' @param reduction dimensional reduction to extract
-#' @param dim.1 Dimension one.  X-axis data.
-#' @param dim.2 Dimension two.  Y-axis data.
-#' @param dim.3 Dimension three.  Z-axis data.
-#' @param group.by Identity information to use for grouping.
+#' @param dim_1 Dimension one.  X-axis data.
+#' @param dim_2 Dimension two.  Y-axis data.
+#' @param dim_3 Dimension three.  Z-axis data.
+#' @param grouping Identity information to use for grouping.
 #'   Permissible values include meta.data column names.
 #'
 #' @importFrom tibble rownames_to_column
@@ -25,11 +25,11 @@ PrepDf <- function(object, ...) {
 #' @method PrepDf seurat
 #' @return data.frame
 PrepDf.seurat <- function(object,
-                   reduction,
-                   dim.1 = 1,
-                   dim.2 = 2,
-                   dim.3 = NULL,
-                   group.by = NULL) {
+                          reduction,
+                          dim_1 = 1,
+                          dim_2 = 2,
+                          dim_3 = NULL,
+                          grouping = NULL) {
   df <- GetDimReduction(
     object = object,
     reduction.type = reduction,
@@ -51,16 +51,16 @@ PrepDf.seurat <- function(object,
     )
   )
 
-  if (is.null(dim.3)) {
+  if (is.null(dim_3)) {
     dim.code <- c(
-      dim.axes[[dim.1]],
-      dim.axes[[dim.2]]
+      dim.axes[[dim_1]],
+      dim.axes[[dim_2]]
     )
   } else {
     dim.code <- c(
-      dim.axes[[dim.1]],
-      dim.axes[[dim.2]],
-      dim.axes[[dim.3]]
+      dim.axes[[dim_1]],
+      dim.axes[[dim_2]],
+      dim.axes[[dim_3]]
     )
   }
 
@@ -69,17 +69,17 @@ PrepDf.seurat <- function(object,
 
   column.titles <- letters[24:26]
   colnames(df) <- column.titles[c(
-    dim.1,
-    dim.2,
-    dim.3
+    dim_1,
+    dim_2,
+    dim_3
   )]
   rownames(df) <- cell_names
 
-  if (!is.null(group.by)){
-    if (group.by != "ident") {
-      df$ident <- object$group.by %>%
+  if (!is.null(grouping)){
+    if (grouping != "ident") {
+      df$ident <- object$grouping %>%
         as.factor()
-    } else if (group.by == "ident"){
+    } else if (grouping == "ident"){
       df$ident <- Idents(object) %>% as.factor()
     }
   }
@@ -96,10 +96,10 @@ PrepDf.seurat <- function(object,
 #' @return data.frame
 PrepDf.Seurat <- function(object,
                           reduction,
-                          dim.1 = 1,
-                          dim.2 = 2,
-                          dim.3 = NULL,
-                          group.by = NULL) {
+                          dim_1 = 1,
+                          dim_2 = 2,
+                          dim_3 = NULL,
+                          grouping = NULL) {
   df <- Embeddings(
     object = object,
     reduction = reduction) %>%
@@ -107,16 +107,16 @@ PrepDf.Seurat <- function(object,
 
   dim.axes <- colnames(df)
 
-  if (is.null(dim.3)) {
+  if (is.null(dim_3)) {
     dim.code <- c(
-      dim.axes[[dim.1]],
-      dim.axes[[dim.2]]
+      dim.axes[[dim_1]],
+      dim.axes[[dim_2]]
     )
   } else {
     dim.code <- c(
-      dim.axes[[dim.1]],
-      dim.axes[[dim.2]],
-      dim.axes[[dim.3]]
+      dim.axes[[dim_1]],
+      dim.axes[[dim_2]],
+      dim.axes[[dim_3]]
     )
   }
 
@@ -126,17 +126,17 @@ PrepDf.Seurat <- function(object,
 
   column.titles <- letters[24:26]
   colnames(df) <- column.titles[c(
-    dim.1,
-    dim.2,
-    dim.3
+    dim_1,
+    dim_2,
+    dim_3
   )]
   rownames(df) <- cell_names
 
-  if (!is.null(group.by)){
-    if (group.by != "ident") {
-      df$ident <- object$group.by %>%
+  if (!is.null(grouping)){
+    if (grouping != "ident") {
+      df$ident <- object$grouping %>%
         as.factor()
-    } else if (group.by == "ident"){
+    } else if (grouping == "ident"){
       df$ident <- Idents(object) %>% as.factor()
     }
   }
@@ -147,12 +147,12 @@ PrepDf.Seurat <- function(object,
 
 #' @title PrepInfo
 #'
-#' @description Using the members of pt.info, build a string for
-#' each row that compiles the indicated pt.info from the meta.data
+#' @description Using the members of pt_info, build a string for
+#' each row that compiles the indicated pt_info from the meta.data
 #' slot along with the necessary html tags and column names
 #'
 #' @param object Seurat object to extract data from
-#' @param pt.info A list of meta.data columns to add to the hoverinfo popup.
+#' @param pt_info A list of meta.data columns to add to the hoverinfo popup.
 #' @param df Plotting data frame to which to add the popup data.
 #'
 #' @importFrom glue glue
@@ -170,15 +170,15 @@ PrepInfo <- function(object, ...) {
 #' @rdname PrepInfo
 #' @method PrepInfo seurat
 #' @return data.frame
-PrepInfo.seurat <- function(object, pt.info, df) {
-  if (!is.null(pt.info)) {
+PrepInfo.seurat <- function(object, pt_info, df) {
+  if (!is.null(pt_info)) {
     meta.info <- list()
     # for each row
     for (i in seq(dim(df)[1])) {
-      # for each member of pt.info
+      # for each member of pt_info
       rowinfo <- ""
-      for (j in 1:length(pt.info)) {
-        rowinfo <- glue("{rowinfo} </br> {pt.info[j]}: {object@meta.data[i, pt.info[j]]}")
+      for (j in 1:length(pt_info)) {
+        rowinfo <- glue("{rowinfo} </br> {pt_info[j]}: {object@meta.data[i, pt_info[j]]}")
       }
       meta.info <- c(meta.info, rowinfo)
     }
@@ -194,22 +194,22 @@ PrepInfo.seurat <- function(object, pt.info, df) {
 #' @rdname PrepInfo
 #' @method PrepInfo Seurat
 #' @return data.frame
-PrepInfo.Seurat <- function(object, pt.info, df) {
-  if (!is.null(pt.info)) {
-    feature_info <- FetchData(object = object, vars = pt.info) %>% rownames_to_column("cell")
+PrepInfo.Seurat <- function(object, pt_info, df) {
+  if (!is.null(pt_info)) {
+    feature_info <- FetchData(object = object, vars = pt_info) %>% rownames_to_column("cell")
     # for each row
     if ("cell" %nin% colnames(df)){
       df %<>% as.data.frame() %>% rownames_to_column("cell")
     }
     meta.info <- new("data.frame")
     for (i in seq(nrow(feature_info))) {
-      # for each member of pt.info
+      # for each member of pt_info
       rowinfo <- ""
-      for (j in 1:length(pt.info)) {
-        if (is.numeric(feature_info[i, pt.info[j]])){
-          rowinfo <- glue("{rowinfo} </br> {pt.info[j]}: {round(feature_info[i, pt.info[j]],digits = 3)}")
+      for (j in 1:length(pt_info)) {
+        if (is.numeric(feature_info[i, pt_info[j]])){
+          rowinfo <- glue("{rowinfo} </br> {pt_info[j]}: {round(feature_info[i, pt_info[j]],digits = 3)}")
         } else {
-          rowinfo <- glue("{rowinfo} </br> {pt.info[j]}: {feature_info[i, pt.info[j]]}")
+          rowinfo <- glue("{rowinfo} </br> {pt_info[j]}: {feature_info[i, pt_info[j]]}")
         }
 
       }
@@ -231,7 +231,7 @@ PrepInfo.Seurat <- function(object, pt.info, df) {
 #'
 #' @param df A graphing data.frame (from PrepDf) containing a column named 'ident'
 #'   with group identities.
-#' @param palette.use The name of a palette to use.  Must be a palette available in
+#' @param palette_use The name of a palette to use.  Must be a palette available in
 #'   the Paletteer package.  If there are more unique identities than colors in the
 #'   palette, additional values will be created by interpolation.
 #'
@@ -242,23 +242,24 @@ PrepInfo.Seurat <- function(object, pt.info, df) {
 #' @importFrom grDevices colorRampPalette
 #'
 #' @examples
-PrepPalette <- function(df, palette.use) {
+PrepPalette <- function(df, 
+                        palette_use) {
   bins <- length(unique(df[, "ident"]))
 
-  if (palette.use %in% palettes_d_names$palette) {
-    color.package <- palettes_d_names$package[which(palette.use == palettes_d_names$palette)]
+  if (palette_use %in% palettes_d_names$palette) {
+    color.package <- palettes_d_names$package[which(palette_use == palettes_d_names$palette)]
     pal <- paletteer_d(
       package = !!color.package,
-      palette = !!palette.use
+      palette = !!palette_use
     )
-  } else if (palette.use %in% palettes_c_names$palette) {
-    color.package <- palettes_c_names$package[which(palette.use == palettes_c_names$palette)]
+  } else if (palette_use %in% palettes_c_names$palette) {
+    color.package <- palettes_c_names$package[which(palette_use == palettes_c_names$palette)]
     pal <- paletteer_c(
       package = !!color.package,
-      palette = !!palette.use
+      palette = !!palette_use
     )
   } else {
-    pal <- palette.use
+    pal <- palette_use
   }
   pal <- colorRampPalette(pal)(bins)
   return(pal)
@@ -271,8 +272,8 @@ PrepPalette <- function(df, palette.use) {
 #' @param object Seurat object to get feature data from
 #' @param df Plotting data frame to which to add the popup data.
 #' @param features Features (genes expression, metadata, etc...) to retrieve data for
-#' @param assay.use Assay to pull feature data from.  Default: "RNA"
-#' @param slot.use Slot to pull feature data from. Default: "data"
+#' @param assay_use Assay to pull feature data from.  Default: "RNA"
+#' @param slot_use Slot to pull feature data from. Default: "data"
 #'
 #' @importFrom glue glue
 #'
@@ -288,13 +289,13 @@ GetFeatureValues <- function(object, ...) {
 # Seurat 2
 #' @rdname PrepInfo
 #' @method PrepInfo seurat
-#' @importFrom Seurat
+#' @import Seurat
 #' @return data.frame
 GetFeatureValues.seurat <- function(object,
                                     df,
                                     features,
-                                    assay.use = "RNA",
-                                    slot.use = "data") {
+                                    bins = NULL,
+                                    ...) {
   if (slot.use == "scaled.data"){
     use.scaled <- TRUE
     use.raw <- FALSE
@@ -305,7 +306,18 @@ GetFeatureValues.seurat <- function(object,
     use.raw <- FALSE
     use.scaled <- FALSE
   }
-  feature_data <- FetchData(object, vars.all = features, use.scaled = use.scaled, use.raw = use.raw) %>% rownames_to_column("cell")
+  feature_data <- FetchData(object, 
+                            vars.all = features, 
+                            use.scaled = use.scaled, 
+                            use.raw = use.raw) %<>% rownames_to_column("cell")
+  if (!is.null(bins)){
+    feature_data %<>% mutate_if(is.numeric, 
+                                list(cut(feature_1_data, 
+                                         breaks = bins)) %>%
+      mutate_if(is.factor, 
+                list(as.numeric))
+  }
+  feature_data 
   df %<>% inner_join(feature_data, by = "cell")
   return(df)
 }
@@ -313,15 +325,31 @@ GetFeatureValues.seurat <- function(object,
 # Seurat 3
 #' @rdname PrepInfo
 #' @method PrepInfo Seurat
-#' @importFrom Seurat
+#' @import Seurat
+#' @importFrom glue glue
+#' @importFrom purrr map_chr
 #' @return data.frame
 GetFeatureValues.Seurat <- function(object,
                                     df,
                                     features,
-                                    assay.use = "RNA",
-                                    slot.use = "data") {
-  DefaultAssay(object) <- assay.use
-  feature_data <- FetchData(object, vars = features, slot = slot.use) %>% rownames_to_column("cell")
+                                    assay_use = "RNA",
+                                    slot_use = "data",
+                                    bins = F
+                                    ...) {
+  key <- GetAssayData(object, assay = assay_use, slot = key)
+  feature_data <- FetchData(object, 
+                            vars = map_chr(features, function(x) glue("{key}_{x}")), 
+                            slot = slot_use) %>% 
+    rownames_to_column("cell")
+  
+  if (!is.null(bins)){
+    feature_data %<>% mutate_if(is.numeric, 
+                                list(cut(feature_1_data, 
+                                         breaks = bins)) %>%
+      mutate_if(is.factor, 
+                list(as.numeric))
+  }
+
   df %<>% inner_join(feature_data, by = "cell")
   return(df)
 }

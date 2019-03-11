@@ -11,18 +11,18 @@
 #' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param dot.min Minimium marker size, in pixels. (default: 0)
 #' @param dot.scale Factor by which to scale markers. (default: 2)
-#' @param group.by Factor by which to group cells.  (default: ident)
+#' @param grouping Factor by which to group cells.  (default: ident)
 #' @param legend Display legend. (currently nonfunctional) (default TRUE)
-#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#' @param return Return the plot object instead of displaying it (default: FALSE)
 #' @param x.lab.rot Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)
-#' @param plot.height Plot height in pixels. (default: 900)
-#' @param plot.width Plot width in pixels. (default: 900)
+#' @param plot_height Plot height in pixels. (default: 900)
+#' @param plot_width Plot width in pixels. (default: 900)
 #' @param x.font.size Size of the x-axis titles. (default: 10)
 #' @param y.font.size Size of the y-axis titles. (default: 10)
 #' @param title.font.size Size of the plot title. (default: 12)
 #' @param legend.text.size Size of the legend text. (default: 10)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param plot.title  Display title with the name of the feature? (default TRUE)
+#' @param plot_title  Display title with the name of the feature? (default TRUE)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
 #' @param flip Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. (default: false)
 #' @param alphabetize Alphabetize the display order of genes. (default: TRUE)
@@ -44,7 +44,7 @@
 #' @importFrom plotly plot_ly layout
 #' @importFrom grDevices colorRampPalette
 #'
-#' @return if do.return is TRUE, a plotly object.
+#' @return if return is TRUE, a plotly object.
 #' @return if export.df is TRUE, a data frame.
 #' @export
 #'
@@ -54,18 +54,18 @@ BubblePlotly <- function (object,
                           colors_use = "Blues",
                           dot.min = 0,
                           dot.scale = 2,
-                          group.by,
+                          grouping,
                           plot.legend = FALSE,
-                          do.return = FALSE,
+                          return = FALSE,
                           x.lab.rot = -45,
-                          plot.width = 600,
-                          plot.height = 600,
+                          plot_width = 600,
+                          plot_height = 600,
                           x.font.size = 10,
                           y.font.size = 10,
                           title.font.size = 12,
                           legend.text.size = 10,
                           opacity = 1,
-                          plot.title = NULL,
+                          plot_title = NULL,
                           bins = 50,
                           flip = FALSE,
                           alphabetize = TRUE,
@@ -78,8 +78,8 @@ BubblePlotly <- function (object,
                           y.label.order = NULL)
 {
 
-  if (!missing(x = group.by)) {
-    object <- SetAllIdent(object = object, id = group.by)
+  if (!missing(x = grouping)) {
+    object <- SetAllIdent(object = object, id = grouping)
   }
 
   #screen out any genes that are not in our dataset and print them
@@ -207,9 +207,9 @@ BubblePlotly <- function (object,
                              symbol = 'circle',
                              sizemode = 'diameter'),
                showlegend = FALSE,
-               width = plot.width,
-               height = plot.height) %>%
-    layout(title = plot.title,
+               width = plot_width,
+               height = plot_height) %>%
+    layout(title = plot_title,
            titlefont = list(size = title.font.size),
            #font = list(size = font.size),
            xaxis = list(title = "Gene", tickangle = x.lab.rot, tickfont = list(size = x.font.size)),
@@ -217,7 +217,7 @@ BubblePlotly <- function (object,
            margin = list(b = 100, l = 250)
     )
 
-  if (do.return) {
+  if (return) {
     return(p)
   } else if(isTRUE(export.df))
   {

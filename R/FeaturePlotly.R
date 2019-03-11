@@ -7,31 +7,27 @@
 #'
 #' @param object Seurat object
 #' @param feature Variable to display. Currently only works with gene names
-#' @param reduction.use Dimensional reduction to display (default: tsne)
-#' @param dim.1 Dimension to display on the x-axis (default: 1)
-#' @param dim.2 Dimension to display on the y-axis (default: 2)
-#' @param pt.scale Factor by which to multiply the size of the points (default: 5)
-#' @param pt.shape Shape to use for the points (default = circle)
+#' @param reduction_use Dimensional reduction to display (default: tsne)
+#' @param dim_1 Dimension to display on the x-axis (default: 1)
+#' @param dim_2 Dimension to display on the y-axis (default: 2)
+#' @param pt_scale Factor by which to multiply the size of the points (default: 5)
+#' @param pt_shape Shape to use for the points (default = circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)
+#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
-#' @param plot.height Plot height in pixels (default: 900)
-#' @param plot.width Plot width in pixels (default: 900)
-#' @param plot.title  Display title with the name of the feature? (default TRUE)
-#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
+#' @param plot_height Plot height in pixels (default: 900)
+#' @param plot_width Plot width in pixels (default: 900)
+#' @param plot_title  Display title with the name of the feature? (default TRUE)
+#' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param legend Display legend? (default: TRUE)
-#' @param legend.font.size Legend font size (default: 12)
-#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#' @param legend_font_size Legend font size (default: 12)
+#' @param return Return the plot object instead of displaying it (default: FALSE)
 #'
 #' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom Seurat GetDimReduction
-#' @importFrom Seurat FetchData
-#' @importFrom RColorBrewer brewer.pal
-#' @importFrom RColorBrewer brewer.pal.info
+#' @import Seurat
+#' @importFrom RColorBrewer brewer.pal brewer.pal.info
 #' @importFrom viridis viridis
-#' @importFrom plotly plot_ly
-#' @importFrom plotly layout
+#' @importFrom plotly plot_ly layout
 #' @importFrom grDevices colorRampPalette
 #'
 #' @return plotly object
@@ -42,30 +38,30 @@ FeaturePlotly <- function(object,
                           feature = NULL,
                           assay.use = "RNA",
                           slot.use = "data",
-                          do.return = TRUE,
-                          pt.scale = 5,
-                          pt.shape = "circle",
+                          return = TRUE,
+                          pt_scale = 5,
+                          pt_shape = "circle",
                           opacity = 1,
-                          reduction.use = "tsne",
-                          dim.1 = 1,
-                          dim.2 = 2,
-                          colors.use = c("blue","red"),
+                          reduction_use = "tsne",
+                          dim_1 = 1,
+                          dim_2 = 2,
+                          colors_use = c("blue","red"),
                           reverse.color.scale = FALSE,
                           bins = 10,
-                          plot.height = 900,
-                          plot.width = 900,
-                          plot.title = FALSE,
-                          pt.info = NULL,
+                          plot_height = 900,
+                          plot_width = 900,
+                          plot_title = FALSE,
+                          pt_info = NULL,
                           legend = TRUE,
-                          legend.font.size = 12){
+                          legend_font_size = 12){
 
   df <- PrepDf(object,
-               reduction.use,
-               dim.1 = dim.1,
-               dim.2 = dim.2)
+               reduction_use,
+               dim_1 = dim_1,
+               dim_2 = dim_2)
 
   df <- PrepInfo(object = object,
-                 pt.info = c(feature),
+                 pt_info = c(feature),
                  df = df)
 
   if (is.null(feature)){ stop("No gene or feature given") }
@@ -78,12 +74,12 @@ FeaturePlotly <- function(object,
 
   cut.feature.data <- as.numeric(as.factor(x = cut(x = as.numeric(df[,feature]), breaks = bins)))
 
-  df[,"size"] <- df[,feature] * pt.scale
+  df[,"size"] <- df[,feature] * pt_scale
 
-  if (isTRUE(plot.title)){
-    plot.title = feature
+  if (isTRUE(plot_title)){
+    plot_title = feature
   } else {
-    plot.title = NULL
+    plot_title = NULL
   }
 
   p <- plot_ly(df,
@@ -93,34 +89,34 @@ FeaturePlotly <- function(object,
                type = "scattergl",
                size = ~size,
                sizes = c(0,max(df$size)),
-               marker = list(symbol = pt.shape,
+               marker = list(symbol = pt_shape,
                              opacity = opacity,
                              color = ~get(feature),
                              line = list(width = 0),
-                             colorscale=colors.use,
+                             colorscale=colors_use,
                              reversescale = reverse.color.scale,
                              cmin = 0,
                              cmax = 1,
                              sizemode = "diameter",
                              colorbar = list(title = feature)),
-               width = plot.width,
-               height = plot.height,
+               width = plot_width,
+               height = plot_height,
                showlegend = legend,
                hoverinfo = "text",
                text = ~meta.info) %>%
     layout(
-      title = plot.title,
-      xaxis = list(title = glue("{reduction.use}_{dim.1}")),
-      yaxis = list(title = glue("{reduction.use}_{dim.2}"))
+      title = plot_title,
+      xaxis = list(title = glue("{reduction_use}_{dim_1}")),
+      yaxis = list(title = glue("{reduction_use}_{dim_2}"))
     )
 
   p <- p %>% layout(legend = list(
     font = list(
-      size = legend.font.size)
+      size = legend_font_size)
     )
   )
 
-  if (isTRUE(do.return)){
+  if (isTRUE(return)){
     return(p)
   } else {
     p

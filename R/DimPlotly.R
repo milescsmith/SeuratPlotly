@@ -5,24 +5,24 @@
 #' coloring points by the given grouping variable
 #'
 #' @param object scRNA-seq object
-#' @param group.by Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
-#' @param reduction.use Dimensional reduction to display (default: tsne)
-#' @param dim.1 Dimension to display on the x-axis (default: 1)
-#' @param dim.2 Dimension to display on the y-axis (default: 2)
+#' @param grouping Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
+#' @param reduction_use Dimensional reduction to display (default: tsne)
+#' @param dim_1 Dimension to display on the x-axis (default: 1)
+#' @param dim_2 Dimension to display on the y-axis (default: 2)
 #' @param do.label Add a label showing thr group name to the graph (default: FALSE)
 #' @param label.size Label font size (default: 12)
 #' @param show.arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
 #' @param label.color Color for label border and arrow.  Need hex value. (default = '000000')
 #' @param pt.size Size of the points in pixels (default: 2)
-#' @param pt.shape Shape to use for the points (default: circle)
+#' @param pt_shape Shape to use for the points (default: circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
 #' @param palette.use Color palette to use.  Must be a palette available in the Paletteer package
-#' @param plot.height Plot height in pixels (default: 900)
-#' @param plot.width Plot width in pixels (default: 900)
+#' @param plot_height Plot height in pixels (default: 900)
+#' @param plot_width Plot width in pixels (default: 900)
 #' @param legend Display legend? (default: TRUE)
-#' @param legend.font.size Legend font size (default: 12)
-#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#' @param legend_font_size Legend font size (default: 12)
+#' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
+#' @param return Return the plot object instead of displaying it (default: FALSE)
 #'
 #' @import dplyr
 #' @importFrom plotly plot_ly layout
@@ -32,36 +32,36 @@
 #'
 #' @examples
 #' object <- RunTSNE(object)
-#' DimPlotly(object, group.by = 'ident', pt.size = 4, opacity = 0.5, plot.title = "Test Plot", reduction.use = "tsne")
+#' DimPlotly(object, grouping = 'ident', pt.size = 4, opacity = 0.5, plot_title = "Test Plot", reduction_use = "tsne")
 DimPlotly <- function(object,
-                      group.by = "ident",
+                      grouping = "ident",
                       do.label = FALSE,
                       label.size = 12,
                       show.arrow = FALSE,
                       label.color = "000000",
-                      do.return = FALSE,
+                      return = FALSE,
                       pt.size = 4,
-                      pt.shape = "circle",
+                      pt_shape = "circle",
                       opacity = 0.75,
-                      reduction.use = "tsne",
-                      dim.1 = 1,
-                      dim.2 = 2,
+                      reduction_use = "tsne",
+                      dim_1 = 1,
+                      dim_2 = 2,
                       palette.use = "default_ucscgb",
-                      plot.height = 900,
-                      plot.width = 900,
-                      plot.title = NULL,
-                      pt.info = NULL,
+                      plot_height = 900,
+                      plot_width = 900,
+                      plot_title = NULL,
+                      pt_info = NULL,
                       legend = TRUE,
-                      legend.font.size = 12){
+                      legend_font_size = 12){
 
   df <- PrepDf(object,
-               reduction.use,
-               dim.1 = dim.1,
-               dim.2 = dim.2,
-               group.by = group.by)
+               reduction_use,
+               dim_1 = dim_1,
+               dim_2 = dim_2,
+               grouping = grouping)
 
   df <- PrepInfo(object = object,
-                 pt.info = pt.info,
+                 pt_info = pt_info,
                  df = df)
 
   pal <- PrepPalette(df = df,
@@ -87,8 +87,8 @@ DimPlotly <- function(object,
     labels <- NULL
   }
 
-  if (is.null(plot.title)){
-    plot.title <- reduction.use
+  if (is.null(plot_title)){
+    plot_title <- reduction_use
   }
 
   p <- plot_ly(df,
@@ -97,13 +97,13 @@ DimPlotly <- function(object,
                color = ~ident,
                colors = pal,
                marker = list(
-                 symbol = pt.shape,
+                 symbol = pt_shape,
                  size = pt.size,
                  opacity = opacity,
                  mode = "markers"
                ),
-               width = plot.width,
-               height = plot.height,
+               width = plot_width,
+               height = plot_height,
                type = "scattergl",
                mode = "markers",
                showlegend = legend,
@@ -111,19 +111,19 @@ DimPlotly <- function(object,
                text = ~meta.info
   ) %>%
     layout(
-      title = plot.title,
-      xaxis = list(title = glue("{reduction.use}_{dim.1}")),
-      yaxis = list(title = glue("{reduction.use}_{dim.2}")),
+      title = plot_title,
+      xaxis = list(title = glue("{reduction_use}_{dim_1}")),
+      yaxis = list(title = glue("{reduction_use}_{dim_2}")),
       annotations = labels
     )
 
   p <- p %>% layout(legend = list(
     font = list(
-      size = legend.font.size)
+      size = legend_font_size)
     )
   )
 
-  if (isTRUE(do.return)){
+  if (isTRUE(return)){
     return(p)
   } else {
     p

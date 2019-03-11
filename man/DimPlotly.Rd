@@ -4,18 +4,18 @@
 \alias{DimPlotly}
 \title{Plot dimensional reduction for a Seurat object}
 \usage{
-DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
+DimPlotly(object, grouping = "ident", do.label = FALSE,
   label.size = 12, show.arrow = FALSE, label.color = "000000",
-  do.return = FALSE, pt.size = 4, pt.shape = "circle",
-  opacity = 0.75, reduction.use = "tsne", dim.1 = 1, dim.2 = 2,
-  palette.use = "default_ucscgb", plot.height = 900,
-  plot.width = 900, plot.title = NULL, pt.info = NULL,
-  legend = TRUE, legend.font.size = 12)
+  return = FALSE, pt.size = 4, pt_shape = "circle",
+  opacity = 0.75, reduction_use = "tsne", dim_1 = 1, dim_2 = 2,
+  palette.use = "default_ucscgb", plot_height = 900,
+  plot_width = 900, plot_title = NULL, pt_info = NULL,
+  legend = TRUE, legend_font_size = 12)
 }
 \arguments{
-\item{seuratObj}{Seurat object}
+\item{object}{Seurat object}
 
-\item{group.by}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
+\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
 
 \item{do.label}{Add a label showing thr group name to the graph (default: FALSE)}
 
@@ -25,31 +25,31 @@ DimPlotly(seuratObj, group.by = "ident", do.label = FALSE,
 
 \item{label.color}{Color for label border and arrow.  Need hex value. (default = '000000')}
 
-\item{do.return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{return}{Return the plot object instead of displaying it (default: FALSE)}
 
 \item{pt.size}{Size of the points in pixels (default: 2)}
 
-\item{pt.shape}{Shape to use for the points (default: circle)}
+\item{pt_shape}{Shape to use for the points (default: circle)}
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
-\item{reduction.use}{Dimensional reduction to display (default: tsne)}
+\item{reduction_use}{Dimensional reduction to display (default: tsne)}
 
-\item{dim.1}{Dimension to display on the x-axis (default: 1)}
+\item{dim_1}{Dimension to display on the x-axis (default: 1)}
 
-\item{dim.2}{Dimension to display on the y-axis (default: 2)}
+\item{dim_2}{Dimension to display on the y-axis (default: 2)}
 
 \item{palette.use}{Color palette to use.  Must be a palette available in the Paletteer package}
 
-\item{plot.height}{Plot height in pixels (default: 900)}
+\item{plot_height}{Plot height in pixels (default: 900)}
 
-\item{plot.width}{Plot width in pixels (default: 900)}
+\item{plot_width}{Plot width in pixels (default: 900)}
 
-\item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
 
 \item{legend}{Display legend? (default: TRUE)}
 
-\item{legend.font.size}{Legend font size (default: 12)}
+\item{legend_font_size}{Legend font size (default: 12)}
 }
 \value{
 plotly object
@@ -58,9 +58,9 @@ plotly object
 Create a scatterplot of a given dimensional reduction set for a Seurat object,
 coloring points by the given grouping variable
 Requrires a Seurat object with the reduction to be used in the corresponding
-seuratObj@dr slot
+object@dr slot
 }
 \examples{
-seuratObj <- RunTSNE(seuratObj)
-DimPlotly(seuratObj, group.by = 'ident', pt.size = 4, opacity = 0.5, plot.title = "Test Plot", reduction.use = "tsne")
+object <- RunTSNE(object)
+DimPlotly(object, grouping = 'ident', pt.size = 4, opacity = 0.5, plot_title = "Test Plot", reduction_use = "tsne")
 }

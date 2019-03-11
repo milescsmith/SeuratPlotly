@@ -5,12 +5,12 @@
 \title{Feature2Plotly3D}
 \usage{
 Feature2Plotly3D(object, feature_1 = NULL, feature_2 = NULL,
-  return = FALSE, pt_scale = 0.5, pt_shape = "circle",
-  opacity = 1, reduction_use = "tsne", dim_1 = 1, dim_2 = 2,
-  dim_3 = 3, colors_use_1 = "Reds", colors_use_2 = "Blues",
-  bins = 10, plot_height = "750", plot_width = "750",
-  pt_info = NULL, legend = TRUE, legend_font_size = 12,
-  plot_grid = FALSE, plot_axes = FALSE)
+  return = FALSE, pt_scale = 0.5, pt_shape = "circle", opacity = 1,
+  reduction_use = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
+  colors_use_1 = "Reds", colors_use_2 = "Blues", bins = 10,
+  plot_height = "750", plot_width = "750", pt_info = NULL,
+  legend = TRUE, legend_font_size = 12, plot_grid = FALSE,
+  plot_axes = FALSE)
 }
 \arguments{
 \item{object}{Seurat object}

@@ -5,11 +5,12 @@
 \title{Feature2Plotly}
 \usage{
 Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
-  return = FALSE, pt_scale = 1.5, pt_shape = "circle",
-  opacity = 0.5, reduction_use = "tsne", dim_1 = 1, dim_2 = 2,
-  colors_use_1 = "Reds", colors_use_2 = "Blues", bins = 10,
-  plot_height = "750", plot_width = "750", pt_info = NULL,
-  legend = TRUE, legend_font_size = 12)
+  assay_1 = "RNA", assay_2 = "RNA", return = FALSE, pt_scale = 1.5,
+  pt_shape = "circle", opacity = 0.5, reduction_use = "tsne",
+  dim_1 = 1, dim_2 = 2, colors_use_1 = "Reds",
+  colors_use_2 = "Blues", bins = 10, plot_height = "750",
+  plot_width = "750", pt_info = NULL, legend = TRUE,
+  legend_font_size = 12)
 }
 \arguments{
 \item{object}{Seurat object}
@@ -18,7 +19,7 @@ Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
 
 \item{feature_2}{Second variable to display. Currently only works with gene names}
 
-\item{return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{return}{Return the plot dataframe instead of displaying it (default: FALSE)}
 
 \item{pt_scale}{Factor by which to multiply the size of the points (default: 5)}
 
@@ -53,6 +54,4 @@ Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
 \description{
 Create a scatterplot of a given dimensional reduction set for a Seurat object,
 coloring and sizing points by the expression level of two different features.
-Requrires a Seurat object with the reduction to be used in the corresponding
-object@dr slot
 }

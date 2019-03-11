@@ -4,9 +4,8 @@
 \alias{GOBubblePlotly}
 \title{GOBubblePlotly}
 \usage{
-GOBubblePlotly(object, go_term, grouping = "ident",
-  plot_height = 900, plot_width = 900, filter = object@var.genes,
-  ...)
+GOBubblePlotly(object, go_term, grouping = "ident", plot_height = 900,
+  plot_width = 900, filter = object@var.genes, ...)
 }
 \arguments{
 \item{object}{Seurat object}

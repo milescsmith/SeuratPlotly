@@ -21,15 +21,13 @@
 #' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param legend Display legend? (default: TRUE)
 #' @param legend_font_size Legend font size (default: 12)
-#' @param return Return the plot object instead of displaying it (default: FALSE)
+#' @param return Return the plot dataframe instead of displaying it (default: FALSE)
 #'
-#' @import dplyr
-#' @import Seurat
 #' @importFrom RColorBrewer brewer.pal brewer.pal.info
 #' @importFrom viridis viridis
 #' @importFrom plotly plot_ly layout
 #' @importFrom grDevices colorRampPalette
-#' @importFrom glue glue
+#' @importFrom stringr str_glue
 #'
 #' @return
 #' @export
@@ -80,34 +78,34 @@ Feature2Plotly <- function(object,
     pal.2 <- colors_use_2
   }
 
-  df <- GetFeatureValues(object = object, 
-                                     df = df,
-                                     features = feature_1
-                                     bins = bins
-                                     use.scaled = TRUE,
-                                     assay_use = assay_1)
-  df <- GetFeatureValues(object = object, 
-                                     df = df,
-                                     features = feature_1
-                                     bins = bins
-                                     use.scaled = FALSE,
-                                     assay_use = assay_1)
-  colnames(df)[ncol(df)] <- glue("colnames(df)[ncol(df)]_size")
+  df <- GetFeatureValues(object = object,
+                         df = df,
+                         feature = feature_1,
+                         bins = bins,
+                         use.scaled = TRUE,
+                         assay_use = assay_1)
+  df <- GetFeatureValues(object = object,
+                         df = df,
+                         feature = feature_1,
+                         bins = bins,
+                         use.scaled = FALSE,
+                         assay_use = assay_1,
+                         suffix = "size")
   df[,ncol(df)] <- df[,ncol(df)] * pt_scale
 
-  df <- GetFeatureValues(object = object, 
-                                     df = df,
-                                     features = feature_2
-                                     bins = bins
-                                     use.scaled = TRUE,
-                                     assay_use = assay_2)
-  df <- GetFeatureValues(object = object, 
-                                     df = df,
-                                     features = feature_2
-                                     bins = bins
-                                     use.scaled = FALSE,
-                                     assay_use = assay_2)
-  colnames(df)[ncol(df)] <- glue("colnames(df)[ncol(df)]_size")
+  df <- GetFeatureValues(object = object,
+                         df = df,
+                         feature = feature_2,
+                         bins = bins,
+                         use.scaled = TRUE,
+                         assay_use = assay_2)
+  df <- GetFeatureValues(object = object,
+                         df = df,
+                         feature = feature_2,
+                         bins = bins,
+                         use.scaled = FALSE,
+                         assay_use = assay_2,
+                         suffix = "size")
   df[,ncol(df)] <- df[,ncol(df)] * pt_scale
 
   if(!is.null(pt_info)){
@@ -117,10 +115,10 @@ Feature2Plotly <- function(object,
       # for each member of pt_info
       rowinfo = ""
       for(j in 1:length(pt_info)){
-        rowinfo <- glue("{rowinfo} </br> {pt_info[j]}: {object@meta.data[i, pt_info[j]]}")
+        rowinfo <- str_glue("{rowinfo} </br> {pt_info[j]}: {object@meta.data[i, pt_info[j]]}")
       }
-      rowinfo <- glue("{rowinfo} </br> Expr {feature_1}: {df[i,'feature_1']}")
-      rowinfo <- glue("{rowinfo} </br> Expr {feature_2}: {df[i,'feature_2']}")
+      rowinfo <- str_glue("{rowinfo} </br> Expr {feature_1}: {df[i,'feature_1']}")
+      rowinfo <- str_glue("{rowinfo} </br> Expr {feature_2}: {df[i,'feature_2']}")
       meta.info <- c(meta.info, rowinfo)
     }
     meta.info <- unlist(meta.info)
@@ -133,8 +131,8 @@ Feature2Plotly <- function(object,
                color = ~feature_1,
                mode = 'markers',
                colors = c(pal.1,pal.2),
-               size = ~glue("{feature_1}_size"),
-               sizes = c(0,max(df[[glue("{feature_1}_size")]])),
+               size = ~get(tr_glue("{feature_1}_size")),
+               sizes = c(0,max(df[[str_glue("{feature_1}_size")]])),
                marker = list(symbol = pt_shape,
                              opacity = opacity,
                              sizemode = "diameter"
@@ -151,15 +149,15 @@ Feature2Plotly <- function(object,
               color = ~feature.2,
               mode = 'markers',
               type = 'scattergl',
-              size = ~glue("{feature_1}_size"),,
-              sizes = c(0,max(df[[glue("{feature_1}_size")]])),
+              size = ~get(str_glue("{feature_1}_size")),
+              sizes = c(0,max(df[[str_glue("{feature_1}_size")]])),
               marker = list(symbol = pt_shape,
                             opacity = opacity,
                             sizemode = "diameter"),
               legendgroup = 1,
               showlegend = legend,
               name = feature_2) %>%
-    layout(title = glue("{feature_1} x {feature_2}"),
+    layout(title = str_glue("{feature_1} x {feature_2}"),
            xaxis = list(title = dim.axes[as.numeric(dim_1)]),
            yaxis = list(title = dim.axes[as.numeric(dim_2)]),
            margin = c(100,NA,NA,NA)
@@ -177,7 +175,7 @@ Feature2Plotly <- function(object,
       size = legend_font_size)))
 
   if (isTRUE(return)){
-    return(p)
+    return(df)
   } else {
     p
   }

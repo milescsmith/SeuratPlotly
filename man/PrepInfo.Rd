@@ -2,9 +2,22 @@
 % Please edit documentation in R/common_functions.R
 \name{PrepInfo}
 \alias{PrepInfo}
+\alias{PrepInfo.seurat}
+\alias{PrepInfo.Seurat}
+\alias{GetFeatureValues.seurat}
+\alias{GetFeatureValues.Seurat}
 \title{PrepInfo}
 \usage{
-PrepInfo(object, pt_info, df)
+PrepInfo(object, ...)
+
+\method{PrepInfo}{seurat}(object, pt_info, df)
+
+\method{PrepInfo}{Seurat}(object, pt_info, df)
+
+\method{PrepInfo}{seurat}(object, df, feature, bins = NULL, ...)
+
+\method{PrepInfo}{Seurat}(object, df, feature, assay_use = "RNA",
+  slot_use = "data", bins = NULL, suffix = NULL, ...)
 }
 \arguments{
 \item{object}{Seurat object to extract data from}
@@ -14,6 +27,14 @@ PrepInfo(object, pt_info, df)
 \item{df}{Plotting data frame to which to add the popup data.}
 }
 \value{
+data.frame
+
+data.frame
+
+data.frame
+
+data.frame
+
 data.frame
 }
 \description{

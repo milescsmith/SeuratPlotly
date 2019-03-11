@@ -2,15 +2,22 @@
 % Please edit documentation in R/common_functions.R
 \name{PrepDf}
 \alias{PrepDf}
+\alias{PrepDf.seurat}
+\alias{PrepDf.Seurat}
 \title{PrepDf}
 \usage{
-PrepDf(object, reduction_use, dim_1 = 1, dim_2 = 2, dim_3 = NULL,
-  grouping)
+PrepDf(object, ...)
+
+\method{PrepDf}{seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
+  dim_3 = NULL, grouping = NULL)
+
+\method{PrepDf}{Seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
+  dim_3 = NULL, grouping = NULL)
 }
 \arguments{
-\item{object}{Seurat object}
+\item{object}{scRNA-seq data object}
 
-\item{reduction_use}{dimensional reduction to extract}
+\item{reduction}{dimensional reduction to extract}
 
 \item{dim_1}{Dimension one.  X-axis data.}
 
@@ -22,6 +29,8 @@ PrepDf(object, reduction_use, dim_1 = 1, dim_2 = 2, dim_3 = NULL,
 Permissible values include meta.data column names.}
 }
 \value{
+data.frame
+
 data.frame
 }
 \description{

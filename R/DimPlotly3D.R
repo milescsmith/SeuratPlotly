@@ -6,15 +6,15 @@
 #' @param dim_1 Dimension to display on the x-axis (default: 1)
 #' @param dim_2 Dimension to display on the y-axis (default: 2)
 #' @param dim_3 Dimension to display on the z-axis (default: 3)
-#' @param do.label Add a label showing thr group name to the graph (default: FALSE)
-#' @param label.size Label font size (default: 12)
-#' @param show.arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
-#' @param label.color Color for label border and arrow.  Need hex value. (default = '000000')
+#' @param label Add a label showing thr group name to the graph (default: FALSE)
+#' @param label_size Label font size (default: 12)
+#' @param label_color Color for label border and arrow.  Need hex value. (default = '000000')
+#' @param show_arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
 #' @param return Return the plot object instead of displaying it (default: FALSE)
-#' @param pt.size Size of the points in pixels (default: 2)
+#' @param pt_size Size of the points in pixels (default: 2)
 #' @param pt_shape Shape to use for the points (default: circle)
 #' @param opacity Transparency level to use for the points on a 0-1 scale (default: 1)
-#' @param palette.use Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')
+#' @param palette_use Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')
 #' @param plot_height Plot height in pixels (default: 900)
 #' @param plot_width Plot width in pixels (default: 900)
 #' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
@@ -24,31 +24,29 @@
 #' @param plot_axes Display the major x, y, and z axes? (default: FALSE)
 #' @param plot_grid Display the major unit tick marks? (default: FALSE)
 #'
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom plotly plot_ly
-#' @importFrom plotly layout
+#' @importFrom dplyr group_by summarise
+#' @importFrom plotly plot_ly layout
 #'
 #' @return plotly object
 #' @export
 #'
 #' @examples
-#' DimPlotly3D(object, grouping = "res.0.6", do.label = TRUE, show.arrow = FALSE)
+#' DimPlotly3D(object, grouping = "res.0.6", label = TRUE, show_arrow = FALSE)
 DimPlotly3d <- DimPlotly3D <- function(object,
                                        grouping = "ident",
-                                       do.label = FALSE,
-                                       label.size = 12,
-                                       label.color = "000000",
-                                       show.arrow = FALSE,
+                                       label = FALSE,
+                                       label_size = 12,
+                                       label_color = "000000",
+                                       show_arrow = FALSE,
                                        return = FALSE,
-                                       pt.size = 2,
+                                       pt_size = 2,
                                        pt_shape = "circle",
                                        opacity = 1,
                                        reduction_use = "tsne",
                                        dim_1 = 1,
                                        dim_2 = 2,
                                        dim_3 = 3,
-                                       palette.use = "Set1",
+                                       palette_use = "Set1",
                                        plot_height = 900,
                                        plot_width = 900,
                                        plot_title = NULL,
@@ -71,25 +69,25 @@ DimPlotly3d <- DimPlotly3D <- function(object,
     df = df
   )
 
-  if (do.label) {
+  if (label) {
     df %>%
-      dplyr::group_by(ident) %>%
-      centers() <- summarize(
-      x = median(x = x),
-      y = median(x = y),
-      z = median(x = z)
+      group_by(ident) %>%
+      centers() <- summarise(
+        x = median(x = x),
+        y = median(x = y),
+        z = median(x = z)
     )
     labels <- list(
       x = centers$x,
       y = centers$y,
       z = centers$z,
       text = centers$ident,
-      font = list(size = label.size)
+      font = list(size = label_size)
     )
     compiled.labels <- list()
 
-    if (isTRUE(show.arrow)) {
-      border.color <- label.color
+    if (isTRUE(show_arrow)) {
+      border.color <- label_color
       bg.color <- "FFFFFF"
     } else {
       border.color <- "FFFFFF"
@@ -97,12 +95,12 @@ DimPlotly3d <- DimPlotly3D <- function(object,
     }
     for (k in 1:length(unique(ident))) {
       tmp <- list(
-        showarrow = show.arrow,
+        showarrow = show_arrow,
         x = labels$x[k],
         y = labels$y[k],
         z = labels$z[k],
         text = labels$text[k],
-        font = list(size = label.size),
+        font = list(size = label_size),
         bordercolor = border.color,
         bgcolor = bg.color,
         opacity = 0.8
@@ -119,7 +117,7 @@ DimPlotly3d <- DimPlotly3D <- function(object,
 
   pal <- PrepPalette(
     df = df,
-    palette.use = palette.use
+    palette_use = palette_use
   )
 
   p <- plot_ly(df,
@@ -130,7 +128,7 @@ DimPlotly3d <- DimPlotly3D <- function(object,
     colors = pal,
     marker = list(
       symbol = pt_shape,
-      size = pt.size,
+      size = pt_size,
       opacity = opacity,
       mode = "markers"
     ),
@@ -203,7 +201,7 @@ DimPlotly3d <- DimPlotly3D <- function(object,
   ))
 
   if (isTRUE(return)) {
-    return(p)
+    return(df)
   } else {
     p
   }

@@ -7,7 +7,7 @@
 #'
 #' @param object Seurat object
 #' @param feature Variable to display. Currently only works with gene names
-#' @param reduction_use Dimensional reduction to display (default: tsne)
+#' @param reduction Dimensional reduction to display (default: tsne)
 #' @param dim_1 Dimension to display on the x-axis (default: 1)
 #' @param dim_2 Dimension to display on the y-axis (default: 2)
 #' @param pt_scale Factor by which to multiply the size of the points (default: 5)
@@ -21,10 +21,8 @@
 #' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param legend Display legend? (default: TRUE)
 #' @param legend_font_size Legend font size (default: 12)
-#' @param return Return the plot object instead of displaying it (default: FALSE)
+#' @param return Return the plot dataframe instead of displaying it (default: FALSE)
 #'
-#' @import dplyr
-#' @import Seurat
 #' @importFrom RColorBrewer brewer.pal brewer.pal.info
 #' @importFrom viridis viridis
 #' @importFrom plotly plot_ly layout
@@ -36,13 +34,13 @@
 #' @examples
 FeaturePlotly <- function(object,
                           feature = NULL,
-                          assay.use = "RNA",
-                          slot.use = "data",
-                          return = TRUE,
+                          assay_use = "RNA",
+                          slot_use = "data",
+                          return = FALSE,
                           pt_scale = 5,
                           pt_shape = "circle",
                           opacity = 1,
-                          reduction_use = "tsne",
+                          reduction = "tsne",
                           dim_1 = 1,
                           dim_2 = 2,
                           colors_use = c("blue","red"),
@@ -56,7 +54,7 @@ FeaturePlotly <- function(object,
                           legend_font_size = 12){
 
   df <- PrepDf(object,
-               reduction_use,
+               reduction,
                dim_1 = dim_1,
                dim_2 = dim_2)
 
@@ -69,12 +67,16 @@ FeaturePlotly <- function(object,
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature,
-                         assay.use,
-                         slot.use)
-
-  cut.feature.data <- as.numeric(as.factor(x = cut(x = as.numeric(df[,feature]), breaks = bins)))
-
-  df[,"size"] <- df[,feature] * pt_scale
+                         bins = bins,
+                         use.scaled = TRUE,
+                         assay_use = assay_use)
+  df <- GetFeatureValues(object = object,
+                         df = df,
+                         feature = feature,
+                         use.scaled = FALSE,
+                         assay_use = assay_use,
+                         suffix = "size")
+  df[,ncol(df)] <- df[,ncol(df)] * pt_scale
 
   if (isTRUE(plot_title)){
     plot_title = feature
@@ -87,11 +89,11 @@ FeaturePlotly <- function(object,
                y = ~y,
                mode = 'markers',
                type = "scattergl",
-               size = ~size,
-               sizes = c(0,max(df$size)),
+               size = ~get(str_glue("{feature}_size")),
+               sizes = c(0,max(df[[str_glue("{feature}_size")]])),
                marker = list(symbol = pt_shape,
                              opacity = opacity,
-                             color = ~get(feature),
+                             color = ~feature,
                              line = list(width = 0),
                              colorscale=colors_use,
                              reversescale = reverse.color.scale,
@@ -106,19 +108,19 @@ FeaturePlotly <- function(object,
                text = ~meta.info) %>%
     layout(
       title = plot_title,
-      xaxis = list(title = glue("{reduction_use}_{dim_1}")),
-      yaxis = list(title = glue("{reduction_use}_{dim_2}"))
+      xaxis = list(title = str_glue("{reduction}_{dim_1}")),
+      yaxis = list(title = str_glue("{reduction}_{dim_2}"))
     )
 
   p <- p %>% layout(legend = list(
     font = list(
       size = legend_font_size)
-    )
+  )
   )
 
   if (isTRUE(return)){
-    return(p)
+    return(df)
   } else {
-    p
+    return(p)
   }
 }

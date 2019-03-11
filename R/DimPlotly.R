@@ -16,7 +16,7 @@
 #' @param pt.size Size of the points in pixels (default: 2)
 #' @param pt_shape Shape to use for the points (default: circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param palette.use Color palette to use.  Must be a palette available in the Paletteer package
+#' @param palette_use Color palette to use.  Must be a palette available in the Paletteer package
 #' @param plot_height Plot height in pixels (default: 900)
 #' @param plot_width Plot width in pixels (default: 900)
 #' @param legend Display legend? (default: TRUE)
@@ -24,7 +24,7 @@
 #' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
 #' @param return Return the plot object instead of displaying it (default: FALSE)
 #'
-#' @import dplyr
+#' @importFrom dplyr group_by summarise
 #' @importFrom plotly plot_ly layout
 #'
 #' @return plotly object
@@ -46,7 +46,7 @@ DimPlotly <- function(object,
                       reduction_use = "tsne",
                       dim_1 = 1,
                       dim_2 = 2,
-                      palette.use = "default_ucscgb",
+                      palette_use = "default_ucscgb",
                       plot_height = 900,
                       plot_width = 900,
                       plot_title = NULL,
@@ -65,12 +65,12 @@ DimPlotly <- function(object,
                  df = df)
 
   pal <- PrepPalette(df = df,
-                     palette.use = palette.use)
+                     palette_use = palette_use)
 
   if (do.label) {
     df %>%
-      dplyr::group_by(ident) %>%
-      centers <- summarize(
+      group_by(ident) %>%
+      centers <- summarise(
         x = median(x = as.double(x)),
         y = median(x = as.double(y))
       )

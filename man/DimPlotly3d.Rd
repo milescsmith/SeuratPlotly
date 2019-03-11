@@ -4,11 +4,11 @@
 \alias{DimPlotly3d}
 \title{DimPlotly3D}
 \usage{
-DimPlotly3d(object, grouping = "ident", do.label = FALSE,
-  label.size = 12, label.color = "000000", show.arrow = FALSE,
-  return = FALSE, pt.size = 2, pt_shape = "circle", opacity = 1,
+DimPlotly3d(object, grouping = "ident", label = FALSE,
+  label_size = 12, label_color = "000000", show_arrow = FALSE,
+  return = FALSE, pt_size = 2, pt_shape = "circle", opacity = 1,
   reduction_use = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
-  palette.use = "Set1", plot_height = 900, plot_width = 900,
+  palette_use = "Set1", plot_height = 900, plot_width = 900,
   plot_title = NULL, pt_info = NULL, legend = TRUE,
   legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
 }
@@ -17,17 +17,17 @@ DimPlotly3d(object, grouping = "ident", do.label = FALSE,
 
 \item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
 
-\item{do.label}{Add a label showing thr group name to the graph (default: FALSE)}
+\item{label}{Add a label showing thr group name to the graph (default: FALSE)}
 
-\item{label.size}{Label font size (default: 12)}
+\item{label_size}{Label font size (default: 12)}
 
-\item{label.color}{Color for label border and arrow.  Need hex value. (default = '000000')}
+\item{label_color}{Color for label border and arrow.  Need hex value. (default = '000000')}
 
-\item{show.arrow}{Offset the position of the labels and instead point to each group with an arrow (default: FALSE)}
+\item{show_arrow}{Offset the position of the labels and instead point to each group with an arrow (default: FALSE)}
 
 \item{return}{Return the plot object instead of displaying it (default: FALSE)}
 
-\item{pt.size}{Size of the points in pixels (default: 2)}
+\item{pt_size}{Size of the points in pixels (default: 2)}
 
 \item{pt_shape}{Shape to use for the points (default: circle)}
 
@@ -41,7 +41,7 @@ DimPlotly3d(object, grouping = "ident", do.label = FALSE,
 
 \item{dim_3}{Dimension to display on the z-axis (default: 3)}
 
-\item{palette.use}{Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')}
+\item{palette_use}{Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')}
 
 \item{plot_height}{Plot height in pixels (default: 900)}
 
@@ -66,5 +66,5 @@ plotly object
 DimPlotly3D
 }
 \examples{
-DimPlotly3D(object, grouping = "res.0.6", do.label = TRUE, show.arrow = FALSE)
+DimPlotly3D(object, grouping = "res.0.6", label = TRUE, show_arrow = FALSE)
 }

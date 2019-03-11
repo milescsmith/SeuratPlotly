@@ -4,7 +4,7 @@
 \alias{BubblePlotly}
 \title{BubblePlotly}
 \usage{
-BubblePlotly(object, genes.plot, colors_use = "Blues", dot.min = 0,
+BubblePlotly(object, genes_plot, colors_use = "Blues", dot.min = 0,
   dot.scale = 2, grouping, plot.legend = FALSE, return = FALSE,
   x.lab.rot = -45, plot_width = 600, plot_height = 600,
   x.font.size = 10, y.font.size = 10, title.font.size = 12,
@@ -16,7 +16,7 @@ BubblePlotly(object, genes.plot, colors_use = "Blues", dot.min = 0,
 \arguments{
 \item{object}{Seurat object}
 
-\item{genes.plot}{A list of genes to plot for each group.}
+\item{genes_plot}{A list of genes to plot for each group.}
 
 \item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
 

@@ -155,7 +155,7 @@ PrepDf.Seurat <- function(object,
 #' @param pt_info A list of meta.data columns to add to the hoverinfo popup.
 #' @param df Plotting data frame to which to add the popup data.
 #'
-#' @importFrom glue glue
+#' @importFrom stringr str_glue
 #'
 #' @return data.frame
 #' @export
@@ -178,7 +178,7 @@ PrepInfo.seurat <- function(object, pt_info, df) {
       # for each member of pt_info
       rowinfo <- ""
       for (j in 1:length(pt_info)) {
-        rowinfo <- glue("{rowinfo} </br> {pt_info[j]}: {object@meta.data[i, pt_info[j]]}")
+        rowinfo <- str_glue("{rowinfo} </br> {pt_info[j]}: {object@meta.data[i, pt_info[j]]}")
       }
       meta.info <- c(meta.info, rowinfo)
     }
@@ -207,9 +207,9 @@ PrepInfo.Seurat <- function(object, pt_info, df) {
       rowinfo <- ""
       for (j in 1:length(pt_info)) {
         if (is.numeric(feature_info[i, pt_info[j]])){
-          rowinfo <- glue("{rowinfo} </br> {pt_info[j]}: {round(feature_info[i, pt_info[j]],digits = 3)}")
+          rowinfo <- str_glue("{rowinfo} </br> {pt_info[j]}: {round(feature_info[i, pt_info[j]],digits = 3)}")
         } else {
-          rowinfo <- glue("{rowinfo} </br> {pt_info[j]}: {feature_info[i, pt_info[j]]}")
+          rowinfo <- str_glue("{rowinfo} </br> {pt_info[j]}: {feature_info[i, pt_info[j]]}")
         }
 
       }
@@ -242,7 +242,7 @@ PrepInfo.Seurat <- function(object, pt_info, df) {
 #' @importFrom grDevices colorRampPalette
 #'
 #' @examples
-PrepPalette <- function(df, 
+PrepPalette <- function(df,
                         palette_use) {
   bins <- length(unique(df[, "ident"]))
 
@@ -271,11 +271,11 @@ PrepPalette <- function(df,
 #'
 #' @param object Seurat object to get feature data from
 #' @param df Plotting data frame to which to add the popup data.
-#' @param features Features (genes expression, metadata, etc...) to retrieve data for
+#' @param feature feature (genes expression, metadata, etc...) to retrieve data for
 #' @param assay_use Assay to pull feature data from.  Default: "RNA"
 #' @param slot_use Slot to pull feature data from. Default: "data"
 #'
-#' @importFrom glue glue
+#' @importFrom stringr str_glue
 #'
 #' @return data.frame
 #' @export
@@ -293,7 +293,7 @@ GetFeatureValues <- function(object, ...) {
 #' @return data.frame
 GetFeatureValues.seurat <- function(object,
                                     df,
-                                    features,
+                                    feature,
                                     bins = NULL,
                                     ...) {
   if (slot.use == "scaled.data"){
@@ -306,18 +306,21 @@ GetFeatureValues.seurat <- function(object,
     use.raw <- FALSE
     use.scaled <- FALSE
   }
-  feature_data <- FetchData(object, 
-                            vars.all = features, 
-                            use.scaled = use.scaled, 
+  feature_data <- FetchData(object,
+                            vars.all = feature,
+                            use.scaled = use.scaled,
                             use.raw = use.raw) %<>% rownames_to_column("cell")
+
+  colnames(feature_data) %<>% str_remove(pattern = key)
+
   if (!is.null(bins)){
-    feature_data %<>% mutate_if(is.numeric, 
-                                list(cut(feature_1_data, 
-                                         breaks = bins)) %>%
-      mutate_if(is.factor, 
+    feature_data %<>% mutate_if(is.numeric,
+                                list(~cut(.,
+                                          breaks = bins))) %>%
+      mutate_if(is.factor,
                 list(as.numeric))
   }
-  feature_data 
+  feature_data
   df %<>% inner_join(feature_data, by = "cell")
   return(df)
 }
@@ -326,30 +329,50 @@ GetFeatureValues.seurat <- function(object,
 #' @rdname PrepInfo
 #' @method PrepInfo Seurat
 #' @import Seurat
-#' @importFrom glue glue
+#' @importFrom stringr str_glue
 #' @importFrom purrr map_chr
 #' @return data.frame
 GetFeatureValues.Seurat <- function(object,
                                     df,
-                                    features,
+                                    feature,
                                     assay_use = "RNA",
                                     slot_use = "data",
-                                    bins = F
+                                    bins = NULL,
+                                    suffix = NULL,
                                     ...) {
-  key <- GetAssayData(object, assay = assay_use, slot = key)
-  feature_data <- FetchData(object, 
-                            vars = map_chr(features, function(x) glue("{key}_{x}")), 
-                            slot = slot_use) %>% 
+  key <- GetAssayData(object = object, assay = assay_use, slot = "key")
+  feature_data <- FetchData(object,
+                            vars = str_glue("{key}{feature}") %>% as.character(),
+                            slot = slot_use) %>%
     rownames_to_column("cell")
-  
+
+  if (!is.null(suffix)){
+    colnames(feature_data)[2] %<>% str_remove(pattern = key) %>% str_glue("_{suffix}")
+  } else {
+    colnames(feature_data)[2] %<>% str_remove(pattern = key)
+  }
+
+
   if (!is.null(bins)){
-    feature_data %<>% mutate_if(is.numeric, 
-                                list(cut(feature_1_data, 
-                                         breaks = bins)) %>%
-      mutate_if(is.factor, 
+    feature_data %<>% mutate_if(is.numeric,
+                                list(~cut(.,
+                                         breaks = bins))) %>%
+      mutate_if(is.factor,
                 list(as.numeric))
   }
 
   df %<>% inner_join(feature_data, by = "cell")
   return(df)
 }
+
+#' inverse match
+#'
+#' See \code{Hmisc::\link[Hmisc]{\%nin\%}} for details.
+#'
+#' @name %nin%
+#' @rdname nin
+#' @keywords internal
+#' @export
+#' @importFrom Hmisc %nin%
+#' @usage lhs \%nin\% rhs
+NULL

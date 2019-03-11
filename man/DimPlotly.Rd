@@ -6,14 +6,14 @@
 \usage{
 DimPlotly(object, grouping = "ident", do.label = FALSE,
   label.size = 12, show.arrow = FALSE, label.color = "000000",
-  return = FALSE, pt.size = 4, pt_shape = "circle",
-  opacity = 0.75, reduction_use = "tsne", dim_1 = 1, dim_2 = 2,
-  palette.use = "default_ucscgb", plot_height = 900,
+  return = FALSE, pt.size = 4, pt_shape = "circle", opacity = 0.75,
+  reduction_use = "tsne", dim_1 = 1, dim_2 = 2,
+  palette_use = "default_ucscgb", plot_height = 900,
   plot_width = 900, plot_title = NULL, pt_info = NULL,
   legend = TRUE, legend_font_size = 12)
 }
 \arguments{
-\item{object}{Seurat object}
+\item{object}{scRNA-seq object}
 
 \item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
 
@@ -39,7 +39,7 @@ DimPlotly(object, grouping = "ident", do.label = FALSE,
 
 \item{dim_2}{Dimension to display on the y-axis (default: 2)}
 
-\item{palette.use}{Color palette to use.  Must be a palette available in the Paletteer package}
+\item{palette_use}{Color palette to use.  Must be a palette available in the Paletteer package}
 
 \item{plot_height}{Plot height in pixels (default: 900)}
 
@@ -55,10 +55,8 @@ DimPlotly(object, grouping = "ident", do.label = FALSE,
 plotly object
 }
 \description{
-Create a scatterplot of a given dimensional reduction set for a Seurat object,
+Create a scatterplot of a given dimensional reduction set for a scRNA-seq data object,
 coloring points by the given grouping variable
-Requrires a Seurat object with the reduction to be used in the corresponding
-object@dr slot
 }
 \examples{
 object <- RunTSNE(object)

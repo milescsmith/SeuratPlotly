@@ -2,10 +2,8 @@
 #'
 #' Create a scatterplot of a given dimensional reduction set for a Seurat object,
 #' coloring and sizing points by the expression level of two different features.
-#' Requrires a Seurat object with the reduction to be used in the corresponding
-#' seuratObj@@dr slot
 #'
-#' @param seuratObj Seurat object
+#' @param object Seurat object
 #' @param feature.1.use First variable to display. Currently only works with gene names
 #' @param feature.2.use Second variable to display. Currently only works with gene names
 #' @param reduction.use Dimensional reduction to display (default: tsne)
@@ -40,7 +38,7 @@
 #' @export
 #'
 #' @examples
-Feature2Plotly <- function(seuratObj,
+Feature2Plotly <- function(object,
                            feature.1.use = NULL,
                            feature.2.use = NULL,
                            do.return = FALSE,
@@ -59,18 +57,18 @@ Feature2Plotly <- function(seuratObj,
                            legend = TRUE,
                            legend.font.size = 12){
 
-  df <- as.data.frame(GetDimReduction(object = seuratObj,
+  df <- as.data.frame(GetDimReduction(object = object,
                                       reduction.type = reduction.use,
                                       slot = "cell.embeddings"))
   dim.code <- GetDimReduction(
-    object = seuratObj,
+    object = object,
     reduction.type = reduction.use,
     slot = "key"
   )
 
   dim.axes <- colnames(
     GetDimReduction(
-      object = seuratObj,
+      object = object,
       reduction.type = reduction.use,
       slot = "cell.embeddings"
     )
@@ -102,10 +100,10 @@ Feature2Plotly <- function(seuratObj,
     pal.2 <- colors.use.2
   }
 
-  feature.1.data <- FetchData(object = seuratObj,
+  feature.1.data <- FetchData(object = object,
                               vars.all = feature.1.use,
                               use.scaled = TRUE)
-  size.1.data <- FetchData(object = seuratObj,
+  size.1.data <- FetchData(object = object,
                            vars.all = feature.1.use,
                            use.scaled = FALSE)
   feature.1.data[,1][feature.1.data[,1] == 0] <- NA
@@ -114,10 +112,10 @@ Feature2Plotly <- function(seuratObj,
   df[,"feature.1"] <- cut.feature.1.data
   df[,"size.1"] <- size.1.data[,1] * pt.scale
 
-  feature.2.data <- FetchData(object = seuratObj,
+  feature.2.data <- FetchData(object = object,
                               vars.all = feature.2.use,
                               use.scaled = TRUE)
-  size.2.data <- FetchData(object = seuratObj,
+  size.2.data <- FetchData(object = object,
                            vars.all = feature.2.use,
                            use.scaled = FALSE)
   feature.2.data[,1][feature.2.data[,1] == 0] <- NA
@@ -133,7 +131,7 @@ Feature2Plotly <- function(seuratObj,
       # for each member of pt.info
       rowinfo = ""
       for(j in 1:length(pt.info)){
-        rowinfo <- paste0(rowinfo, " </br> ", pt.info[j], ": ", seuratObj@meta.data[i, pt.info[j]])
+        rowinfo <- paste0(rowinfo, " </br> ", pt.info[j], ": ", object@meta.data[i, pt.info[j]])
       }
       rowinfo <- paste0(rowinfo, ' </br> Expr ', feature.1.use, ': ', df[i,"feature.1"])
       rowinfo <- paste0(rowinfo, ' </br> Expr ', feature.2.use, ': ', df[i,"feature.2"])

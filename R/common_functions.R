@@ -3,7 +3,7 @@
 #' @description Helper function to extract dimensional reduction data from a Seurat object
 #' and format it into a data frame for use in plotting.
 #'
-#' @param object Seurat object
+#' @param object scRNA-seq data object
 #' @param reduction dimensional reduction to extract
 #' @param dim.1 Dimension one.  X-axis data.
 #' @param dim.2 Dimension two.  Y-axis data.
@@ -11,7 +11,6 @@
 #' @param group.by Identity information to use for grouping.
 #'   Permissible values include meta.data column names.
 #'
-#' @import magrittr
 #' @importFrom tibble rownames_to_column
 #' @export
 #'
@@ -22,7 +21,7 @@ PrepDf <- function(object, ...) {
 
 # Seurat 2 objects
 #' @rdname PrepDf
-#' @importFrom Seurat GetDimReduction FetchData
+#' @import Seurat
 #' @method PrepDf seurat
 #' @return data.frame
 PrepDf.seurat <- function(object,
@@ -92,7 +91,7 @@ PrepDf.seurat <- function(object,
 
 # Seurat 3
 #' @rdname PrepDf
-#' @importFrom Seurat Embeddings Idents
+#' @import Seurat
 #' @method PrepDf Seurat
 #' @return data.frame
 PrepDf.Seurat <- function(object,
@@ -156,7 +155,6 @@ PrepDf.Seurat <- function(object,
 #' @param pt.info A list of meta.data columns to add to the hoverinfo popup.
 #' @param df Plotting data frame to which to add the popup data.
 #'
-#' @import magrittr
 #' @importFrom glue glue
 #'
 #' @return data.frame
@@ -241,7 +239,6 @@ PrepInfo.Seurat <- function(object, pt.info, df) {
 #' @export
 #'
 #' @import paletteer
-#' @import magrittr
 #' @importFrom grDevices colorRampPalette
 #'
 #' @examples
@@ -277,7 +274,6 @@ PrepPalette <- function(df, palette.use) {
 #' @param assay.use Assay to pull feature data from.  Default: "RNA"
 #' @param slot.use Slot to pull feature data from. Default: "data"
 #'
-#' @import magrittr
 #' @importFrom glue glue
 #'
 #' @return data.frame
@@ -292,7 +288,7 @@ GetFeatureValues <- function(object, ...) {
 # Seurat 2
 #' @rdname PrepInfo
 #' @method PrepInfo seurat
-#' @importFrom Seurat FetchData
+#' @importFrom Seurat
 #' @return data.frame
 GetFeatureValues.seurat <- function(object,
                                     df,
@@ -317,7 +313,7 @@ GetFeatureValues.seurat <- function(object,
 # Seurat 3
 #' @rdname PrepInfo
 #' @method PrepInfo Seurat
-#' @importFrom Seurat FetchData
+#' @importFrom Seurat
 #' @return data.frame
 GetFeatureValues.Seurat <- function(object,
                                     df,

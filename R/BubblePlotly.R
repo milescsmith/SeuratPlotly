@@ -6,9 +6,9 @@
 #' the proportion of the group expressing the gene above a given threshold. By default, genes are arranged
 #' along the x-axis and groups along the y-axis.
 #'
-#' @param seuratObj Seurat object
-#' @param genes.plot A list of genes to plot for each group.
-#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param object Seurat object
+#' @param genes_plot A list of genes to plot for each group.
+#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param dot.min Minimium marker size, in pixels. (default: 0)
 #' @param dot.scale Factor by which to scale markers. (default: 2)
 #' @param group.by Factor by which to group cells.  (default: ident)
@@ -35,18 +35,13 @@
 #' @param y.label.order List of labels to use for the comparison groups.  Will be displayed in order of their index.
 #'
 #' @import dplyr
-#' @importFrom magrittr "%>%"
+#' @import Seurat
 #' @importFrom tidyr gather
 #' @importFrom tibble rownames_to_column
-#' @importFrom Seurat GetDimReduction
-#' @importFrom Seurat FetchData
-#' @importFrom Seurat SetAllIdent
-#' @importFrom RColorBrewer brewer.pal
-#' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom RColorBrewer brewer.pal brewer.pal.info
 #' @importFrom viridis viridis
 #' @importFrom compositions normalize
-#' @importFrom plotly plot_ly
-#' @importFrom plotly layout
+#' @importFrom plotly plot_ly layout
 #' @importFrom grDevices colorRampPalette
 #'
 #' @return if do.return is TRUE, a plotly object.
@@ -54,9 +49,9 @@
 #' @export
 #'
 #' @examples
-BubblePlotly <- function (seuratObj,
-                          genes.plot,
-                          colors.use = "Blues",
+BubblePlotly <- function (object,
+                          genes_plot,
+                          colors_use = "Blues",
                           dot.min = 0,
                           dot.scale = 2,
                           group.by,
@@ -84,32 +79,32 @@ BubblePlotly <- function (seuratObj,
 {
 
   if (!missing(x = group.by)) {
-    seuratObj <- SetAllIdent(object = seuratObj, id = group.by)
+    object <- SetAllIdent(object = object, id = group.by)
   }
 
   #screen out any genes that are not in our dataset and print them
-  original_genes_to_plot <- genes.plot
-  genes.plot <- (genes.plot %>% as_tibble() %>% dplyr::filter(value %in% rownames(seuratObj@data)))$value
-  not_found <- original_genes_to_plot[!original_genes_to_plot %in% genes.plot]
+  original_genes_to_plot <- genes_plot
+  genes_plot <- (genes_plot %>% as_tibble() %>% dplyr::filter(value %in% rownames(object@data)))$value
+  not_found <- original_genes_to_plot[!original_genes_to_plot %in% genes_plot]
   print(not_found)
 
   #let the user alphabetize the list of genes.  makes it easier to find a particular gene in a big table
   #TODO: add more sort options
   if (isTRUE(alphabetize)){
-    genes.plot <- sort(genes.plot, decreasing = TRUE)
+    genes_plot <- sort(genes_plot, decreasing = TRUE)
   }
 
   if(isTRUE(use.scaled)){
-    data.to.plot <- data.frame(FetchData(object = seuratObj,
-                                                 vars.all = genes.plot,
+    data.to.plot <- data.frame(FetchData(object = object,
+                                                 vars.all = genes_plot,
                                                  use.scaled = TRUE))
   } else if(isTRUE(use.raw)){
-    data.to.plot <- data.frame(FetchData(object = seuratObj,
-                                                 vars.all = genes.plot,
+    data.to.plot <- data.frame(FetchData(object = object,
+                                                 vars.all = genes_plot,
                                                  use.scaled = FALSE))
   } else {
-    data.to.plot <- data.frame(FetchData(object = seuratObj,
-                                                 vars.all = genes.plot))
+    data.to.plot <- data.frame(FetchData(object = object,
+                                                 vars.all = genes_plot))
   }
 
   # Add 0 data for each gene that was not detected or failed to pass QC
@@ -121,28 +116,28 @@ BubblePlotly <- function (seuratObj,
 
   data.to.plot <- rownames_to_column(df = data.to.plot, var = "cell")
 
-  data.to.plot$id <- seuratObj@ident
+  data.to.plot$id <- object@ident
 
-  data.to.plot <- data.to.plot %>% gather(key = genes.plot,
+  data.to.plot <- data.to.plot %>% gather(key = genes_plot,
                                           value = expression, -c(cell, id))
 
-  data.to.plot <- data.to.plot %>% group_by(id, genes.plot) %>%
+  data.to.plot <- data.to.plot %>% group_by(id, genes_plot) %>%
     summarize(avg.exp = mean(expm1(x = expression)),
               pct.exp = PercentAbove(x = expression, threshold = 0),
               n = n())
 
   if(!is.null(pct.expr.thresh)){
-    data.to.plot <- data.to.plot %>% group_by(genes.plot) %>% filter(max(pct.exp) > pct.expr.thresh)
+    data.to.plot <- data.to.plot %>% group_by(genes_plot) %>% filter(max(pct.exp) > pct.expr.thresh)
   }
 
-  data.to.plot <- data.to.plot %>% ungroup() %>% group_by(genes.plot) %>%
+  data.to.plot <- data.to.plot %>% ungroup() %>% group_by(genes_plot) %>%
     mutate(avg.exp.scale = normalize(x = avg.exp))
 
 
-  data.to.plot$genes.plot <- factor(x = data.to.plot$genes.plot,
+  data.to.plot$genes_plot <- factor(x = data.to.plot$genes_plot,
                                     levels = rev(x = sub(pattern = "-",
                                                          replacement = ".",
-                                                         x = genes.plot)))
+                                                         x = genes_plot)))
 
   data.to.plot$pct.exp[data.to.plot$pct.exp < dot.min] <- NA
 
@@ -155,10 +150,10 @@ BubblePlotly <- function (seuratObj,
 
   if(!is.null(add.group)){
     for(i in add.group){
-      for(j in genes.plot){
+      for(j in genes_plot){
         data.to.plot <- data.to.plot %>%
           do(add_row(.,id = i,
-                     genes.plot = j,
+                     genes_plot = j,
                      avg.exp = 0,
                      pct.exp = 0,
                      n = 0,
@@ -172,23 +167,23 @@ BubblePlotly <- function (seuratObj,
 
   viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
 
-  if (colors.use %in% rownames(brewer.pal.info)){
-    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors.use,]$maxcolors,colors.use))(100)
-  } else if (colors.use %in% viridis_palettes){
-    pal <- viridis(n = 100, option = colors.use)
+  if (colors_use %in% rownames(brewer.pal.info)){
+    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors_use,]$maxcolors,colors_use))(100)
+  } else if (colors_use %in% viridis_palettes){
+    pal <- viridis(n = 100, option = colors_use)
   } else {
-    pal <- colors.use
+    pal <- colors_use
   }
 
   data.to.plot <- data.to.plot %>% arrange(id)
 
-  genes.plot <- data.to.plot$genes.plot
+  genes_plot <- data.to.plot$genes_plot
 
   if(flip){
     ax = ~id
-    ay = ~genes.plot
+    ay = ~genes_plot
   } else {
-    ax = ~genes.plot
+    ax = ~genes_plot
     ay = ~id
   }
 
@@ -197,7 +192,7 @@ BubblePlotly <- function (seuratObj,
                y = ay,
                hoverinfo = 'text',
                text = ~paste('Group:', id,
-                             '<br>Gene:', genes.plot,
+                             '<br>Gene:', genes_plot,
                              '<br>Avg normalized expression:', round(avg.exp.scale,2),
                              '<br>% expressing:', round(pct.exp*100,2)),
                type = 'scatter',
@@ -231,5 +226,5 @@ BubblePlotly <- function (seuratObj,
     p
   }
   # print(length(unique(data.to.plot$id)))
-  # print(length(unique(data.to.plot$genes.plot)))
+  # print(length(unique(data.to.plot$genes_plot)))
 }

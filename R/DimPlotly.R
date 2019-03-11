@@ -1,12 +1,10 @@
 #seuratPlotly.R: Functions replacing the ggplot2-based ploting functions of Seurat with those of Plot.ly
 #' Plot dimensional reduction for a Seurat object
 #'
-#' Create a scatterplot of a given dimensional reduction set for a Seurat object,
+#' Create a scatterplot of a given dimensional reduction set for a scRNA-seq data object,
 #' coloring points by the given grouping variable
-#' Requrires a Seurat object with the reduction to be used in the corresponding
-#' object@@dr slot
 #'
-#' @param object Seurat object
+#' @param object scRNA-seq object
 #' @param group.by Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
 #' @param reduction.use Dimensional reduction to display (default: tsne)
 #' @param dim.1 Dimension to display on the x-axis (default: 1)
@@ -27,9 +25,7 @@
 #' @param do.return Return the plot object instead of displaying it (default: FALSE)
 #'
 #' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom plotly plot_ly
-#' @importFrom plotly layout
+#' @importFrom plotly plot_ly layout
 #'
 #' @return plotly object
 #' @export
@@ -126,7 +122,6 @@ DimPlotly <- function(object,
       size = legend.font.size)
     )
   )
-
 
   if (isTRUE(do.return)){
     return(p)

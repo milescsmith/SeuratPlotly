@@ -8,201 +8,176 @@
 #'
 #' @param object Seurat object
 #' @param genes_plot A list of genes to plot for each group.
-#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
-#' @param dot.min Minimium marker size, in pixels. (default: 0)
-#' @param dot.scale Factor by which to scale markers. (default: 2)
-#' @param grouping Factor by which to group cells.  (default: ident)
-#' @param legend Display legend. (currently nonfunctional) (default TRUE)
-#' @param return Return the plot object instead of displaying it (default: FALSE)
-#' @param x.lab.rot Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)
-#' @param plot_height Plot height in pixels. (default: 900)
-#' @param plot_width Plot width in pixels. (default: 900)
-#' @param x.font.size Size of the x-axis titles. (default: 10)
-#' @param y.font.size Size of the y-axis titles. (default: 10)
-#' @param title.font.size Size of the plot title. (default: 12)
-#' @param legend.text.size Size of the legend text. (default: 10)
-#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param plot_title  Display title with the name of the feature? (default TRUE)
-#' @param bins Number of bins to use in dividing expression levels. (default: 10)
-#' @param flip Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. (default: false)
-#' @param alphabetize Alphabetize the display order of genes. (default: TRUE)
-#' @param pct.expr.thresh Hide a gene if there is no group that expresses at or above this percentage. (default: 0)
-#' @param export.df Return the generated data frame underlying the graph. (default: FALSE)
-#' @param use.scaled Use scaled data. (default: FALSE)
-#' @param use.raw Use raw data. (default: FALSE)
-#' @param show.zeros Display comparison groups for which there there was no data? (default: FALSE)
-#' @param add.group Add a null comparison group.  Will be initialized with zeros.
-#' @param y.label.order List of labels to use for the comparison groups.  Will be displayed in order of their index.
+#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds
+#' @param dot_min Minimium marker size, in pixels. Default: 0
+#' @param dot_scale Factor by which to scale markers. Default: 2
+#' @param grouping Factor by which to group cells.  Default: ident
+#' @param legend Display legend. (currently nonfunctional) Default TRUE
+#' @param return Return the plot object instead of displaying it Default: FALSE
+#' @param x_label_rotation Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. Default -45°
+#' @param plot_height Plot height in pixels. Default: 900
+#' @param plot_width Plot width in pixels. Default: 900
+#' @param x_font_size Size of the x-axis titles. Default: 10
+#' @param y_font_size Size of the y-axis titles. Default: 10
+#' @param title_font_size Size of the plot title. Default: 12
+#' @param legend_text_size Size of the legend text. Default: 10
+#' @param opacity Transparency level to use for the points, on a 0-1 scale Default: 1
+#' @param plot_title  Display title with the name of the feature? Default TRUE
+#' @param bins Number of bins to use in dividing expression levels. Default: 10
+#' @param flip Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. Default: false
+#' @param alphabetize Alphabetize the display order of genes. Default: TRUE
+#' @param pct_expr_thres Hide a gene if there is no group that expresses at or above this percentage. Default: 0
+#' @param return Return the generated data frame underlying the graph. Default: FALSE
+#' @param use_scaled Use scaled data. Default: FALSE
+#' @param use_raw Use raw data. Default: FALSE
+#' @param show_zeros Display comparison groups for which there there was no data? Default: FALSE
+#' @param add_group Add a null comparison group.  Will be initialized with zeros.
+#' @param y_label_order List of labels to use for the comparison groups.  Will be displayed in order of their index.
 #'
-#' @import dplyr
-#' @import Seurat
+#' @importFrom dplyr filter summarise group_by mutate inner_join ungroup distinct arrange mutate_if
 #' @importFrom tidyr gather
-#' @importFrom tibble rownames_to_column
-#' @importFrom RColorBrewer brewer.pal brewer.pal.info
-#' @importFrom viridis viridis
+#' @importFrom tibble rownames_to_column add_row
 #' @importFrom compositions normalize
 #' @importFrom plotly plot_ly layout
-#' @importFrom grDevices colorRampPalette
+#' @importFrom gtools mixedsort
 #'
-#' @return if return is TRUE, a plotly object.
-#' @return if export.df is TRUE, a data frame.
+#' @return
 #' @export
 #'
 #' @examples
 BubblePlotly <- function (object,
                           genes_plot,
+                          assay_use = "RNA",
+                          slot_use = "data",
+                          grouping = "ident",
                           colors_use = "Blues",
-                          dot.min = 0,
-                          dot.scale = 2,
-                          grouping,
-                          plot.legend = FALSE,
+                          dot_min = 0,
+                          dot_scale = 2,
+                          plot_legend = FALSE,
                           return = FALSE,
-                          x.lab.rot = -45,
+                          x_label_rotation = -45,
                           plot_width = 600,
                           plot_height = 600,
-                          x.font.size = 10,
-                          y.font.size = 10,
-                          title.font.size = 12,
-                          legend.text.size = 10,
+                          x_font_size = 10,
+                          y_font_size = 10,
+                          title_font_size = 12,
+                          legend_text_size = 10,
                           opacity = 1,
                           plot_title = NULL,
                           bins = 50,
                           flip = FALSE,
                           alphabetize = TRUE,
-                          pct.expr.thresh = NULL,
-                          export.df = FALSE,
-                          use.scaled = FALSE,
-                          use.raw = FALSE,
-                          show.zeros = FALSE,
-                          add.group = NULL,
-                          y.label.order = NULL)
-{
-
-  if (!missing(x = grouping)) {
-    object <- SetAllIdent(object = object, id = grouping)
-  }
+                          pct_expr_thres = NULL,
+                          show_zeros = FALSE,
+                          add_group = NULL,
+                          y_label_order = NULL){
 
   #screen out any genes that are not in our dataset and print them
   original_genes_to_plot <- genes_plot
-  genes_plot <- (genes_plot %>% as_tibble() %>% dplyr::filter(value %in% rownames(object@data)))$value
-  not_found <- original_genes_to_plot[!original_genes_to_plot %in% genes_plot]
-  print(not_found)
+  genes_plot <- genes_plot[which(genes_plot %in% rownames(object))]
+  not_found <- original_genes_to_plot[original_genes_to_plot %nin% genes_plot]
+  message(not_found)
 
   #let the user alphabetize the list of genes.  makes it easier to find a particular gene in a big table
   #TODO: add more sort options
   if (isTRUE(alphabetize)){
-    genes_plot <- sort(genes_plot, decreasing = TRUE)
+    genes_plot <- mixedsort(genes_plot, decreasing = TRUE)
   }
 
-  if(isTRUE(use.scaled)){
-    data.to.plot <- data.frame(FetchData(object = object,
-                                                 vars.all = genes_plot,
-                                                 use.scaled = TRUE))
-  } else if(isTRUE(use.raw)){
-    data.to.plot <- data.frame(FetchData(object = object,
-                                                 vars.all = genes_plot,
-                                                 use.scaled = FALSE))
-  } else {
-    data.to.plot <- data.frame(FetchData(object = object,
-                                                 vars.all = genes_plot))
-  }
+  df <- GetFeatureValues(object = object,
+                         features = genes_plot,
+                         assay_use = assay_use,
+                         slot_use = slot_use,
+                         bins = bins)
 
   # Add 0 data for each gene that was not detected or failed to pass QC
-  if (isTRUE(show.zeros)){
+  if (isTRUE(show_zeros)){
     for(i in not_found){
-      data.to.plot[,i] <- 0
+      df[,i] <- 0
     }
   }
 
-  data.to.plot <- rownames_to_column(df = data.to.plot, var = "cell")
+  ident <- GetFeatureValues(object, features = grouping)
+  colnames(ident)[1] <- "ident"
+  df <- inner_join(df, rownames_to_column(ident, "cell"))
 
-  data.to.plot$id <- object@ident
+  df <- df %>% gather(key = genes_plot,
+                      value = expression,
+                      -c(cell, ident))
 
-  data.to.plot <- data.to.plot %>% gather(key = genes_plot,
-                                          value = expression, -c(cell, id))
-
-  data.to.plot <- data.to.plot %>% group_by(id, genes_plot) %>%
-    summarize(avg.exp = mean(expm1(x = expression)),
+  df <- df %>% group_by(ident, genes_plot) %>%
+    summarise(avg.exp = mean(x = expression),
               pct.exp = PercentAbove(x = expression, threshold = 0),
               n = n())
 
-  if(!is.null(pct.expr.thresh)){
-    data.to.plot <- data.to.plot %>% group_by(genes_plot) %>% filter(max(pct.exp) > pct.expr.thresh)
+  if(!is.null(pct_expr_thres)){
+    df <- df %>% group_by(genes_plot) %>% filter(max(pct.exp) > pct_expr_thres)
   }
 
-  data.to.plot <- data.to.plot %>% ungroup() %>% group_by(genes_plot) %>%
-    mutate(avg.exp.scale = normalize(x = avg.exp))
+  df <- df %>% ungroup() %>% group_by(genes_plot) %>%
+    mutate(avg.exp.scale = replace_na(normalize(avg.exp), 0))
 
+  if (isTRUE(show_zeros)){
+    df[["genes_plot"]] <- factor(x = df[["genes_plot"]],
+                                      levels = rev(x = sub(pattern = "-",
+                                                           replacement = ".",
+                                                           x = c(genes_plot, not_found))))
+  } else {
+    df[["genes_plot"]] <- factor(x = df[["genes_plot"]],
+                                 levels = rev(x = sub(pattern = "-",
+                                                      replacement = ".",
+                                                      x = genes_plot)))
+  }
 
-  data.to.plot$genes_plot <- factor(x = data.to.plot$genes_plot,
-                                    levels = rev(x = sub(pattern = "-",
-                                                         replacement = ".",
-                                                         x = genes_plot)))
+  df[["pct.exp"]][df[["pct.exp"]] < dot_min] <- NA
 
-  data.to.plot$pct.exp[data.to.plot$pct.exp < dot.min] <- NA
-
-  data.to.plot <- as.data.frame(data.to.plot)
-
-  cut.avg.exp.scale.data <- factor(round(data.to.plot$avg.exp.scale*100,0)+1)
-
-  data.to.plot[,"feature"] <- cut.avg.exp.scale.data
-  data.to.plot[,"size"] <- data.to.plot$pct.exp
-
-  if(!is.null(add.group)){
-    for(i in add.group){
+  if(!is.null(add_group)){
+    for(i in add_group){
       for(j in genes_plot){
-        data.to.plot <- data.to.plot %>%
-          do(add_row(.,id = i,
+        df <- df %>%
+          do(add_row(.,ident = i,
                      genes_plot = j,
                      avg.exp = 0,
                      pct.exp = 0,
                      n = 0,
-                     avg.exp.scale=0,
-                     size=0,
-                     feature=factor(1))) %>%
+                     avg.exp.scale=0)) %>%
           distinct()
       }
     }
   }
 
-  viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
+  pal <- PrepQualitativePalette(bins = bins, palette_use = colors_use)
 
-  if (colors_use %in% rownames(brewer.pal.info)){
-    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors_use,]$maxcolors,colors_use))(100)
-  } else if (colors_use %in% viridis_palettes){
-    pal <- viridis(n = 100, option = colors_use)
-  } else {
-    pal <- colors_use
-  }
+  df <- df %>% arrange(ident) %>% ungroup() %>% mutate_if(is.factor, list(~as.character(.)))
 
-  data.to.plot <- data.to.plot %>% arrange(id)
-
-  genes_plot <- data.to.plot$genes_plot
+  genes_plot <- df$genes_plot
 
   if(flip){
-    ax = ~id
+    ax = ~ident
     ay = ~genes_plot
   } else {
     ax = ~genes_plot
-    ay = ~id
+    ay = ~ident
   }
 
-  p <- plot_ly(data = data.to.plot,
-               x = ax,
-               y = ay,
+  p <- plot_ly(data = df,
+               x = ~ident,
+               y = ~genes_plot,
+               # x = ax,
+               # y = ay,
                hoverinfo = 'text',
-               text = ~paste('Group:', id,
+               text = ~paste('Group:', ident,
                              '<br>Gene:', genes_plot,
                              '<br>Avg normalized expression:', round(avg.exp.scale,2),
                              '<br>% expressing:', round(pct.exp*100,2)),
                type = 'scatter',
                mode = 'markers',
-               color = ~feature,
+               color = ~avg.exp.scale,
                colors = pal,
                cmin = pal[1],
                cmax = pal[100],
-               size = ~size,
-               sizes = c(0,10)*dot.scale,
+               size = ~pct.exp,
+               sizes = c(0,10)*dot_scale,
                marker = list(opacity = opacity,
                              symbol = 'circle',
                              sizemode = 'diameter'),
@@ -210,21 +185,21 @@ BubblePlotly <- function (object,
                width = plot_width,
                height = plot_height) %>%
     layout(title = plot_title,
-           titlefont = list(size = title.font.size),
+           titlefont = list(size = title_font_size),
            #font = list(size = font.size),
-           xaxis = list(title = "Gene", tickangle = x.lab.rot, tickfont = list(size = x.font.size)),
-           yaxis = list(title = "Cluster", tickfont = list(size = y.font.size), type = "category", categoryorder = "array", categoryarray = y.label.order),
+           xaxis = list(title = "Gene", tickangle = x_label_rotation, tickfont = list(size = x_font_size)),
+           yaxis = list(title = "Cluster", tickfont = list(size = y_font_size), type = "category", categoryorder = "array", categoryarray = y_label_order),
            margin = list(b = 100, l = 250)
     )
 
   if (return) {
     return(p)
-  } else if(isTRUE(export.df))
+  } else if(isTRUE(return))
   {
-    return(data.to.plot)
+    return(df)
   } else {
     p
   }
-  # print(length(unique(data.to.plot$id)))
-  # print(length(unique(data.to.plot$genes_plot)))
+  # print(length(unique(df$id)))
+  # print(length(unique(df$genes_plot)))
 }

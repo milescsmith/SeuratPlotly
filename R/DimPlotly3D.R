@@ -1,28 +1,28 @@
 #' DimPlotly3D
 #'
 #' @param object Seurat object
-#' @param grouping Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
-#' @param reduction_use Dimensional reduction to display (default: tsne)
-#' @param dim_1 Dimension to display on the x-axis (default: 1)
-#' @param dim_2 Dimension to display on the y-axis (default: 2)
-#' @param dim_3 Dimension to display on the z-axis (default: 3)
-#' @param label Add a label showing thr group name to the graph (default: FALSE)
-#' @param label_size Label font size (default: 12)
-#' @param label_color Color for label border and arrow.  Need hex value. (default = '000000')
-#' @param show_arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
-#' @param return Return the plot object instead of displaying it (default: FALSE)
-#' @param pt_size Size of the points in pixels (default: 2)
-#' @param pt_shape Shape to use for the points (default: circle)
-#' @param opacity Transparency level to use for the points on a 0-1 scale (default: 1)
-#' @param palette_use Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')
-#' @param plot_height Plot height in pixels (default: 900)
-#' @param plot_width Plot width in pixels (default: 900)
-#' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend? (default: TRUE)
-#' @param legend_font_size Legend font size (default: 12)
-#' @param plot_title Plot title (default: reduction_use)
-#' @param plot_axes Display the major x, y, and z axes? (default: FALSE)
-#' @param plot_grid Display the major unit tick marks? (default: FALSE)
+#' @param grouping Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident
+#' @param reduction_use Dimensional reduction to display. Default: tsne
+#' @param dim_1 Dimension to display on the x-axis. Default: 1
+#' @param dim_2 Dimension to display on the y-axis. Default: 2
+#' @param dim_3 Dimension to display on the z-axis. Default: 3
+#' @param label Add a label showing thr group name to the graph. Default: FALSE
+#' @param label_size Label font size. Default: 12
+#' @param label_color Color for label border and arrow.  Need hex value.. Default = '000000'
+#' @param show_arrow Offset the position of the labels and instead point to each group with an arrow. Default: FALSE
+#' @param return Return the plot object instead of displaying it. Default: FALSE
+#' @param pt_size Size of the points in pixels. Default: 2
+#' @param pt_shape Shape to use for the points. Default: circle
+#' @param opacity Transparency level to use for the points on a 0-1 scale. Default: 1
+#' @param palette_use Color palette to use.  Must be a palette available in the Paletteer package. . Default: 'Set1'
+#' @param plot_height Plot height in pixels. Default: 900
+#' @param plot_width Plot width in pixels. Default: 900
+#' @param pt_info Meta.data columns to add to the hoverinfo popup.. Default: ident
+#' @param legend Display legend?. Default: TRUE
+#' @param legend_font_size Legend font size. Default: 12
+#' @param plot_title Plot title. Default: reduction_use
+#' @param plot_axes Display the major x, y, and z axes?. Default: FALSE
+#' @param plot_grid Display the major unit tick marks?. Default: FALSE
 #'
 #' @importFrom dplyr group_by summarise
 #' @importFrom plotly plot_ly layout
@@ -61,12 +61,6 @@ DimPlotly3d <- DimPlotly3D <- function(object,
     dim_2 = dim_2,
     dim_3 = dim_3,
     grouping = grouping
-  )
-
-  df <- PrepInfo(
-    object = object,
-    pt_info = pt_info,
-    df = df
   )
 
   if (label) {
@@ -114,6 +108,14 @@ DimPlotly3d <- DimPlotly3D <- function(object,
   if (is.null(plot_title)) {
     plot_title <- reduction_use
   }
+
+  md <- GetFeatureValues(object = object,
+                         features = c(pt_info, "ident")) %>%
+    mutate_at(vars(-cell),
+              list(~paste0('</br> ', substitute(.), ": ", .))) %>%
+    unite(info, -cell)
+
+  df %<>% inner_join(md)
 
   pal <- PrepPalette(
     df = df,

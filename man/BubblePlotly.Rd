@@ -4,74 +4,69 @@
 \alias{BubblePlotly}
 \title{BubblePlotly}
 \usage{
-BubblePlotly(object, genes_plot, colors_use = "Blues", dot.min = 0,
-  dot.scale = 2, grouping, plot.legend = FALSE, return = FALSE,
-  x.lab.rot = -45, plot_width = 600, plot_height = 600,
-  x.font.size = 10, y.font.size = 10, title.font.size = 12,
-  legend.text.size = 10, opacity = 1, plot_title = NULL, bins = 50,
-  flip = FALSE, alphabetize = TRUE, pct.expr.thresh = NULL,
-  export.df = FALSE, use.scaled = FALSE, use.raw = FALSE,
-  show.zeros = FALSE, add.group = NULL, y.label.order = NULL)
+BubblePlotly(object, genes_plot, assay_use = "RNA", slot_use = "data",
+  grouping = "ident", colors_use = "Blues", dot_min = 0,
+  dot_scale = 2, plot_legend = FALSE, return = FALSE,
+  x_label_rotation = -45, plot_width = 600, plot_height = 600,
+  x_font_size = 10, y_font_size = 10, title_font_size = 12,
+  legend_text_size = 10, opacity = 1, plot_title = NULL, bins = 50,
+  flip = FALSE, alphabetize = TRUE, pct_expr_thres = NULL,
+  show_zeros = FALSE, add_group = NULL, y_label_order = NULL)
 }
 \arguments{
 \item{object}{Seurat object}
 
 \item{genes_plot}{A list of genes to plot for each group.}
 
-\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{grouping}{Factor by which to group cells.  Default: ident)}
 
-\item{dot.min}{Minimium marker size, in pixels. (default: 0)}
+\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds)}
 
-\item{dot.scale}{Factor by which to scale markers. (default: 2)}
+\item{dot_min}{Minimium marker size, in pixels. Default: 0)}
 
-\item{grouping}{Factor by which to group cells.  (default: ident)}
+\item{dot_scale}{Factor by which to scale markers. Default: 2)}
 
-\item{return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{return}{Return the plot object instead of displaying it Default: FALSE)}
 
-\item{x.lab.rot}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)}
+\item{x_label_rotation}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. Default -45°)}
 
-\item{plot_width}{Plot width in pixels. (default: 900)}
+\item{plot_width}{Plot width in pixels. Default: 900)}
 
-\item{plot_height}{Plot height in pixels. (default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900)}
 
-\item{x.font.size}{Size of the x-axis titles. (default: 10)}
+\item{x_font_size}{Size of the x-axis titles. Default: 10)}
 
-\item{y.font.size}{Size of the y-axis titles. (default: 10)}
+\item{y_font_size}{Size of the y-axis titles. Default: 10)}
 
-\item{title.font.size}{Size of the plot title. (default: 12)}
+\item{title_font_size}{Size of the plot title. Default: 12)}
 
-\item{legend.text.size}{Size of the legend text. (default: 10)}
+\item{legend_text_size}{Size of the legend text. Default: 10)}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale Default: 1)}
 
-\item{plot_title}{Display title with the name of the feature? (default TRUE)}
+\item{plot_title}{Display title with the name of the feature? Default TRUE)}
 
-\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+\item{bins}{Number of bins to use in dividing expression levels. Default: 10)}
 
-\item{flip}{Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. (default: false)}
+\item{flip}{Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. Default: false)}
 
-\item{alphabetize}{Alphabetize the display order of genes. (default: TRUE)}
+\item{alphabetize}{Alphabetize the display order of genes. Default: TRUE)}
 
-\item{pct.expr.thresh}{Hide a gene if there is no group that expresses at or above this percentage. (default: 0)}
+\item{pct_expr_thres}{Hide a gene if there is no group that expresses at or above this percentage. Default: 0)}
 
-\item{export.df}{Return the generated data frame underlying the graph. (default: FALSE)}
+\item{show_zeros}{Display comparison groups for which there there was no data? Default: FALSE)}
 
-\item{use.scaled}{Use scaled data. (default: FALSE)}
+\item{add_group}{Add a null comparison group.  Will be initialized with zeros.}
 
-\item{use.raw}{Use raw data. (default: FALSE)}
+\item{y_label_order}{List of labels to use for the comparison groups.  Will be displayed in order of their index.}
 
-\item{show.zeros}{Display comparison groups for which there there was no data? (default: FALSE)}
+\item{legend}{Display legend. (currently nonfunctional) Default TRUE)}
 
-\item{add.group}{Add a null comparison group.  Will be initialized with zeros.}
+\item{return}{Return the generated data frame underlying the graph. Default: FALSE)}
 
-\item{y.label.order}{List of labels to use for the comparison groups.  Will be displayed in order of their index.}
+\item{use_scaled}{Use scaled data. Default: FALSE)}
 
-\item{legend}{Display legend. (currently nonfunctional) (default TRUE)}
-}
-\value{
-if return is TRUE, a plotly object.
-
-if export.df is TRUE, a data frame.
+\item{use_raw}{Use raw data. Default: FALSE)}
 }
 \description{
 Plot average expression levels and proportion expressing a feature arranged by given grouping.

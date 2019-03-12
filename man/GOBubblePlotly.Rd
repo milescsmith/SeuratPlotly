@@ -5,20 +5,20 @@
 \title{GOBubblePlotly}
 \usage{
 GOBubblePlotly(object, go_term, grouping = "ident", plot_height = 900,
-  plot_width = 900, filter = object@var.genes, ...)
+  plot_width = 900, gene_filter = NULL, ...)
 }
 \arguments{
 \item{object}{Seurat object}
 
 \item{go_term}{Gene Ontology term identifier (i.e. GO:0046774)}
 
-\item{grouping}{Factor by which to group cells.  (default: ident)}
+\item{grouping}{Factor by which to group cells.  Default: ident}
 
-\item{plot_height}{Plot height in pixels. (default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{plot_width}{Plot width in pixels. (default: 900)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{filter}{A list of gene names to filter the GO term members against. (default: object@var.genes)}
+\item{gene}{filter A list of gene names to filter the GO term members against. Default: NULL}
 
 \item{...options}{to pass to BubblePlotly}
 }

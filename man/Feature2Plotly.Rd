@@ -19,37 +19,37 @@ Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
 
 \item{feature_2}{Second variable to display. Currently only works with gene names}
 
-\item{return}{Return the plot dataframe instead of displaying it (default: FALSE)}
+\item{return}{Return the plot dataframe instead of displaying it Default: FALSE)}
 
-\item{pt_scale}{Factor by which to multiply the size of the points (default: 5)}
+\item{pt_scale}{Factor by which to multiply the size of the points Default: 5)}
 
-\item{pt_shape}{Shape to use for the points (default = circle)}
+\item{pt_shape}{Shape to use for the points Default = circle)}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale Default: 1)}
 
-\item{reduction_use}{Dimensional reduction to display (default: tsne)}
+\item{reduction_use}{Dimensional reduction to display Default: tsne)}
 
-\item{dim_1}{Dimension to display on the x-axis (default: 1)}
+\item{dim_1}{Dimension to display on the x-axis Default: 1)}
 
-\item{dim_2}{Dimension to display on the y-axis (default: 2)}
+\item{dim_2}{Dimension to display on the y-axis Default: 2)}
 
-\item{colors_use_1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{colors_use_1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. Default: Reds)}
 
-\item{colors_use_2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{colors_use_2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. Default: Reds)}
 
-\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+\item{bins}{Number of bins to use in dividing expression levels. Default: 10)}
 
-\item{plot_height}{Plot height in pixels (default: 900)}
+\item{plot_height}{Plot height in pixels Default: 900)}
 
-\item{plot_width}{Plot width in pixels (default: 900)}
+\item{plot_width}{Plot width in pixels Default: 900)}
 
-\item{pt_info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup. Default: ident)}
 
-\item{legend}{Display legend? (default: TRUE)}
+\item{legend}{Display legend? Default: TRUE)}
 
-\item{legend_font_size}{Legend font size (default: 12)}
+\item{legend_font_size}{Legend font size Default: 12)}
 
-\item{plot_title}{Display title with the name of the feature? (default TRUE)}
+\item{plot_title}{Display title with the name of the feature? Default TRUE)}
 }
 \description{
 Create a scatterplot of a given dimensional reduction set for a Seurat object,

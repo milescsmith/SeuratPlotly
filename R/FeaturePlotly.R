@@ -7,26 +7,26 @@
 #'
 #' @param object Seurat object
 #' @param feature Variable to display. Currently only works with gene names
-#' @param reduction Dimensional reduction to display (default: tsne)
-#' @param dim_1 Dimension to display on the x-axis (default: 1)
-#' @param dim_2 Dimension to display on the y-axis (default: 2)
-#' @param pt_scale Factor by which to multiply the size of the points (default: 5)
-#' @param pt_shape Shape to use for the points (default = circle)
-#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)
-#' @param bins Number of bins to use in dividing expression levels. (default: 10)
-#' @param plot_height Plot height in pixels (default: 900)
-#' @param plot_width Plot width in pixels (default: 900)
-#' @param plot_title  Display title with the name of the feature? (default TRUE)
-#' @param pt_info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend? (default: TRUE)
-#' @param legend_font_size Legend font size (default: 12)
-#' @param return Return the plot dataframe instead of displaying it (default: FALSE)
+#' @param reduction Dimensional reduction to display. Default: tsne
+#' @param dim_1 Dimension to display on the x-axis. Default: 1
+#' @param dim_2 Dimension to display on the y-axis. Default: 2
+#' @param pt_scale Factor by which to multiply the size of the points. Default: 5
+#' @param pt_shape Shape to use for the points. Default = circle
+#' @param opacity Transparency level to use for the points, on a 0-1 scale. Default: 1
+#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors.. Default: Reds
+#' @param bins Number of bins to use in dividing expression levels.. Default: 10
+#' @param plot_height Plot height in pixels. Default: 900
+#' @param plot_width Plot width in pixels. Default: 900
+#' @param plot_title  Display title with the name of the feature?. Default TRUE
+#' @param pt_info Meta.data columns to add to the hoverinfo popup.. Default: ident
+#' @param legend Display legend?. Default: TRUE
+#' @param legend_font_size Legend font size. Default: 12
+#' @param return Return the plot dataframe instead of displaying it. Default: FALSE
+#' @param assay_use
+#' @param slot_use
+#' @param reverse_color_scale
 #'
-#' @importFrom RColorBrewer brewer.pal brewer.pal.info
-#' @importFrom viridis viridis
 #' @importFrom plotly plot_ly layout
-#' @importFrom grDevices colorRampPalette
 #'
 #' @return plotly object
 #' @export
@@ -40,11 +40,11 @@ FeaturePlotly <- function(object,
                           pt_scale = 5,
                           pt_shape = "circle",
                           opacity = 1,
-                          reduction = "tsne",
+                          reduction = "umap",
                           dim_1 = 1,
                           dim_2 = 2,
-                          colors_use = c("blue","red"),
-                          reverse.color.scale = FALSE,
+                          colors_use = "Red",
+                          reverse_color_scale = FALSE,
                           bins = 10,
                           plot_height = 900,
                           plot_width = 900,
@@ -59,10 +59,12 @@ FeaturePlotly <- function(object,
                dim_2 = dim_2)
 
   df <- PrepInfo(object = object,
-                 pt_info = c(feature),
+                 pt_info = pt_info,
                  df = df)
 
-  if (is.null(feature)){ stop("No gene or feature given") }
+  if (is.null(feature)){
+    stop("No gene or feature given")
+    }
 
   df <- GetFeatureValues(object = object,
                          df = df,
@@ -78,11 +80,22 @@ FeaturePlotly <- function(object,
                          suffix = "size")
   df[,ncol(df)] <- df[,ncol(df)] * pt_scale
 
+  md <- GetFeatureValues(object = object,
+                         features = c(pt_info, "ident")) %>%
+    mutate_at(vars(-cell),
+              list(~paste0('</br> ', substitute(.), ": ", .))) %>%
+    unite(info, -cell)
+
+  df %<>% inner_join(md)
+
   if (isTRUE(plot_title)){
     plot_title = feature
   } else {
     plot_title = NULL
   }
+
+  pal <- PrepQualitativePalette(bins = binds,
+                                palette_use = colors_use)
 
   p <- plot_ly(df,
                x = ~x,
@@ -95,8 +108,8 @@ FeaturePlotly <- function(object,
                              opacity = opacity,
                              color = ~feature,
                              line = list(width = 0),
-                             colorscale=colors_use,
-                             reversescale = reverse.color.scale,
+                             colorscale=pal,
+                             reversescale = reverse_color_scale,
                              cmin = 0,
                              cmax = 1,
                              sizemode = "diameter",

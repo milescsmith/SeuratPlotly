@@ -145,84 +145,6 @@ PrepDf.Seurat <- function(object,
   return(df)
 }
 
-#' @title PrepInfo
-#'
-#' @description Using the members of pt_info, build a string for
-#' each row that compiles the indicated pt_info from the meta.data
-#' slot along with the necessary html tags and column names
-#'
-#' @param object Seurat object to extract data from
-#' @param pt_info A list of meta.data columns to add to the hoverinfo popup.
-#' @param df Plotting data frame to which to add the popup data.
-#'
-#' @importFrom stringr str_glue
-#'
-#' @return data.frame
-#' @export
-#'
-#' @examples
-
-PrepInfo <- function(object, ...) {
-  UseMethod("PrepInfo")
-}
-
-# Seurat 2
-#' @rdname PrepInfo
-#' @method PrepInfo seurat
-#' @return data.frame
-PrepInfo.seurat <- function(object, pt_info, df) {
-  if (!is.null(pt_info)) {
-    meta.info <- list()
-    # for each row
-    for (i in seq(dim(df)[1])) {
-      # for each member of pt_info
-      rowinfo <- ""
-      for (j in 1:length(pt_info)) {
-        rowinfo <- str_glue("{rowinfo} </br> {pt_info[j]}: {object@meta.data[i, pt_info[j]]}")
-      }
-      meta.info <- c(meta.info, rowinfo)
-    }
-    meta.info <- unlist(meta.info)
-    df$meta.info <- meta.info
-  } else {
-    df$meta.info <- df$ident
-  }
-  return(df)
-}
-
-# Seurat 3
-#' @rdname PrepInfo
-#' @method PrepInfo Seurat
-#' @return data.frame
-PrepInfo.Seurat <- function(object, pt_info, df) {
-  if (!is.null(pt_info)) {
-    feature_info <- FetchData(object = object, vars = pt_info) %>% rownames_to_column("cell")
-    # for each row
-    if ("cell" %nin% colnames(df)){
-      df %<>% as.data.frame() %>% rownames_to_column("cell")
-    }
-    meta.info <- new("data.frame")
-    for (i in seq(nrow(feature_info))) {
-      # for each member of pt_info
-      rowinfo <- ""
-      for (j in 1:length(pt_info)) {
-        if (is.numeric(feature_info[i, pt_info[j]])){
-          rowinfo <- str_glue("{rowinfo} </br> {pt_info[j]}: {round(feature_info[i, pt_info[j]],digits = 3)}")
-        } else {
-          rowinfo <- str_glue("{rowinfo} </br> {pt_info[j]}: {feature_info[i, pt_info[j]]}")
-        }
-
-      }
-      meta.info <- c(meta.info, rowinfo)
-    }
-    meta.info <- unlist(meta.info)
-    df$meta.info <- meta.info
-  } else {
-    df$meta.info <- Idents(object)
-  }
-  return(df)
-}
-
 #' @title PrepPalette
 #'
 #' @description Given a palette name and data frame with clustering or grouping
@@ -244,7 +166,7 @@ PrepInfo.Seurat <- function(object, pt_info, df) {
 #' @examples
 PrepPalette <- function(df,
                         palette_use) {
-  bins <- length(unique(df[, "ident"]))
+  bins <- length(unique(df[["ident"]]))
 
   if (palette_use %in% palettes_d_names$palette) {
     color.package <- palettes_d_names$package[which(palette_use == palettes_d_names$palette)]
@@ -265,6 +187,53 @@ PrepPalette <- function(df,
   return(pal)
 }
 
+#' @title PrepQualitativePalette
+#'
+#' @description Given a palette name and data frame with clustering or grouping
+#' information in an 'ident' column, return a palette containing a color for each
+#' unique cluster identity.
+#'
+#' @param bins Number of discrete values that need colors.
+#' @param palette_use The name of a palette to use.  Must be a palette available in
+#'   the Paletteer package.  If there are more unique identities than colors in the
+#'   palette, additional values will be created by interpolation.
+#'
+#' @return A list containing color values.
+#' @export
+#'
+#' @import paletteer
+#' @importFrom grDevices colorRampPalette
+#'
+#' @examples
+PrepPalette <- function(bins,
+                        palette_use) {
+
+  if (palette_use %in% palettes_d_names$palette) {
+    color.package <- palettes_d_names$package[which(palette_use == palettes_d_names$palette)]
+    pal <- paletteer_d(
+      package = !!color.package,
+      palette = !!palette_use
+    )
+  } else if (palette_use %in% palettes_c_names$palette) {
+    color.package <- palettes_c_names$package[which(palette_use == palettes_c_names$palette)]
+    pal <- paletteer_c(
+      package = !!color.package,
+      palette = !!palette_use
+    )
+  } else if (palette_use %in% palettes_dynamic_names$palette) {
+    color.package <- palettes_dynamic_names$package[which(palette_use == palettes_dynamic_names$palette)]
+    pal <- paletteer_dynamic(
+      package = !!color.package,
+      palette = !!palette_use
+    )
+
+  } else {
+    pal <- palette_use
+  }
+  pal <- colorRampPalette(pal)(bins)
+  return(pal)
+}
+
 #' @title GetFeatureValues
 #'
 #' @description Get expression levels of a given feature for each cell
@@ -276,6 +245,7 @@ PrepPalette <- function(df,
 #' @param slot_use Slot to pull feature data from. Default: "data"
 #'
 #' @importFrom stringr str_glue
+#' @importFrom purrr map_chr
 #'
 #' @return data.frame
 #' @export
@@ -320,48 +290,70 @@ GetFeatureValues.seurat <- function(object,
       mutate_if(is.factor,
                 list(as.numeric))
   }
-  feature_data
-  df %<>% inner_join(feature_data, by = "cell")
-  return(df)
+
+  if (!is.null(df)){
+    df %<>% inner_join(feature_data, by = "cell")
+  } else {
+    df <- feature_data
+  }
 }
 
 # Seurat 3
 #' @rdname PrepInfo
 #' @method PrepInfo Seurat
 #' @import Seurat
-#' @importFrom stringr str_glue
-#' @importFrom purrr map_chr
 #' @return data.frame
 GetFeatureValues.Seurat <- function(object,
-                                    df,
-                                    feature,
-                                    assay_use = "RNA",
-                                    slot_use = "data",
+                                    features,
+                                    df = NULL,
+                                    assay_use = NULL,
+                                    slot_use = NULL,
                                     bins = NULL,
                                     suffix = NULL,
                                     ...) {
-  key <- GetAssayData(object = object, assay = assay_use, slot = "key")
-  feature_data <- FetchData(object,
-                            vars = str_glue("{key}{feature}") %>% as.character(),
+  if (!is.null(assay_use)){
+    key <- GetAssayData(object = object, assay = assay_use, slot = "key")
+    feature_data <- FetchData(object,
+                            vars = map_chr(features, function(x) str_glue("{key}{x}")),
                             slot = slot_use) %>%
     rownames_to_column("cell")
 
-  if (!is.null(suffix)){
-    colnames(feature_data)[2] %<>% str_remove(pattern = key) %>% str_glue("_{suffix}")
+    colnames(feature_data) %<>% str_remove(pattern = key)
+    if (!is.null(suffix)){
+      colnames(feature_data) %<>% map_chr(function(i){
+        if (!str_detect(string = i, pattern = "cell")){
+          i <- str_glue("{i}_{suffix}")
+        }
+      })
+    }
   } else {
-    colnames(feature_data)[2] %<>% str_remove(pattern = key)
-  }
+    feature_data <- FetchData(object,
+                              vars = features) %>%
+    rownames_to_column("cell")
 
+    if (!is.null(suffix)){
+      colnames(feature_data) %<>% map_chr(function(i){
+        if (!str_detect(string = i, pattern = "cell")){
+          i <- str_glue("{i}_{suffix}")
+        }
+      })
+    }
+  }
 
   if (!is.null(bins)){
     feature_data %<>% mutate_if(is.numeric,
                                 list(~cut(.,
-                                         breaks = bins))) %>%
+                                          breaks = bins,
+                                          labels = FALSE)-1)) %>%
       mutate_if(is.factor,
                 list(as.numeric))
   }
 
-  df %<>% inner_join(feature_data, by = "cell")
+  if (!is.null(df)){
+    df %<>% inner_join(feature_data, by = "cell")
+  } else {
+    df <- feature_data
+  }
   return(df)
 }
 

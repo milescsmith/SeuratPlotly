@@ -6,8 +6,8 @@
 \usage{
 FeaturePlotly3D(object, feature_use = NULL, return = FALSE,
   pt_scale = 0.5, pt_shape = "circle", opacity = 1,
-  reduction_use = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
-  colors_use = "Reds", bins = 10, plot_height = 900,
+  reduction_use = "umap", dim_1 = 1, dim_2 = 2, dim_3 = 3,
+  colors_use = "Red", bins = 10, plot_height = 900,
   plot_width = 900, plot_title = FALSE, pt_info = NULL,
   legend = TRUE, legend_font_size = 12, plot_grid = FALSE,
   plot_axes = FALSE)
@@ -17,44 +17,41 @@ FeaturePlotly3D(object, feature_use = NULL, return = FALSE,
 
 \item{feature_use}{Variable to display. Currently only works with gene names}
 
-\item{return}{Return the plot object instead of displaying it Default: FALSE)}
+\item{return}{Return the plot object instead of displaying it. Default: FALSE}
 
-\item{pt_scale}{Factor by which to multiply the size of the points Default: 5)}
+\item{pt_scale}{Factor by which to multiply the size of the points. Default: 5}
 
-\item{pt_shape}{Shape to use for the points Default = circle)}
+\item{pt_shape}{Shape to use for the points. Default = circle}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale Default: 1)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-\item{reduction_use}{Dimensional reduction to display Default: tsne)}
+\item{reduction_use}{Dimensional reduction to display. Default: umap}
 
-\item{dim_1}{Dimension to display on the x-axis Default: 1)}
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-\item{dim_2}{Dimension to display on the y-axis Default: 2)}
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
-\item{dim_3}{Dimension to display on the z-axis Default: 3)}
+\item{dim_3}{Dimension to display on the z-axis. Default: 3}
 
-\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds)}
+\item{colors_use}{Color palette to use.  Accepts palettes available in the paletteer package.. Default: Reds}
 
-\item{bins}{Number of bins to use in dividing expression levels. Default: 10)}
+\item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 
-\item{plot_height}{Plot height in pixels Default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{plot_width}{Plot width in pixels Default: 900)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{plot_title}{Display title with the name of the feature? Default TRUE)}
+\item{plot_title}{Display title with the name of the feature?. Default TRUE}
 
-\item{pt_info}{Meta.data columns to add to the hoverinfo popup. Default: ident)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup. Default: ident}
 
-\item{legend}{Display legend? Default: TRUE)}
+\item{legend}{Display legend?. Default: TRUE}
 
-\item{legend_font_size}{Legend font size Default: 12)}
+\item{legend_font_size}{Legend font size. Default: 12}
 
-\item{plot_grid}{Display the major unit tick marks? Default: FALSE)}
+\item{plot_grid}{Display the major unit tick marks?. Default: FALSE}
 
-\item{plot_axes}{Display the major x, y, and z axes? Default: FALSE)}
-}
-\value{
-If return is TRUE, a plotly object.
+\item{plot_axes}{Display the major x, y, and z axes?. Default: FALSE}
 }
 \description{
 Create a scatterplot of a given dimensional reduction set for a Seurat object,

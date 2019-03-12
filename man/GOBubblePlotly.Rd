@@ -10,7 +10,7 @@ GOBubblePlotly(object, go_term, grouping = "ident", plot_height = 900,
 \arguments{
 \item{object}{Seurat object}
 
-\item{go_term}{Gene Ontology term identifier (i.e. GO:0046774)}
+\item{go_term}{Gene Ontology term identifier (i.e. GO:0046774}
 
 \item{grouping}{Factor by which to group cells.  Default: ident}
 

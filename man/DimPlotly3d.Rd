@@ -15,49 +15,49 @@ DimPlotly3d(object, grouping = "ident", label = FALSE,
 \arguments{
 \item{object}{Seurat object}
 
-\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data Default: ident)}
+\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident}
 
-\item{label}{Add a label showing thr group name to the graph Default: FALSE)}
+\item{label}{Add a label showing thr group name to the graph. Default: FALSE}
 
-\item{label_size}{Label font size Default: 12)}
+\item{label_size}{Label font size. Default: 12}
 
-\item{label_color}{Color for label border and arrow.  Need hex value. Default = '000000')}
+\item{label_color}{Color for label border and arrow.  Need hex value.. Default = '000000'}
 
-\item{show_arrow}{Offset the position of the labels and instead point to each group with an arrow Default: FALSE)}
+\item{show_arrow}{Offset the position of the labels and instead point to each group with an arrow. Default: FALSE}
 
-\item{return}{Return the plot object instead of displaying it Default: FALSE)}
+\item{return}{Return the plot object instead of displaying it. Default: FALSE}
 
-\item{pt_size}{Size of the points in pixels Default: 2)}
+\item{pt_size}{Size of the points in pixels. Default: 2}
 
-\item{pt_shape}{Shape to use for the points Default: circle)}
+\item{pt_shape}{Shape to use for the points. Default: circle}
 
-\item{opacity}{Transparency level to use for the points on a 0-1 scale Default: 1)}
+\item{opacity}{Transparency level to use for the points on a 0-1 scale. Default: 1}
 
-\item{reduction_use}{Dimensional reduction to display Default: tsne)}
+\item{reduction_use}{Dimensional reduction to display. Default: tsne}
 
-\item{dim_1}{Dimension to display on the x-axis Default: 1)}
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-\item{dim_2}{Dimension to display on the y-axis Default: 2)}
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
-\item{dim_3}{Dimension to display on the z-axis Default: 3)}
+\item{dim_3}{Dimension to display on the z-axis. Default: 3}
 
-\item{palette_use}{Color palette to use.  Must be a palette available in the Paletteer package.  Default: 'Set1')}
+\item{palette_use}{Color palette to use.  Must be a palette available in the Paletteer package. . Default: 'Set1'}
 
-\item{plot_height}{Plot height in pixels Default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{plot_width}{Plot width in pixels Default: 900)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{plot_title}{Plot title Default: reduction_use)}
+\item{plot_title}{Plot title. Default: reduction_use}
 
-\item{pt_info}{Meta.data columns to add to the hoverinfo popup. Default: ident)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup.. Default: ident}
 
-\item{legend}{Display legend? Default: TRUE)}
+\item{legend}{Display legend?. Default: TRUE}
 
-\item{legend_font_size}{Legend font size Default: 12)}
+\item{legend_font_size}{Legend font size. Default: 12}
 
-\item{plot_grid}{Display the major unit tick marks? Default: FALSE)}
+\item{plot_grid}{Display the major unit tick marks?. Default: FALSE}
 
-\item{plot_axes}{Display the major x, y, and z axes? Default: FALSE)}
+\item{plot_axes}{Display the major x, y, and z axes?. Default: FALSE}
 }
 \value{
 plotly object

@@ -1,4 +1,4 @@
-#' @title PrepDf
+#' @title PrepDr
 #'
 #' @description Helper function to extract dimensional reduction data from a Seurat object
 #' and format it into a data frame for use in plotting.
@@ -15,16 +15,16 @@
 #' @export
 #'
 #' @examples
-PrepDf <- function(object, ...) {
-  UseMethod("PrepDf")
+PrepDr <- function(object, ...) {
+  UseMethod("PrepDr")
 }
 
 # Seurat 2 objects
-#' @rdname PrepDf
+#' @rdname PrepDr
 #' @import Seurat
-#' @method PrepDf seurat
+#' @method PrepDr seurat
 #' @return data.frame
-PrepDf.seurat <- function(object,
+PrepDr.seurat <- function(object,
                           reduction,
                           dim_1 = 1,
                           dim_2 = 2,
@@ -90,11 +90,11 @@ PrepDf.seurat <- function(object,
 }
 
 # Seurat 3
-#' @rdname PrepDf
+#' @rdname PrepDr
 #' @import Seurat
-#' @method PrepDf Seurat
+#' @method PrepDr Seurat
 #' @return data.frame
-PrepDf.Seurat <- function(object,
+PrepDr.Seurat <- function(object,
                           reduction,
                           dim_1 = 1,
                           dim_2 = 2,
@@ -151,7 +151,7 @@ PrepDf.Seurat <- function(object,
 #' information in an 'ident' column, return a palette containing a color for each
 #' unique cluster identity.
 #'
-#' @param df A graphing data.frame (from PrepDf) containing a column named 'ident'
+#' @param df A graphing data.frame (from PrepDr) containing a column named 'ident'
 #'   with group identities.
 #' @param palette_use The name of a palette to use.  Must be a palette available in
 #'   the Paletteer package.  If there are more unique identities than colors in the
@@ -257,8 +257,8 @@ GetFeatureValues <- function(object, ...) {
 }
 
 # Seurat 2
-#' @rdname PrepInfo
-#' @method PrepInfo seurat
+#' @rdname GetFeatureValues
+#' @method GetFeatureValues seurat
 #' @import Seurat
 #' @return data.frame
 GetFeatureValues.seurat <- function(object,
@@ -299,8 +299,8 @@ GetFeatureValues.seurat <- function(object,
 }
 
 # Seurat 3
-#' @rdname PrepInfo
-#' @method PrepInfo Seurat
+#' @rdname GetFeatureValues
+#' @method GetFeatureValues Seurat
 #' @import Seurat
 #' @return data.frame
 GetFeatureValues.Seurat <- function(object,

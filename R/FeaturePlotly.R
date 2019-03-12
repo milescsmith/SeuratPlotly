@@ -53,7 +53,7 @@ FeaturePlotly <- function(object,
                           legend = TRUE,
                           legend_font_size = 12){
 
-  df <- PrepDf(object,
+  df <- PrepDr(object,
                reduction,
                dim_1 = dim_1,
                dim_2 = dim_2)

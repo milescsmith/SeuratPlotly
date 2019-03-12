@@ -18,55 +18,55 @@ BubblePlotly(object, genes_plot, assay_use = "RNA", slot_use = "data",
 
 \item{genes_plot}{A list of genes to plot for each group.}
 
-\item{grouping}{Factor by which to group cells.  Default: ident)}
+\item{grouping}{Factor by which to group cells.  Default: ident}
 
-\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds)}
+\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds}
 
-\item{dot_min}{Minimium marker size, in pixels. Default: 0)}
+\item{dot_min}{Minimium marker size, in pixels. Default: 0}
 
-\item{dot_scale}{Factor by which to scale markers. Default: 2)}
+\item{dot_scale}{Factor by which to scale markers. Default: 2}
 
-\item{return}{Return the plot object instead of displaying it Default: FALSE)}
+\item{return}{Return the plot object instead of displaying it Default: FALSE}
 
-\item{x_label_rotation}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. Default -45°)}
+\item{x_label_rotation}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. Default -45°}
 
-\item{plot_width}{Plot width in pixels. Default: 900)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{plot_height}{Plot height in pixels. Default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{x_font_size}{Size of the x-axis titles. Default: 10)}
+\item{x_font_size}{Size of the x-axis titles. Default: 10}
 
-\item{y_font_size}{Size of the y-axis titles. Default: 10)}
+\item{y_font_size}{Size of the y-axis titles. Default: 10}
 
-\item{title_font_size}{Size of the plot title. Default: 12)}
+\item{title_font_size}{Size of the plot title. Default: 12}
 
-\item{legend_text_size}{Size of the legend text. Default: 10)}
+\item{legend_text_size}{Size of the legend text. Default: 10}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale Default: 1)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale Default: 1}
 
-\item{plot_title}{Display title with the name of the feature? Default TRUE)}
+\item{plot_title}{Display title with the name of the feature? Default TRUE}
 
-\item{bins}{Number of bins to use in dividing expression levels. Default: 10)}
+\item{bins}{Number of bins to use in dividing expression levels. Default: 10}
 
-\item{flip}{Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. Default: false)}
+\item{flip}{Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. Default: false}
 
-\item{alphabetize}{Alphabetize the display order of genes. Default: TRUE)}
+\item{alphabetize}{Alphabetize the display order of genes. Default: TRUE}
 
-\item{pct_expr_thres}{Hide a gene if there is no group that expresses at or above this percentage. Default: 0)}
+\item{pct_expr_thres}{Hide a gene if there is no group that expresses at or above this percentage. Default: 0}
 
-\item{show_zeros}{Display comparison groups for which there there was no data? Default: FALSE)}
+\item{show_zeros}{Display comparison groups for which there there was no data? Default: FALSE}
 
 \item{add_group}{Add a null comparison group.  Will be initialized with zeros.}
 
 \item{y_label_order}{List of labels to use for the comparison groups.  Will be displayed in order of their index.}
 
-\item{legend}{Display legend. (currently nonfunctional) Default TRUE)}
+\item{legend}{Display legend. (currently nonfunctional) Default TRUE}
 
-\item{return}{Return the generated data frame underlying the graph. Default: FALSE)}
+\item{return}{Return the generated data frame underlying the graph. Default: FALSE}
 
-\item{use_scaled}{Use scaled data. Default: FALSE)}
+\item{use_scaled}{Use scaled data. Default: FALSE}
 
-\item{use_raw}{Use raw data. Default: FALSE)}
+\item{use_raw}{Use raw data. Default: FALSE}
 }
 \description{
 Plot average expression levels and proportion expressing a feature arranged by given grouping.

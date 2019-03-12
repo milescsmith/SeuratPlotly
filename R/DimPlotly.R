@@ -55,7 +55,7 @@ DimPlotly <- function(object,
                       legend = TRUE,
                       legend_font_size = 12){
 
-  df <- PrepDf(object,
+  df <- PrepDr(object,
                reduction_use,
                dim_1 = dim_1,
                dim_2 = dim_2,

@@ -55,7 +55,7 @@ DimPlotly3d <- DimPlotly3D <- function(object,
                                        legend_font_size = 12,
                                        plot_grid = FALSE,
                                        plot_axes = FALSE) {
-  df <- PrepDf(object,
+  df <- PrepDr(object,
     reduction_use,
     dim_1 = dim_1,
     dim_2 = dim_2,

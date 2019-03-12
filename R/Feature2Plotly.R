@@ -55,7 +55,7 @@ Feature2Plotly <- function(object,
                            legend = TRUE,
                            legend_font_size = 12){
 
-  df <- PrepDf(object = object,
+  df <- PrepDr(object = object,
                reduction = reduction_use,
                dim_1 = dim_1,
                dim_2 = dim_2)

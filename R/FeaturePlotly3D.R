@@ -53,7 +53,7 @@ FeaturePlotly3D <- function(object,
                             plot_grid = FALSE,
                             plot_axes = FALSE){
 
-  df <- PrepDf(object,
+  df <- PrepDr(object,
                reduction,
                dim_1 = dim_1,
                dim_2 = dim_2,

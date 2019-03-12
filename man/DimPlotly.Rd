@@ -4,9 +4,9 @@
 \alias{DimPlotly}
 \title{Plot dimensional reduction for a Seurat object}
 \usage{
-DimPlotly(object, grouping = "ident", do.label = FALSE,
-  label.size = 12, show.arrow = FALSE, label.color = "000000",
-  return = FALSE, pt.size = 4, pt_shape = "circle", opacity = 0.75,
+DimPlotly(object, grouping = "ident", label = FALSE, label_size = 12,
+  show_arrow = FALSE, label_color = "000000", return = FALSE,
+  pt_size = 4, pt_shape = "circle", opacity = 0.75,
   reduction_use = "tsne", dim_1 = 1, dim_2 = 2,
   palette_use = "default_ucscgb", plot_height = 900,
   plot_width = 900, plot_title = NULL, pt_info = NULL,
@@ -15,41 +15,43 @@ DimPlotly(object, grouping = "ident", do.label = FALSE,
 \arguments{
 \item{object}{scRNA-seq object}
 
-\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data Default: ident)}
+\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident}
 
-\item{do.label}{Add a label showing thr group name to the graph Default: FALSE)}
+\item{label}{Add a label showing thr group name to the graph. Default: FALSE}
 
-\item{label.size}{Label font size Default: 12)}
+\item{label_size}{Label font size. Default: 12}
 
-\item{show.arrow}{Offset the position of the labels and instead point to each group with an arrow Default: FALSE)}
+\item{show_arrow}{Offset the position of the labels and instead point to each group with an arrow. Default: FALSE}
 
-\item{label.color}{Color for label border and arrow.  Need hex value. Default = '000000')}
+\item{label_color}{Color for label border and arrow.  Need hex value.. Default = '000000'}
 
-\item{return}{Return the plot object instead of displaying it Default: FALSE)}
+\item{return}{Return the plot object instead of displaying it. Default: FALSE}
 
-\item{pt.size}{Size of the points in pixels Default: 2)}
+\item{pt_size}{Size of the points in pixels. Default: 2}
 
-\item{pt_shape}{Shape to use for the points Default: circle)}
+\item{pt_shape}{Shape to use for the points. Default: circle}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale Default: 1)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-\item{reduction_use}{Dimensional reduction to display Default: tsne)}
+\item{reduction_use}{Dimensional reduction to display. Default: tsne}
 
-\item{dim_1}{Dimension to display on the x-axis Default: 1)}
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-\item{dim_2}{Dimension to display on the y-axis Default: 2)}
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
 \item{palette_use}{Color palette to use.  Must be a palette available in the Paletteer package}
 
-\item{plot_height}{Plot height in pixels Default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{plot_width}{Plot width in pixels Default: 900)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{pt_info}{Meta.data columns to add to the hoverinfo popup. Default: ident)}
+\item{plot_title}{}
 
-\item{legend}{Display legend? Default: TRUE)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup.. Default: ident}
 
-\item{legend_font_size}{Legend font size Default: 12)}
+\item{legend}{Display legend?. Default: TRUE}
+
+\item{legend_font_size}{Legend font size. Default: 12}
 }
 \value{
 plotly object
@@ -59,6 +61,6 @@ Create a scatterplot of a given dimensional reduction set for a scRNA-seq data o
 coloring points by the given grouping variable
 }
 \examples{
-object <- RunTSNE(object)
-DimPlotly(object, grouping = 'ident', pt.size = 4, opacity = 0.5, plot_title = "Test Plot", reduction_use = "tsne")
+object <- RunTSNE(object
+DimPlotly(object, grouping = 'ident', pt_size = 4, opacity = 0.5, plot_title = "Test Plot", reduction_use = "tsne")
 }

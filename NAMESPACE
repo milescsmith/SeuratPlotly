@@ -18,13 +18,7 @@ export(PrepPalette)
 export(retrieveGO)
 import(Seurat)
 import(dplyr)
-<<<<<<< HEAD
 import(paletteer)
-=======
-import(group_by)
-import(paletteer)
-import(summarise)
->>>>>>> 8dc2c15f034fc2c050163b334da98176b042360d
 importFrom(Hmisc,"%nin%")
 importFrom(RColorBrewer,brewer.pal)
 importFrom(RColorBrewer,brewer.pal.info)

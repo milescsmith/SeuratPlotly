@@ -77,10 +77,10 @@ PrepDr.seurat <- function(object,
 
   if (!is.null(grouping)){
     if (grouping != "ident") {
-      df$ident <- object$grouping %>%
+      df[[ident]] <- object[[grouping]] %>%
         as.factor()
     } else if (grouping == "ident"){
-      df$ident <- Idents(object) %>% as.factor()
+      df[[ident]] <- Idents(object) %>% as.factor()
     }
   }
 
@@ -134,10 +134,10 @@ PrepDr.Seurat <- function(object,
 
   if (!is.null(grouping)){
     if (grouping != "ident") {
-      df$ident <- object$grouping %>%
+      df[[ident]] <- object[[grouping]] %>%
         as.factor()
     } else if (grouping == "ident"){
-      df$ident <- Idents(object) %>% as.factor()
+      df[[ident]] <- Idents(object) %>% as.factor()
     }
   }
   df %<>% rownames_to_column("cell")
@@ -168,13 +168,13 @@ PrepPalette <- function(df,
                         palette_use) {
   bins <- length(unique(df[["ident"]]))
 
-  if (palette_use %in% palettes_d_names$palette) {
+  if (palette_use %in% palettes_d_names[[palette]]) {
     color.package <- palettes_d_names$package[which(palette_use == palettes_d_names$palette)]
     pal <- paletteer_d(
       package = !!color.package,
       palette = !!palette_use
     )
-  } else if (palette_use %in% palettes_c_names$palette) {
+  } else if (palette_use %in% palettes_c_names[[palette]]) {
     color.package <- palettes_c_names$package[which(palette_use == palettes_c_names$palette)]
     pal <- paletteer_c(
       package = !!color.package,
@@ -208,19 +208,19 @@ PrepPalette <- function(df,
 PrepPalette <- function(bins,
                         palette_use) {
 
-  if (palette_use %in% palettes_d_names$palette) {
+  if (palette_use %in% palettes_d_names[[palette]]) {
     color.package <- palettes_d_names$package[which(palette_use == palettes_d_names$palette)]
     pal <- paletteer_d(
       package = !!color.package,
       palette = !!palette_use
     )
-  } else if (palette_use %in% palettes_c_names$palette) {
+  } else if (palette_use %in% palettes_c_names[[palette]]) {
     color.package <- palettes_c_names$package[which(palette_use == palettes_c_names$palette)]
     pal <- paletteer_c(
       package = !!color.package,
       palette = !!palette_use
     )
-  } else if (palette_use %in% palettes_dynamic_names$palette) {
+  } else if (palette_use %in% palettes_dynamic_names[[palette]]) {
     color.package <- palettes_dynamic_names$package[which(palette_use == palettes_dynamic_names$palette)]
     pal <- paletteer_dynamic(
       package = !!color.package,

@@ -2,9 +2,17 @@
 % Please edit documentation in R/common_functions.R
 \name{GetFeatureValues}
 \alias{GetFeatureValues}
+\alias{GetFeatureValues.seurat}
+\alias{GetFeatureValues.Seurat}
 \title{GetFeatureValues}
 \usage{
 GetFeatureValues(object, ...)
+
+\method{GetFeatureValues}{seurat}(object, df, feature, bins = NULL, ...)
+
+\method{GetFeatureValues}{Seurat}(object, features, df = NULL,
+  assay_use = NULL, slot_use = NULL, bins = NULL, suffix = NULL,
+  ...)
 }
 \arguments{
 \item{object}{Seurat object to get feature data from}
@@ -18,6 +26,10 @@ GetFeatureValues(object, ...)
 \item{slot}{Slot to pull feature data from. Default: "data"}
 }
 \value{
+data.frame
+
+data.frame
+
 data.frame
 }
 \description{

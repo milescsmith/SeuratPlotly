@@ -4,10 +4,22 @@
 \alias{PrepPalette}
 \title{PrepPalette}
 \usage{
+<<<<<<< HEAD
 PrepPalette(df, palette)
+=======
+PrepPalette(bins, palette_use)
+
+PrepPalette(bins, palette_use)
+>>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 }
 \arguments{
-\item{df}{A graphing data.frame (from PrepDf) containing a column named 'ident'
+\item{bins}{Number of discrete values that need colors.}
+
+\item{palette_use}{The name of a palette to use.  Must be a palette available in
+the Paletteer package.  If there are more unique identities than colors in the
+palette, additional values will be created by interpolation.}
+
+\item{df}{A graphing data.frame (from PrepDr) containing a column named 'ident'
 with group identities.}
 
 \item{palette}{The name of a palette to use.  Must be a palette available in
@@ -16,9 +28,15 @@ palette, additional values will be created by interpolation.}
 }
 \value{
 A list containing color values.
+
+A list containing color values.
 }
 \description{
 Given a palette name and data frame with clustering or grouping_var
+information in an 'ident' column, return a palette containing a color for each
+unique cluster identity.
+
+Given a palette name and data frame with clustering or grouping
 information in an 'ident' column, return a palette containing a color for each
 unique cluster identity.
 }

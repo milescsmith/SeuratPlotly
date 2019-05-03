@@ -6,54 +6,67 @@
 \usage{
 FeaturePlotly3D(object, feature = NULL, return = FALSE,
   pt_scale = 0.5, pt_shape = "circle", opacity = 1,
+<<<<<<< HEAD
   reduction = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
   colors = "Reds", bins = 10, plot_height = 900, plot_width = 900,
   plot_title = FALSE, pt_info = NULL, legend = TRUE,
   legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
+=======
+  reduction_use = "umap", dim_1 = 1, dim_2 = 2, dim_3 = 3,
+  colors_use = "Red", bins = 10, plot_height = 900,
+  plot_width = 900, plot_title = FALSE, pt_info = NULL,
+  legend = TRUE, legend_font_size = 12, plot_grid = FALSE,
+  plot_axes = FALSE)
+>>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 }
 \arguments{
 \item{object}{Seurat object}
 
 \item{feature}{Variable to display. Currently only works with gene names}
 
-\item{return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{return}{Return the plot object instead of displaying it. Default: FALSE}
 
-\item{pt_scale}{Factor by which to multiply the size of the points (default: 5)}
+\item{pt_scale}{Factor by which to multiply the size of the points. Default: 5}
 
-\item{pt_shape}{Shape to use for the points (default = circle)}
+\item{pt_shape}{Shape to use for the points. Default = circle}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
+<<<<<<< HEAD
 \item{reduction}{Dimensional reduction to display (default: tsne)}
+=======
+\item{reduction_use}{Dimensional reduction to display. Default: umap}
+>>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 
-\item{dim_1}{Dimension to display on the x-axis (default: 1)}
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-\item{dim_2}{Dimension to display on the y-axis (default: 2)}
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
-\item{dim_3}{Dimension to display on the z-axis (default: 3)}
+\item{dim_3}{Dimension to display on the z-axis. Default: 3}
 
+<<<<<<< HEAD
 \item{colors}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
+=======
+\item{colors_use}{Color palette to use.  Accepts palettes available in the paletteer package.. Default: Reds}
+>>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 
-\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+\item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 
-\item{plot_height}{Plot height in pixels (default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{plot_width}{Plot width in pixels (default: 900)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{plot_title}{Display title with the name of the feature? (default TRUE)}
+\item{plot_title}{Display title with the name of the feature?. Default TRUE}
 
-\item{pt_info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup. Default: ident}
 
-\item{legend}{Display legend? (default: TRUE)}
+\item{legend}{Display legend?. Default: TRUE}
 
-\item{legend_font_size}{Legend font size (default: 12)}
+\item{legend_font_size}{Legend font size. Default: 12}
 
-\item{plot_grid}{Display the major unit tick marks? (default: FALSE)}
+\item{plot_grid}{Display the major unit tick marks?. Default: FALSE}
 
-\item{plot_axes}{Display the major x, y, and z axes? (default: FALSE)}
-}
-\value{
-If return is TRUE, a plotly object.
+\item{plot_axes}{Display the major x, y, and z axes?. Default: FALSE}
 }
 \description{
 Create a scatterplot of a given dimensional reduction set for a Seurat object,

@@ -9,9 +9,9 @@ retrieveGO(term, mart = "ensembl", dataset = "hsapiens_gene_ensembl")
 \arguments{
 \item{term}{GO ID to retreive names for.}
 
-\item{mart}{Biomart database to use (default: 'ensembl')}
+\item{mart}{Biomart database to use. Default: 'ensembl'}
 
-\item{dataset}{Biomart dataset to use (default: 'hsapiens_gene_ensembl')}
+\item{dataset}{Biomart dataset to use. Default: 'hsapiens_gene_ensembl'}
 }
 \value{
 A list of HCGN names.
@@ -20,6 +20,6 @@ A list of HCGN names.
 Retrieve the HUGO Gene Nomenclature Committee names associated with a GeneOntology term.
 }
 \examples{
-genes_to_plot <- retrieveGO('GO:0046774')
+genes_to_plot <- retrieveGO('GO:0046774'
 
 }

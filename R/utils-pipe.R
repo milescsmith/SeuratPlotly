@@ -13,10 +13,22 @@ NULL
 #'
 #' See \code{magrittr::\link[magrittr]{\%<>\%}} for details.
 #'
-#' @name %>%
+#' @name %<>%
 #' @rdname compound
 #' @keywords internal
 #' @export
 #' @importFrom magrittr %<>%
 #' @usage lhs \%<>\% rhs
 NULL
+
+
+#' @title NotIn
+#' @name %nin%
+#' @keywords internal
+#' @export
+#' @description Negative in
+#' @usage lhs \%nin\% rhs
+#'
+#' @importFrom purrr compose
+#'
+`%nin%`` <- compose(`!`,`%in%`)

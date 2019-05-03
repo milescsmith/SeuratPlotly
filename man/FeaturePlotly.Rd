@@ -4,47 +4,63 @@
 \alias{FeaturePlotly}
 \title{FeaturePlotly}
 \usage{
+<<<<<<< HEAD
 FeaturePlotly(object, feature = NULL, assay = "RNA", slot = "data",
   return = FALSE, pt_scale = 5, pt_shape = "circle", opacity = 1,
   reduction = "tsne", dim_1 = 1, dim_2 = 2, colors = c("blue",
   "red"), reverse.color.scale = FALSE, bins = 10, plot_height = 900,
   plot_width = 900, plot_title = FALSE, pt_info = NULL,
   legend = TRUE, legend_font_size = 12)
+=======
+FeaturePlotly(object, feature = NULL, assay_use = "RNA",
+  slot_use = "data", return = FALSE, pt_scale = 5,
+  pt_shape = "circle", opacity = 1, reduction = "umap", dim_1 = 1,
+  dim_2 = 2, colors_use = "Red", reverse_color_scale = FALSE,
+  bins = 10, plot_height = 900, plot_width = 900,
+  plot_title = FALSE, pt_info = NULL, legend = TRUE,
+  legend_font_size = 12)
+>>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 }
 \arguments{
 \item{object}{Seurat object}
 
 \item{feature}{Variable to display. Currently only works with gene names}
 
-\item{return}{Return the plot dataframe instead of displaying it (default: FALSE)}
+\item{return}{Return the plot dataframe instead of displaying it. Default: FALSE}
 
-\item{pt_scale}{Factor by which to multiply the size of the points (default: 5)}
+\item{pt_scale}{Factor by which to multiply the size of the points. Default: 5}
 
-\item{pt_shape}{Shape to use for the points (default = circle)}
+\item{pt_shape}{Shape to use for the points. Default = circle}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-\item{reduction}{Dimensional reduction to display (default: tsne)}
+\item{reduction}{Dimensional reduction to display. Default: tsne}
 
-\item{dim_1}{Dimension to display on the x-axis (default: 1)}
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-\item{dim_2}{Dimension to display on the y-axis (default: 2)}
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
+<<<<<<< HEAD
 \item{colors}{Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)}
+=======
+\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors.. Default: Reds}
+>>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 
-\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+\item{reverse_color_scale}{}
 
-\item{plot_height}{Plot height in pixels (default: 900)}
+\item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 
-\item{plot_width}{Plot width in pixels (default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{plot_title}{Display title with the name of the feature? (default TRUE)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{pt_info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
+\item{plot_title}{Display title with the name of the feature?. Default TRUE}
 
-\item{legend}{Display legend? (default: TRUE)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup.. Default: ident}
 
-\item{legend_font_size}{Legend font size (default: 12)}
+\item{legend}{Display legend?. Default: TRUE}
+
+\item{legend_font_size}{Legend font size. Default: 12}
 }
 \value{
 plotly object

@@ -16,7 +16,6 @@ Imports:
   tibble,
   compositions,
   stringr,
-  Hmisc,
   paletteer,
   glue
 Suggests:

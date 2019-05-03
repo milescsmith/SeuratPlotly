@@ -8,15 +8,15 @@
 #' @param object Seurat object
 #' @param feature_1 First variable to display. Currently only works with gene names
 #' @param feature_2 Second variable to display. Currently only works with gene names
-#' @param reduction_use Dimensional reduction to display (default: tsne)
+#' @param reduction Dimensional reduction to display (default: tsne)
 #' @param dim_1 Dimension to display on the x-axis (default: 1)
 #' @param dim_2 Dimension to display on the y-axis (default: 2)
 #' @param dim_3 Dimension to display on the z-axis (default: 3)
 #' @param pt_scale Factor by which to multiply the size of the points (default: 5)
 #' @param pt_shape Shape to use for the points (default = circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param colors_use_1 Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)
-#' @param colors_use_2 Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param colors_1 Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param colors_2 Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
 #' @param plot_height Plot height in pixels (default: 900)
 #' @param plot_width Plot width in pixels (default: 900)
@@ -46,12 +46,12 @@ Feature2Plotly3D <- function(object,
                              pt_scale = 0.5,
                              pt_shape = "circle",
                              opacity = 1,
-                             reduction_use = "tsne",
+                             reduction = "tsne",
                              dim_1 = 1,
                              dim_2 = 2,
                              dim_3 = 3,
-                             colors_use_1 = "Reds",
-                             colors_use_2 = "Blues",
+                             colors_1 = "Reds",
+                             colors_2 = "Blues",
                              bins = 10,
                              plot_height = "750",
                              plot_width = "750",
@@ -62,18 +62,18 @@ Feature2Plotly3D <- function(object,
                              plot_axes = FALSE){
 
   df <- as.data.frame(GetDimReduction(object = object,
-                                      reduction.type = reduction_use,
+                                      reduction.type = reduction,
                                       slot = "cell.embeddings"))
   dim.code <- GetDimReduction(
     object = object,
-    reduction.type = reduction_use,
+    reduction.type = reduction,
     slot = "key"
   )
 
   dim.axes <- colnames(
     GetDimReduction(
       object = object,
-      reduction.type = reduction_use,
+      reduction.type = reduction,
       slot = "cell.embeddings"
     )
   )
@@ -132,20 +132,20 @@ Feature2Plotly3D <- function(object,
 
   viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
 
-  if (colors_use_1 %in% rownames(brewer.pal.info)){
-    pal.1 <- colorRampPalette(brewer.pal(brewer.pal.info[colors_use_1,]$maxcolors,colors_use_1))(bins)
-  } else if (colors_use_1 %in% viridis_palettes){
-    pal.1 <- viridis(n = bins, option = colors_use_1)
+  if (colors_1 %in% rownames(brewer.pal.info)){
+    pal.1 <- colorRampPalette(brewer.pal(brewer.pal.info[colors_1,]$maxcolors,colors_1))(bins)
+  } else if (colors_1 %in% viridis_palettes){
+    pal.1 <- viridis(n = bins, option = colors_1)
   } else {
-    pal.1 <- colors_use_1
+    pal.1 <- colors_1
   }
 
-  if (colors_use_2 %in% rownames(brewer.pal.info)){
-    pal.2 <- colorRampPalette(brewer.pal(brewer.pal.info[colors_use_2,]$maxcolors,colors_use_2))(bins)
-  } else if (colors_use_2 %in% viridis_palettes){
-    pal.2 <- viridis(n = bins, option = colors_use_2)
+  if (colors_2 %in% rownames(brewer.pal.info)){
+    pal.2 <- colorRampPalette(brewer.pal(brewer.pal.info[colors_2,]$maxcolors,colors_2))(bins)
+  } else if (colors_2 %in% viridis_palettes){
+    pal.2 <- viridis(n = bins, option = colors_2)
   } else {
-    pal.2 <- colors_use_2
+    pal.2 <- colors_2
   }
 
   p <- plot_ly(df,

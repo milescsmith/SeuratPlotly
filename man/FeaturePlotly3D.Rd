@@ -4,18 +4,17 @@
 \alias{FeaturePlotly3D}
 \title{FeaturePlotly3D}
 \usage{
-FeaturePlotly3D(object, feature_use = NULL, return = FALSE,
+FeaturePlotly3D(object, feature = NULL, return = FALSE,
   pt_scale = 0.5, pt_shape = "circle", opacity = 1,
-  reduction_use = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
-  colors_use = "Reds", bins = 10, plot_height = 900,
-  plot_width = 900, plot_title = FALSE, pt_info = NULL,
-  legend = TRUE, legend_font_size = 12, plot_grid = FALSE,
-  plot_axes = FALSE)
+  reduction = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
+  colors = "Reds", bins = 10, plot_height = 900, plot_width = 900,
+  plot_title = FALSE, pt_info = NULL, legend = TRUE,
+  legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{feature_use}{Variable to display. Currently only works with gene names}
+\item{feature}{Variable to display. Currently only works with gene names}
 
 \item{return}{Return the plot object instead of displaying it (default: FALSE)}
 
@@ -25,7 +24,7 @@ FeaturePlotly3D(object, feature_use = NULL, return = FALSE,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
-\item{reduction_use}{Dimensional reduction to display (default: tsne)}
+\item{reduction}{Dimensional reduction to display (default: tsne)}
 
 \item{dim_1}{Dimension to display on the x-axis (default: 1)}
 
@@ -33,7 +32,7 @@ FeaturePlotly3D(object, feature_use = NULL, return = FALSE,
 
 \item{dim_3}{Dimension to display on the z-axis (default: 3)}
 
-\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{colors}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
 
 \item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
 

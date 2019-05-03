@@ -13,9 +13,9 @@ GetFeatureValues(object, ...)
 
 \item{feature}{feature (genes expression, metadata, etc...) to retrieve data for}
 
-\item{assay_use}{Assay to pull feature data from.  Default: "RNA"}
+\item{assay}{Assay to pull feature data from.  Default: "RNA"}
 
-\item{slot_use}{Slot to pull feature data from. Default: "data"}
+\item{slot}{Slot to pull feature data from. Default: "data"}
 }
 \value{
 data.frame

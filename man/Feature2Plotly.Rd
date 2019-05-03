@@ -6,11 +6,10 @@
 \usage{
 Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
   assay_1 = "RNA", assay_2 = "RNA", return = FALSE, pt_scale = 1.5,
-  pt_shape = "circle", opacity = 0.5, reduction_use = "tsne",
-  dim_1 = 1, dim_2 = 2, colors_use_1 = "Reds",
-  colors_use_2 = "Blues", bins = 10, plot_height = "750",
-  plot_width = "750", pt_info = NULL, legend = TRUE,
-  legend_font_size = 12)
+  pt_shape = "circle", opacity = 0.5, reduction = "tsne",
+  dim_1 = 1, dim_2 = 2, colors_1 = "Reds", colors_2 = "Blues",
+  bins = 10, plot_height = "750", plot_width = "750",
+  pt_info = NULL, legend = TRUE, legend_font_size = 12)
 }
 \arguments{
 \item{object}{Seurat object}
@@ -27,15 +26,15 @@ Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
-\item{reduction_use}{Dimensional reduction to display (default: tsne)}
+\item{reduction}{Dimensional reduction to display (default: tsne)}
 
 \item{dim_1}{Dimension to display on the x-axis (default: 1)}
 
 \item{dim_2}{Dimension to display on the y-axis (default: 2)}
 
-\item{colors_use_1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{colors_1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)}
 
-\item{colors_use_2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{colors_2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)}
 
 \item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
 

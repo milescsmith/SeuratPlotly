@@ -4,8 +4,8 @@
 \alias{BubblePlotly}
 \title{BubblePlotly}
 \usage{
-BubblePlotly(object, genes_plot, colors_use = "Blues", dot.min = 0,
-  dot.scale = 2, grouping, plot.legend = FALSE, return = FALSE,
+BubblePlotly(object, genes_plot, palette = "Blues", dot.min = 0,
+  dot.scale = 2, grouping_var, plot.legend = FALSE, return = FALSE,
   x.lab.rot = -45, plot_width = 600, plot_height = 600,
   x.font.size = 10, y.font.size = 10, title.font.size = 12,
   legend.text.size = 10, opacity = 1, plot_title = NULL, bins = 50,
@@ -18,13 +18,13 @@ BubblePlotly(object, genes_plot, colors_use = "Blues", dot.min = 0,
 
 \item{genes_plot}{A list of genes to plot for each group.}
 
-\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{palette}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
 
 \item{dot.min}{Minimium marker size, in pixels. (default: 0)}
 
 \item{dot.scale}{Factor by which to scale markers. (default: 2)}
 
-\item{grouping}{Factor by which to group cells.  (default: ident)}
+\item{grouping_var}{Factor by which to group cells.  (default: ident)}
 
 \item{return}{Return the plot object instead of displaying it (default: FALSE)}
 
@@ -74,7 +74,7 @@ if return is TRUE, a plotly object.
 if export.df is TRUE, a data frame.
 }
 \description{
-Plot average expression levels and proportion expressing a feature arranged by given grouping.
+Plot average expression levels and proportion expressing a feature arranged by given grouping_var.
 Color intensity of the markers indicates expression levels and size of the marker indicates
 the proportion of the group expressing the gene above a given threshold. By default, genes are arranged
 along the x-axis and groups along the y-axis.

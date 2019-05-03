@@ -13,7 +13,7 @@
 #' @param pt_scale Factor by which to multiply the size of the points (default: 5)
 #' @param pt_shape Shape to use for the points (default = circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)
+#' @param colors Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
 #' @param plot_height Plot height in pixels (default: 900)
 #' @param plot_width Plot width in pixels (default: 900)
@@ -34,8 +34,8 @@
 #' @examples
 FeaturePlotly <- function(object,
                           feature = NULL,
-                          assay_use = "RNA",
-                          slot_use = "data",
+                          assay = "RNA",
+                          slot = "data",
                           return = FALSE,
                           pt_scale = 5,
                           pt_shape = "circle",
@@ -43,7 +43,7 @@ FeaturePlotly <- function(object,
                           reduction = "tsne",
                           dim_1 = 1,
                           dim_2 = 2,
-                          colors_use = c("blue","red"),
+                          colors = c("blue","red"),
                           reverse.color.scale = FALSE,
                           bins = 10,
                           plot_height = 900,
@@ -69,12 +69,12 @@ FeaturePlotly <- function(object,
                          feature = feature,
                          bins = bins,
                          use.scaled = TRUE,
-                         assay_use = assay_use)
+                         assay = assay)
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature,
                          use.scaled = FALSE,
-                         assay_use = assay_use,
+                         assay = assay,
                          suffix = "size")
   df[,ncol(df)] <- df[,ncol(df)] * pt_scale
 
@@ -94,18 +94,16 @@ FeaturePlotly <- function(object,
                marker = list(symbol = pt_shape,
                              opacity = opacity,
                              color = ~feature,
-                             line = list(width = 0),
-                             colorscale=colors_use,
+                             colorscale=colors,
                              reversescale = reverse.color.scale,
-                             cmin = 0,
-                             cmax = 1,
+                             cauto = TRUE,
                              sizemode = "diameter",
                              colorbar = list(title = feature)),
                width = plot_width,
                height = plot_height,
                showlegend = legend,
                hoverinfo = "text",
-               text = ~meta.info) %>%
+               text = ~meta_info) %>%
     layout(
       title = plot_title,
       xaxis = list(title = str_glue("{reduction}_{dim_1}")),

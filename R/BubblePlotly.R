@@ -1,17 +1,17 @@
 # TODO: add more ways to sort/slice/dice!
 #' BubblePlotly
 #'
-#' Plot average expression levels and proportion expressing a feature arranged by given grouping.
+#' Plot average expression levels and proportion expressing a feature arranged by given grouping_var.
 #' Color intensity of the markers indicates expression levels and size of the marker indicates
 #' the proportion of the group expressing the gene above a given threshold. By default, genes are arranged
 #' along the x-axis and groups along the y-axis.
 #'
 #' @param object Seurat object
 #' @param genes_plot A list of genes to plot for each group.
-#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param palette Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param dot.min Minimium marker size, in pixels. (default: 0)
 #' @param dot.scale Factor by which to scale markers. (default: 2)
-#' @param grouping Factor by which to group cells.  (default: ident)
+#' @param grouping_var Factor by which to group cells.  (default: ident)
 #' @param legend Display legend. (currently nonfunctional) (default TRUE)
 #' @param return Return the plot object instead of displaying it (default: FALSE)
 #' @param x.lab.rot Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)
@@ -51,10 +51,10 @@
 #' @examples
 BubblePlotly <- function (object,
                           genes_plot,
-                          colors_use = "Blues",
+                          palette = "Blues",
                           dot.min = 0,
                           dot.scale = 2,
-                          grouping,
+                          grouping_var,
                           plot.legend = FALSE,
                           return = FALSE,
                           x.lab.rot = -45,
@@ -78,8 +78,8 @@ BubblePlotly <- function (object,
                           y.label.order = NULL)
 {
 
-  if (!missing(x = grouping)) {
-    object <- SetAllIdent(object = object, id = grouping)
+  if (!missing(x = grouping_var)) {
+    object <- SetAllIdent(object = object, id = grouping_var)
   }
 
   #screen out any genes that are not in our dataset and print them
@@ -167,12 +167,12 @@ BubblePlotly <- function (object,
 
   viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
 
-  if (colors_use %in% rownames(brewer.pal.info)){
-    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors_use,]$maxcolors,colors_use))(100)
-  } else if (colors_use %in% viridis_palettes){
-    pal <- viridis(n = 100, option = colors_use)
+  if (palette %in% rownames(brewer.pal.info)){
+    pal <- colorRampPalette(brewer.pal(brewer.pal.info[palette,]$maxcolors,palette))(100)
+  } else if (palette %in% viridis_palettes){
+    pal <- viridis(n = 100, option = palette)
   } else {
-    pal <- colors_use
+    pal <- palette
   }
 
   data.to.plot <- data.to.plot %>% arrange(id)

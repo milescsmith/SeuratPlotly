@@ -17,7 +17,8 @@ Imports:
   compositions,
   stringr,
   Hmisc,
-  paletteer
+  paletteer,
+  glue
 Suggests:
   Seurat
 License: BSD

@@ -4,11 +4,10 @@
 \alias{FeaturePlotly}
 \title{FeaturePlotly}
 \usage{
-FeaturePlotly(object, feature = NULL, assay_use = "RNA",
-  slot_use = "data", return = FALSE, pt_scale = 5,
-  pt_shape = "circle", opacity = 1, reduction = "tsne", dim_1 = 1,
-  dim_2 = 2, colors_use = c("blue", "red"),
-  reverse.color.scale = FALSE, bins = 10, plot_height = 900,
+FeaturePlotly(object, feature = NULL, assay = "RNA", slot = "data",
+  return = FALSE, pt_scale = 5, pt_shape = "circle", opacity = 1,
+  reduction = "tsne", dim_1 = 1, dim_2 = 2, colors = c("blue",
+  "red"), reverse.color.scale = FALSE, bins = 10, plot_height = 900,
   plot_width = 900, plot_title = FALSE, pt_info = NULL,
   legend = TRUE, legend_font_size = 12)
 }
@@ -31,7 +30,7 @@ FeaturePlotly(object, feature = NULL, assay_use = "RNA",
 
 \item{dim_2}{Dimension to display on the y-axis (default: 2)}
 
-\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)}
+\item{colors}{Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)}
 
 \item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
 

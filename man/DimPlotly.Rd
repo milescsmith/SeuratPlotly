@@ -4,18 +4,18 @@
 \alias{DimPlotly}
 \title{Plot dimensional reduction for a Seurat object}
 \usage{
-DimPlotly(object, grouping = "ident", do.label = FALSE,
+DimPlotly(object, grouping_var = "ident", do.label = FALSE,
   label.size = 12, show.arrow = FALSE, label.color = "000000",
   return = FALSE, pt.size = 4, pt_shape = "circle", opacity = 0.75,
-  reduction_use = "tsne", dim_1 = 1, dim_2 = 2,
-  palette_use = "default_ucscgb", plot_height = 900,
-  plot_width = 900, plot_title = NULL, pt_info = NULL,
-  legend = TRUE, legend_font_size = 12)
+  reduction = "tsne", dim_1 = 1, dim_2 = 2,
+  palette = "default_ucscgb", plot_height = 900, plot_width = 900,
+  plot_title = NULL, pt_info = NULL, legend = TRUE,
+  legend_font_size = 12)
 }
 \arguments{
 \item{object}{scRNA-seq object}
 
-\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
+\item{grouping_var}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
 
 \item{do.label}{Add a label showing thr group name to the graph (default: FALSE)}
 
@@ -33,13 +33,13 @@ DimPlotly(object, grouping = "ident", do.label = FALSE,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
 
-\item{reduction_use}{Dimensional reduction to display (default: tsne)}
+\item{reduction}{Dimensional reduction to display (default: tsne)}
 
 \item{dim_1}{Dimension to display on the x-axis (default: 1)}
 
 \item{dim_2}{Dimension to display on the y-axis (default: 2)}
 
-\item{palette_use}{Color palette to use.  Must be a palette available in the Paletteer package}
+\item{palette}{Color palette to use.  Must be a palette available in the Paletteer package}
 
 \item{plot_height}{Plot height in pixels (default: 900)}
 
@@ -56,9 +56,9 @@ plotly object
 }
 \description{
 Create a scatterplot of a given dimensional reduction set for a scRNA-seq data object,
-coloring points by the given grouping variable
+coloring points by the given grouping_var variable
 }
 \examples{
 object <- RunTSNE(object)
-DimPlotly(object, grouping = 'ident', pt.size = 4, opacity = 0.5, plot_title = "Test Plot", reduction_use = "tsne")
+DimPlotly(object, grouping_var = 'ident', pt.size = 4, opacity = 0.5, plot_title = "Test Plot", reduction = "tsne")
 }

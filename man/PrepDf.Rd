@@ -9,10 +9,10 @@
 PrepDf(object, ...)
 
 \method{PrepDf}{seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
-  dim_3 = NULL, grouping = NULL)
+  dim_3 = NULL, grouping_var = NULL)
 
 \method{PrepDf}{Seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
-  dim_3 = NULL, grouping = NULL)
+  dim_3 = NULL, grouping_var = NULL)
 }
 \arguments{
 \item{object}{scRNA-seq data object}
@@ -25,7 +25,7 @@ PrepDf(object, ...)
 
 \item{dim_3}{Dimension three.  Z-axis data.}
 
-\item{grouping}{Identity information to use for grouping.
+\item{grouping_var}{Identity information to use for grouping_var.
 Permissible values include meta.data column names.}
 }
 \value{

@@ -6,15 +6,15 @@
 #' object@@dr slot
 #'
 #' @param object Seurat object
-#' @param feature_use Variable to display. Currently only works with gene names
-#' @param reduction_use Dimensional reduction to display (default: tsne)
+#' @param feature Variable to display. Currently only works with gene names
+#' @param reduction Dimensional reduction to display (default: tsne)
 #' @param dim_1 Dimension to display on the x-axis (default: 1)
 #' @param dim_2 Dimension to display on the y-axis (default: 2)
 #' @param dim_3 Dimension to display on the z-axis (default: 3)
 #' @param pt_scale Factor by which to multiply the size of the points (default: 5)
 #' @param pt_shape Shape to use for the points (default = circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
+#' @param colors Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
 #' @param bins Number of bins to use in dividing expression levels. (default: 10)
 #' @param plot_height Plot height in pixels (default: 900)
 #' @param plot_width Plot width in pixels (default: 900)
@@ -38,16 +38,16 @@
 #'
 #' @examples
 FeaturePlotly3D <- function(object,
-                            feature_use = NULL,
+                            feature = NULL,
                             return = FALSE,
                             pt_scale = 0.5,
                             pt_shape = "circle",
                             opacity = 1,
-                            reduction_use = "tsne",
+                            reduction = "tsne",
                             dim_1 = 1,
                             dim_2 = 2,
                             dim_3 = 3,
-                            colors_use = "Reds",
+                            colors = "Reds",
                             bins = 10,
                             plot_height = 900,
                             plot_width = 900,
@@ -59,18 +59,18 @@ FeaturePlotly3D <- function(object,
                             plot_axes = FALSE){
 
   df <- as.data.frame(GetDimReduction(object = object,
-                                      reduction.type = reduction_use,
+                                      reduction.type = reduction,
                                       slot = "cell.embeddings"))
   dim.code <- GetDimReduction(
     object = object,
-    reduction.type = reduction_use,
+    reduction.type = reduction,
     slot = "key"
   )
 
   dim.axes <- colnames(
     GetDimReduction(
       object = object,
-      reduction.type = reduction_use,
+      reduction.type = reduction,
       slot = "cell.embeddings"
     )
   )
@@ -99,13 +99,13 @@ FeaturePlotly3D <- function(object,
     df$meta.info <- object@ident
   }
 
-  if (is.null(feature_use)){ stop("No gene or feature given") }
+  if (is.null(feature)){ stop("No gene or feature given") }
 
   feature.data <- FetchData(object = object,
-                            vars.all = feature_use,
+                            vars.all = feature,
                             use.scaled = TRUE)
   size.data <- FetchData(object = object,
-                         vars.all = feature_use,
+                         vars.all = feature,
                          use.scaled = FALSE)
   feature.data[,1][feature.data[,1] == 0] <- NA
   feature.data <- as.matrix(feature.data)
@@ -115,16 +115,16 @@ FeaturePlotly3D <- function(object,
 
   viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
 
-  if (colors_use %in% rownames(brewer.pal.info)){
-    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors_use,]$maxcolors,colors_use))(bins)
-  } else if (colors_use %in% viridis_palettes){
-    pal <- viridis(n = bins, option = colors_use)
+  if (colors %in% rownames(brewer.pal.info)){
+    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors,]$maxcolors,colors))(bins)
+  } else if (colors %in% viridis_palettes){
+    pal <- viridis(n = bins, option = colors)
   } else {
-    pal <- colors_use
+    pal <- colors
   }
 
   if (isTRUE(plot_title)){
-    plot_title = feature_use
+    plot_title = feature
   } else {
     plot_title = NULL
   }

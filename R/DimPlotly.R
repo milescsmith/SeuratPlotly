@@ -2,11 +2,11 @@
 #' Plot dimensional reduction for a Seurat object
 #'
 #' Create a scatterplot of a given dimensional reduction set for a scRNA-seq data object,
-#' coloring points by the given grouping variable
+#' coloring points by the given grouping_var variable
 #'
 #' @param object scRNA-seq object
-#' @param grouping Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
-#' @param reduction_use Dimensional reduction to display (default: tsne)
+#' @param grouping_var Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
+#' @param reduction Dimensional reduction to display (default: tsne)
 #' @param dim_1 Dimension to display on the x-axis (default: 1)
 #' @param dim_2 Dimension to display on the y-axis (default: 2)
 #' @param do.label Add a label showing thr group name to the graph (default: FALSE)
@@ -16,7 +16,7 @@
 #' @param pt.size Size of the points in pixels (default: 2)
 #' @param pt_shape Shape to use for the points (default: circle)
 #' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param palette_use Color palette to use.  Must be a palette available in the Paletteer package
+#' @param palette Color palette to use.  Must be a palette available in the Paletteer package
 #' @param plot_height Plot height in pixels (default: 900)
 #' @param plot_width Plot width in pixels (default: 900)
 #' @param legend Display legend? (default: TRUE)
@@ -26,15 +26,16 @@
 #'
 #' @importFrom dplyr group_by summarise
 #' @importFrom plotly plot_ly layout
+#' @importFrom glue glue
 #'
 #' @return plotly object
 #' @export
 #'
 #' @examples
 #' object <- RunTSNE(object)
-#' DimPlotly(object, grouping = 'ident', pt.size = 4, opacity = 0.5, plot_title = "Test Plot", reduction_use = "tsne")
+#' DimPlotly(object, grouping_var = 'ident', pt.size = 4, opacity = 0.5, plot_title = "Test Plot", reduction = "tsne")
 DimPlotly <- function(object,
-                      grouping = "ident",
+                      grouping_var = "ident",
                       do.label = FALSE,
                       label.size = 12,
                       show.arrow = FALSE,
@@ -43,10 +44,10 @@ DimPlotly <- function(object,
                       pt.size = 4,
                       pt_shape = "circle",
                       opacity = 0.75,
-                      reduction_use = "tsne",
+                      reduction = "tsne",
                       dim_1 = 1,
                       dim_2 = 2,
-                      palette_use = "default_ucscgb",
+                      palette = "default_ucscgb",
                       plot_height = 900,
                       plot_width = 900,
                       plot_title = NULL,
@@ -55,17 +56,17 @@ DimPlotly <- function(object,
                       legend_font_size = 12){
 
   df <- PrepDf(object,
-               reduction_use,
+               reduction,
                dim_1 = dim_1,
                dim_2 = dim_2,
-               grouping = grouping)
+               grouping_var = grouping_var)
 
   df <- PrepInfo(object = object,
                  pt_info = pt_info,
                  df = df)
 
   pal <- PrepPalette(df = df,
-                     palette_use = palette_use)
+                     palette = palette)
 
   if (do.label) {
     df %>%
@@ -88,7 +89,7 @@ DimPlotly <- function(object,
   }
 
   if (is.null(plot_title)){
-    plot_title <- reduction_use
+    plot_title <- reduction
   }
 
   p <- plot_ly(df,
@@ -108,12 +109,12 @@ DimPlotly <- function(object,
                mode = "markers",
                showlegend = legend,
                hoverinfo = "text",
-               text = ~meta.info
+               text = ~meta_info
   ) %>%
     layout(
       title = plot_title,
-      xaxis = list(title = glue("{reduction_use}_{dim_1}")),
-      yaxis = list(title = glue("{reduction_use}_{dim_2}")),
+      xaxis = list(title = glue("{reduction}_{dim_1}")),
+      yaxis = list(title = glue("{reduction}_{dim_2}")),
       annotations = labels
     )
 

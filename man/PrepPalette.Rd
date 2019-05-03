@@ -4,13 +4,13 @@
 \alias{PrepPalette}
 \title{PrepPalette}
 \usage{
-PrepPalette(df, palette_use)
+PrepPalette(df, palette)
 }
 \arguments{
 \item{df}{A graphing data.frame (from PrepDf) containing a column named 'ident'
 with group identities.}
 
-\item{palette_use}{The name of a palette to use.  Must be a palette available in
+\item{palette}{The name of a palette to use.  Must be a palette available in
 the Paletteer package.  If there are more unique identities than colors in the
 palette, additional values will be created by interpolation.}
 }
@@ -18,7 +18,7 @@ palette, additional values will be created by interpolation.}
 A list containing color values.
 }
 \description{
-Given a palette name and data frame with clustering or grouping
+Given a palette name and data frame with clustering or grouping_var
 information in an 'ident' column, return a palette containing a color for each
 unique cluster identity.
 }

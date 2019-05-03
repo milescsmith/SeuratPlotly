@@ -16,8 +16,8 @@ PrepInfo(object, ...)
 
 \method{PrepInfo}{seurat}(object, df, feature, bins = NULL, ...)
 
-\method{PrepInfo}{Seurat}(object, df, feature, assay_use = "RNA",
-  slot_use = "data", bins = NULL, suffix = NULL, ...)
+\method{PrepInfo}{Seurat}(object, df, feature, assay = "RNA",
+  slot = "data", bins = NULL, suffix = NULL, ...)
 }
 \arguments{
 \item{object}{Seurat object to extract data from}

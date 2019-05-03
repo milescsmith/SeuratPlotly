@@ -4,15 +4,16 @@
 \alias{GOBubblePlotly}
 \title{GOBubblePlotly}
 \usage{
-GOBubblePlotly(object, go_term, grouping = "ident", plot_height = 900,
-  plot_width = 900, filter = object@var.genes, ...)
+GOBubblePlotly(object, go_term, grouping_var = "ident",
+  plot_height = 900, plot_width = 900, filter = object@var.genes,
+  ...)
 }
 \arguments{
 \item{object}{Seurat object}
 
 \item{go_term}{Gene Ontology term identifier (i.e. GO:0046774)}
 
-\item{grouping}{Factor by which to group cells.  (default: ident)}
+\item{grouping_var}{Factor by which to group cells.  (default: ident)}
 
 \item{plot_height}{Plot height in pixels. (default: 900)}
 

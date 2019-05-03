@@ -4,18 +4,18 @@
 \alias{DimPlotly3d}
 \title{DimPlotly3D}
 \usage{
-DimPlotly3d(object, grouping = "ident", label = FALSE,
+DimPlotly3d(object, grouping_var = "ident", label = FALSE,
   label_size = 12, label_color = "000000", show_arrow = FALSE,
   return = FALSE, pt_size = 2, pt_shape = "circle", opacity = 1,
-  reduction_use = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
-  palette_use = "Set1", plot_height = 900, plot_width = 900,
+  reduction = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
+  palette = "Set1", plot_height = 900, plot_width = 900,
   plot_title = NULL, pt_info = NULL, legend = TRUE,
   legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
+\item{grouping_var}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
 
 \item{label}{Add a label showing thr group name to the graph (default: FALSE)}
 
@@ -33,7 +33,7 @@ DimPlotly3d(object, grouping = "ident", label = FALSE,
 
 \item{opacity}{Transparency level to use for the points on a 0-1 scale (default: 1)}
 
-\item{reduction_use}{Dimensional reduction to display (default: tsne)}
+\item{reduction}{Dimensional reduction to display (default: tsne)}
 
 \item{dim_1}{Dimension to display on the x-axis (default: 1)}
 
@@ -41,13 +41,13 @@ DimPlotly3d(object, grouping = "ident", label = FALSE,
 
 \item{dim_3}{Dimension to display on the z-axis (default: 3)}
 
-\item{palette_use}{Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')}
+\item{palette}{Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')}
 
 \item{plot_height}{Plot height in pixels (default: 900)}
 
 \item{plot_width}{Plot width in pixels (default: 900)}
 
-\item{plot_title}{Plot title (default: reduction_use)}
+\item{plot_title}{Plot title (default: reduction)}
 
 \item{pt_info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
 
@@ -66,5 +66,5 @@ plotly object
 DimPlotly3D
 }
 \examples{
-DimPlotly3D(object, grouping = "res.0.6", label = TRUE, show_arrow = FALSE)
+DimPlotly3D(object, grouping_var = "res.0.6", label = TRUE, show_arrow = FALSE)
 }

@@ -4,48 +4,37 @@
 \alias{BubblePlotly}
 \title{BubblePlotly}
 \usage{
-<<<<<<< HEAD
-BubblePlotly(object, genes_plot, palette = "Blues", dot.min = 0,
-  dot.scale = 2, grouping_var, plot.legend = FALSE, return = FALSE,
-  x.lab.rot = -45, plot_width = 600, plot_height = 600,
-  x.font.size = 10, y.font.size = 10, title.font.size = 12,
-  legend.text.size = 10, opacity = 1, plot_title = NULL, bins = 50,
-  flip = FALSE, alphabetize = TRUE, pct.expr.thresh = NULL,
-  export.df = FALSE, use.scaled = FALSE, use.raw = FALSE,
-  show.zeros = FALSE, add.group = NULL, y.label.order = NULL)
-=======
-BubblePlotly(object, genes_plot, assay_use = "RNA", slot_use = "data",
-  grouping = "ident", colors_use = "Blues", dot_min = 0,
+BubblePlotly(object, features_plot, assay = NULL, slot = "data",
+  grouping_var = "ident", colors = "Blues", dot_min = 0,
   dot_scale = 2, plot_legend = FALSE, return = FALSE,
   x_label_rotation = -45, plot_width = 600, plot_height = 600,
   x_font_size = 10, y_font_size = 10, title_font_size = 12,
   legend_text_size = 10, opacity = 1, plot_title = NULL, bins = 50,
   flip = FALSE, alphabetize = TRUE, pct_expr_thres = NULL,
   show_zeros = FALSE, add_group = NULL, y_label_order = NULL)
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{genes_plot}{A list of genes to plot for each group.}
+\item{features_plot}{Features to display values for. If trying to retrieve values from an assay
+that is not the current DefaultAssay, prefix the feature name with 'assay_'.
+Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
-<<<<<<< HEAD
-\item{palette}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
-=======
-\item{grouping}{Factor by which to group cells.  Default: ident}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+\item{assay}{Assay to pull data from.  Defaults to the object's DefaultAssay}
 
-\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds}
+\item{slot}{Slot to pull data from.  Default: 'data'}
+
+\item{grouping_var}{Factor by which to group cells.  Default: ident}
+
+\item{colors}{Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds}
 
 \item{dot_min}{Minimium marker size, in pixels. Default: 0}
 
-<<<<<<< HEAD
-\item{grouping_var}{Factor by which to group cells.  (default: ident)}
-=======
 \item{dot_scale}{Factor by which to scale markers. Default: 2}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 
-\item{return}{Return the plot object instead of displaying it Default: FALSE}
+\item{plot_legend}{Display legend? Default: FALSE}
+
+\item{return}{Return the generated data frame underlying the graph. Default: FALSE}
 
 \item{x_label_rotation}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. Default -45°}
 
@@ -67,29 +56,21 @@ BubblePlotly(object, genes_plot, assay_use = "RNA", slot_use = "data",
 
 \item{bins}{Number of bins to use in dividing expression levels. Default: 10}
 
-\item{flip}{Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. Default: false}
+\item{flip}{Swap the x- and y-axes so that features are on the y-axis and groups along the x-axis. Default: false}
 
-\item{alphabetize}{Alphabetize the display order of genes. Default: TRUE}
+\item{alphabetize}{Alphabetize the display order of features Default: TRUE}
 
-\item{pct_expr_thres}{Hide a gene if there is no group that expresses at or above this percentage. Default: 0}
+\item{pct_expr_thres}{Hide a feature if there is no group that expresses at or above this percentage. Default: 0}
 
 \item{show_zeros}{Display comparison groups for which there there was no data? Default: FALSE}
 
 \item{add_group}{Add a null comparison group.  Will be initialized with zeros.}
 
 \item{y_label_order}{List of labels to use for the comparison groups.  Will be displayed in order of their index.}
-
-\item{legend}{Display legend. (currently nonfunctional) Default TRUE}
-
-\item{return}{Return the generated data frame underlying the graph. Default: FALSE}
-
-\item{use_scaled}{Use scaled data. Default: FALSE}
-
-\item{use_raw}{Use raw data. Default: FALSE}
 }
 \description{
 Plot average expression levels and proportion expressing a feature arranged by given grouping_var.
 Color intensity of the markers indicates expression levels and size of the marker indicates
-the proportion of the group expressing the gene above a given threshold. By default, genes are arranged
+the proportion of the group expressing the feature above a given threshold. By default, features are arranged
 along the x-axis and groups along the y-axis.
 }

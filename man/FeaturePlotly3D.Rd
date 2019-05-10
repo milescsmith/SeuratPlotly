@@ -6,23 +6,16 @@
 \usage{
 FeaturePlotly3D(object, feature = NULL, return = FALSE,
   pt_scale = 0.5, pt_shape = "circle", opacity = 1,
-<<<<<<< HEAD
-  reduction = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
-  colors = "Reds", bins = 10, plot_height = 900, plot_width = 900,
-  plot_title = FALSE, pt_info = NULL, legend = TRUE,
-  legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
-=======
-  reduction_use = "umap", dim_1 = 1, dim_2 = 2, dim_3 = 3,
+  reduction = "umap", dim_1 = 1, dim_2 = 2, dim_3 = 3,
   colors_use = "Red", bins = 10, plot_height = 900,
   plot_width = 900, plot_title = FALSE, pt_info = NULL,
   legend = TRUE, legend_font_size = 12, plot_grid = FALSE,
   plot_axes = FALSE)
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{feature}{Variable to display. Currently only works with gene names}
+\item{feature}{Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
 \item{return}{Return the plot object instead of displaying it. Default: FALSE}
 
@@ -32,11 +25,7 @@ FeaturePlotly3D(object, feature = NULL, return = FALSE,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-<<<<<<< HEAD
-\item{reduction}{Dimensional reduction to display (default: tsne)}
-=======
-\item{reduction_use}{Dimensional reduction to display. Default: umap}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+\item{reduction}{Dimensional reduction to display. Default: umap}
 
 \item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
@@ -44,11 +33,7 @@ FeaturePlotly3D(object, feature = NULL, return = FALSE,
 
 \item{dim_3}{Dimension to display on the z-axis. Default: 3}
 
-<<<<<<< HEAD
-\item{colors}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
-=======
 \item{colors_use}{Color palette to use.  Accepts palettes available in the paletteer package.. Default: Reds}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 
 \item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 

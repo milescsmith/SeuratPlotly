@@ -6,8 +6,8 @@
 #' object@@dr slot
 #'
 #' @param object Seurat object
-#' @param feature_use Variable to display. Currently only works with gene names
-#' @param reduction_use Dimensional reduction to display. Default: umap
+#' @param feature Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.
+#' @param reduction Dimensional reduction to display. Default: umap
 #' @param dim_1 Dimension to display on the x-axis. Default: 1
 #' @param dim_2 Dimension to display on the y-axis. Default: 2
 #' @param dim_3 Dimension to display on the z-axis. Default: 3
@@ -27,18 +27,20 @@
 #' @param return Return the plot object instead of displaying it. Default: FALSE
 #'
 #' @importFrom plotly plot_ly layout add_markers
+#' @importFrom stringr str_glue
+#' @importFrom dplyr mutate_at
+#' @importFrom tidyr unite
 #'
 #' @return
 #' @export
 #'
-#' @examples
 FeaturePlotly3D <- function(object,
                             feature = NULL,
                             return = FALSE,
                             pt_scale = 0.5,
                             pt_shape = "circle",
                             opacity = 1,
-                            reduction_use = "umap",
+                            reduction = "umap",
                             dim_1 = 1,
                             dim_2 = 2,
                             dim_3 = 3,
@@ -52,6 +54,8 @@ FeaturePlotly3D <- function(object,
                             legend_font_size = 12,
                             plot_grid = FALSE,
                             plot_axes = FALSE){
+
+
 
   df <- PrepDr(object,
                reduction,
@@ -74,12 +78,12 @@ FeaturePlotly3D <- function(object,
                          feature = feature,
                          bins = bins,
                          use.scaled = TRUE,
-                         assay_use = assay_use)
+                         assay = assay)
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature,
                          use.scaled = FALSE,
-                         assay_use = assay_use,
+                         assay = assay,
                          suffix = "size")
   df[,ncol(df)] <- df[,ncol(df)] * pt_scale
 
@@ -98,7 +102,7 @@ FeaturePlotly3D <- function(object,
   }
 
   pal <- PrepQualitativePalette(bins = binds,
-                                palette_use = colors_use)
+                                palette = colors_use)
 
   if (isTRUE(plot_title)){
     plot_title = feature
@@ -125,19 +129,15 @@ FeaturePlotly3D <- function(object,
                showlegend = legend) %>%
     layout(title = plot_title,
            scene = list(
-             xaxis = list(title = dim.axes[as.numeric(dim_1)], showgrid = plot_grid, visible = plot_axes),
-             yaxis = list(title = dim.axes[as.numeric(dim_2)], showgrid = plot_grid, visible = plot_axes),
-             zaxis = list(title = dim.axes[as.numeric(dim_3)], showgrid = plot_grid, visible = plot_axes)
-           ),
-           margin = c(100,NA,NA,NA)
-    )
+             xaxis = list(title = str_glue("{reduction}_{dim_1}"), showgrid = plot_grid, visible = plot_axes),
+             yaxis = list(title = str_glue("{reduction}_{dim_2}"), showgrid = plot_grid, visible = plot_axes),
+             zaxis = list(title = str_glue("{reduction}_{dim_3}"), showgrid = plot_grid, visible = plot_axes)),
+           margin = c(100,NA,NA,NA))
 
   if(!is.null(pt_info)){
-    p <- p %>% add_markers(hoverinfo = "text",
-                           hovertext = paste(~meta.info, ~feature),
-                           showlegend = FALSE,
-
-    )
+    p %<>% add_markers(hoverinfo = "text",
+                       hovertext = paste(~meta.info, ~feature),
+                       showlegend = FALSE)
   }
 
   p <- p %>% layout(legend = list(

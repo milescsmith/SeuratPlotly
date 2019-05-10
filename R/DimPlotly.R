@@ -1,12 +1,12 @@
-#seuratPlotly.R: Functions replacing the ggplot2-based ploting functions of Seurat with those of Plot.ly
-#' Plot dimensional reduction for a Seurat object
+#' @title DimPlotly
+#' @description Plot dimensional reduction for a Seurat object
 #'
 #' Create a scatterplot of a given dimensional reduction set for a scRNA-seq data object,
-#' coloring points by the given grouping_var_var variable
+#' coloring points by the given grouping_var variable
 #'
 #' @param object scRNA-seq object
 #' @param grouping_var Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident
-#' @param reduction_use Dimensional reduction to display. Default: tsne
+#' @param reduction Dimensional reduction to display. Default: umap
 #' @param dim_1 Dimension to display on the x-axis. Default: 1
 #' @param dim_2 Dimension to display on the y-axis. Default: 2
 #' @param label Add a label showing thr group name to the graph. Default: FALSE
@@ -16,25 +16,23 @@
 #' @param pt_size Size of the points in pixels. Default: 2
 #' @param pt_shape Shape to use for the points. Default: circle
 #' @param opacity Transparency level to use for the points, on a 0-1 scale. Default: 1
-#' @param palette_use Color palette to use.  Must be a palette available in the Paletteer package
+#' @param palette Color palette to use.  Must be a palette available in the Paletteer package
 #' @param plot_height Plot height in pixels. Default: 900
 #' @param plot_width Plot width in pixels. Default: 900
 #' @param legend Display legend?. Default: TRUE
 #' @param legend_font_size Legend font size. Default: 12
 #' @param pt_info Meta.data columns to add to the hoverinfo popup.. Default: ident
 #' @param return Return the plot object instead of displaying it. Default: FALSE
-#' @param plot_title
+#' @param plot_title Plot title
 #'
 #' @importFrom dplyr group_by summarise
+#' @importFrom tidyr unite
 #' @importFrom plotly plot_ly layout
 #' @importFrom glue glue
 #'
 #' @return plotly object
 #' @export
 #'
-#' @examples
-#' object <- RunTSNE(object
-#' DimPlotly(object, grouping_var = 'ident', pt_size = 4, opacity = 0.5, plot_title = "Test Plot", reduction_use = "tsne")
 DimPlotly <- function(object,
                       grouping_var = "ident",
                       label = FALSE,
@@ -56,31 +54,36 @@ DimPlotly <- function(object,
                       legend = TRUE,
                       legend_font_size = 12){
 
+  centers <- NULL
+  median <- NULL
+  x <- NULL
+  y <- NULL
+  cell <- NULL
+  info <- NULL
+  ident <- NULL
+
   df <- PrepDr(object,
-               reduction_use,
+               reduction,
                dim_1 = dim_1,
                dim_2 = dim_2,
-               grouping_var_var = grouping_var_var)
+               grouping_var = grouping_var)
 
   pal <- PrepPalette(df = df,
                      palette = palette)
 
   if (label) {
-    df %>%
+    centers <- df %>%
       group_by(ident) %>%
-      centers <- summarise(
-        x = median(x = as.double(x)),
-        y = median(x = as.double(y))
-      )
-      labels <- list(x = centers$x,
-                     y = centers$y,
-                     text = centers$ident,
-                     font = list(size = label_size),
-                     showarrow = show_arrow,
-                     bordercolor = label_color,
-                     bgcolor = "FFFFFF",
-                     opacity = 1
-      )
+      summarise(x = median(x = as.double(x)),
+                y = median(x = as.double(y)))
+    labels <- list(x = centers$x,
+                   y = centers$y,
+                   text = centers$ident,
+                   font = list(size = label_size),
+                   showarrow = show_arrow,
+                   bordercolor = label_color,
+                   bgcolor = "FFFFFF",
+                   opacity = 1)
   } else {
     labels <- NULL
   }
@@ -123,11 +126,7 @@ DimPlotly <- function(object,
       annotations = labels
     )
 
-  p <- p %>% layout(legend = list(
-    font = list(
-      size = legend_font_size)
-    )
-  )
+  p %<>% layout(legend = list(font = list(size = legend_font_size)))
 
   if (isTRUE(return)){
     return(p)

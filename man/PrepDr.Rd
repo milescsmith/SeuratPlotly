@@ -2,25 +2,13 @@
 % Please edit documentation in R/common_functions.R
 \name{PrepDr}
 \alias{PrepDr}
-\alias{PrepDr.seurat}
 \alias{PrepDr.Seurat}
 \title{PrepDr}
 \usage{
 PrepDr(object, ...)
 
-<<<<<<< HEAD:man/PrepDf.Rd
-\method{PrepDf}{seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
-  dim_3 = NULL, grouping_var = NULL)
-
-\method{PrepDf}{Seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
-  dim_3 = NULL, grouping_var = NULL)
-=======
-\method{PrepDr}{seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
-  dim_3 = NULL, grouping = NULL)
-
 \method{PrepDr}{Seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
-  dim_3 = NULL, grouping = NULL)
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f:man/PrepDr.Rd
+  dim_3 = NULL, grouping_var = NULL)
 }
 \arguments{
 \item{object}{scRNA-seq data object}
@@ -37,8 +25,6 @@ PrepDr(object, ...)
 Permissible values include meta.data column names.}
 }
 \value{
-data.frame
-
 data.frame
 }
 \description{

@@ -4,22 +4,20 @@
 \alias{DimPlotly3d}
 \title{DimPlotly3D}
 \usage{
-DimPlotly3d(object, grouping_var = "ident", label = FALSE,
-  label_size = 12, label_color = "000000", show_arrow = FALSE,
-  return = FALSE, pt_size = 2, pt_shape = "circle", opacity = 1,
-  reduction = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
-  palette = "Set1", plot_height = 900, plot_width = 900,
+DimPlotly3d(object, grouping_var = "ident", reduction = "umap",
+  label = FALSE, label_size = 12, label_color = "000000",
+  show_arrow = FALSE, return = FALSE, pt_size = 2,
+  pt_shape = "circle", opacity = 1, dim_1 = 1, dim_2 = 2,
+  dim_3 = 3, palette = "Set1", plot_height = 900, plot_width = 900,
   plot_title = NULL, pt_info = NULL, legend = TRUE,
   legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
 }
 \arguments{
 \item{object}{Seurat object}
 
-<<<<<<< HEAD
-\item{grouping_var}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
-=======
-\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+\item{grouping_var}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident}
+
+\item{reduction}{Dimensional reduction to display. Default: umap}
 
 \item{label}{Add a label showing thr group name to the graph. Default: FALSE}
 
@@ -37,33 +35,19 @@ DimPlotly3d(object, grouping_var = "ident", label = FALSE,
 
 \item{opacity}{Transparency level to use for the points on a 0-1 scale. Default: 1}
 
-<<<<<<< HEAD
-\item{reduction}{Dimensional reduction to display (default: tsne)}
-=======
-\item{reduction_use}{Dimensional reduction to display. Default: tsne}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
-
 \item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
 \item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
 \item{dim_3}{Dimension to display on the z-axis. Default: 3}
 
-<<<<<<< HEAD
-\item{palette}{Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')}
-=======
-\item{palette_use}{Color palette to use.  Must be a palette available in the Paletteer package. . Default: 'Set1'}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+\item{palette}{Color palette to use.  Must be a palette available in the Paletteer package. . Default: 'Set1'}
 
 \item{plot_height}{Plot height in pixels. Default: 900}
 
 \item{plot_width}{Plot width in pixels. Default: 900}
 
-<<<<<<< HEAD
-\item{plot_title}{Plot title (default: reduction)}
-=======
-\item{plot_title}{Plot title. Default: reduction_use}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+\item{plot_title}{Plot title. Default: reduction}
 
 \item{pt_info}{Meta.data columns to add to the hoverinfo popup.. Default: ident}
 
@@ -80,7 +64,4 @@ plotly object
 }
 \description{
 DimPlotly3D
-}
-\examples{
-DimPlotly3D(object, grouping_var = "res.0.6", label = TRUE, show_arrow = FALSE)
 }

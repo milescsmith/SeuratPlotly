@@ -27,8 +27,10 @@ NULL
 #' @keywords internal
 #' @export
 #' @description Negative in
-#' @usage lhs \%nin\% rhs
 #'
 #' @importFrom purrr compose
 #'
 `%nin%` <- compose(`!`,`%in%`)
+
+#' @importFrom utils globalVariables
+globalVariables(c("."))

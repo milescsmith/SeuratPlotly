@@ -4,21 +4,25 @@
 \alias{Feature2Plotly}
 \title{Feature2Plotly}
 \usage{
-Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
-  assay_1 = "RNA", assay_2 = "RNA", return = FALSE, pt_scale = 1.5,
-  pt_shape = "circle", opacity = 0.5, reduction = "tsne",
-  dim_1 = 1, dim_2 = 2, colors_1 = "Reds", colors_2 = "Blues",
-  bins = 10, plot_height = "750", plot_width = "750",
-  pt_info = NULL, legend = TRUE, legend_font_size = 12)
+Feature2Plotly(object, reduction = "umap", feature_1 = NULL,
+  feature_2 = NULL, assay_1 = NULL, assay_2 = NULL, return = FALSE,
+  pt_scale = 1.5, pt_shape = "circle", opacity = 0.5, dim_1 = 1,
+  dim_2 = 2, colors_1 = "Reds", colors_2 = "Blues", bins = 10,
+  plot_height = "750", plot_width = "750", pt_info = NULL,
+  legend = TRUE, legend_font_size = 12)
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{feature_1}{First variable to display. Currently only works with gene names}
+\item{reduction}{Dimensional reduction to display. Default: 'umap'}
 
-\item{feature_2}{Second variable to display. Currently only works with gene names}
+\item{feature_1}{First feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
-\item{assay_2}{}
+\item{feature_2}{Second feature values to display.}
+
+\item{assay_1}{Assay to pull values from for feature_1. Default: NULL}
+
+\item{assay_2}{Assay to pull values from for feature_2. Default: NULL}
 
 \item{return}{Return the plot dataframe instead of displaying it. Default: FALSE}
 
@@ -26,27 +30,15 @@ Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
 
 \item{pt_shape}{Shape to use for the points. Default = circle}
 
-<<<<<<< HEAD
-\item{reduction}{Dimensional reduction to display (default: tsne)}
-=======
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
-
-\item{reduction_use}{Dimensional reduction to display. Default: tsne}
 
 \item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-<<<<<<< HEAD
-\item{colors_1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)}
-
-\item{colors_2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)}
-=======
 \item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
-\item{colors_use_1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis.. Default: Reds}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+\item{colors_1}{Colors to use to display values for feature_1. Default: "Reds"}
 
-\item{colors_use_2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis.. Default: Reds}
+\item{colors_2}{Colors to use to display values for feature_2. Default: "Blues"}
 
 \item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 

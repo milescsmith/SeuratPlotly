@@ -19,7 +19,3 @@ A list of HCGN names.
 \description{
 Retrieve the HUGO Gene Nomenclature Committee names associated with a GeneOntology term.
 }
-\examples{
-genes_to_plot <- retrieveGO('GO:0046774'
-
-}

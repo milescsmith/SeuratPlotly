@@ -6,9 +6,9 @@
 #' @param go_term Gene Ontology term identifier (i.e. GO:0046774)
 #' @param grouping_var Factor by which to group cells.  (default: ident)
 #' @param plot_height Plot height in pixels. (default: 900)
+#' @param gene_filter
+#' @param ...
 #' @param plot_width Plot width in pixels. (default: 900)
-#' @param filter A list of gene names to filter the GO term members against. (default: `object@var.genes`)
-#' @param ...options to pass to BubblePlotly
 #'
 #' @importFrom dplyr select distinct filter
 #'
@@ -36,7 +36,7 @@ GOBubblePlotly <- function(object,
 
   if(length(go_genes_to_plot) > 0){
     BubblePlotly(object,
-                 genes_plot = go_genes_to_plot$hgnc_symbol,
+                 features_plot = go_genes_to_plot$hgnc_symbol,
                  grouping_var = grouping_var,
                  plot_height = plot_height,
                  plot_width = plot_width,

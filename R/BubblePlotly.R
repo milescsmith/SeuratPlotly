@@ -1,19 +1,21 @@
-# TODO: add more ways to sort/slice/dice!
-#' BubblePlotly
+#' @title BubblePlotly
 #'
-#' Plot average expression levels and proportion expressing a feature arranged by given grouping_var_var.
+#' @description Plot average expression levels and proportion expressing a feature arranged by given grouping_var.
 #' Color intensity of the markers indicates expression levels and size of the marker indicates
-#' the proportion of the group expressing the gene above a given threshold. By default, genes are arranged
+#' the proportion of the group expressing the feature above a given threshold. By default, features are arranged
 #' along the x-axis and groups along the y-axis.
 #'
 #' @param object Seurat object
-#' @param genes_plot A list of genes to plot for each group.
-#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds
+#' @param features_plot Features to display values for. If trying to retrieve values from an assay
+#' that is not the current DefaultAssay, prefix the feature name with 'assay_'.
+#' Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.
+#' @param assay Assay to pull data from.  Defaults to the object's DefaultAssay
+#' @param slot Slot to pull data from.  Default: 'data'
+#' @param grouping_var Factor by which to group cells.  Default: ident
+#' @param colors Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds
 #' @param dot_min Minimium marker size, in pixels. Default: 0
 #' @param dot_scale Factor by which to scale markers. Default: 2
-#' @param grouping_var Factor by which to group cells.  Default: ident
-#' @param legend Display legend. (currently nonfunctional) Default TRUE
-#' @param return Return the plot object instead of displaying it Default: FALSE
+#' @param plot_legend Display legend? Default: FALSE
 #' @param x_label_rotation Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. Default -45°
 #' @param plot_height Plot height in pixels. Default: 900
 #' @param plot_width Plot width in pixels. Default: 900
@@ -24,18 +26,17 @@
 #' @param opacity Transparency level to use for the points, on a 0-1 scale Default: 1
 #' @param plot_title  Display title with the name of the feature? Default TRUE
 #' @param bins Number of bins to use in dividing expression levels. Default: 10
-#' @param flip Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. Default: false
-#' @param alphabetize Alphabetize the display order of genes. Default: TRUE
-#' @param pct_expr_thres Hide a gene if there is no group that expresses at or above this percentage. Default: 0
+#' @param flip Swap the x- and y-axes so that features are on the y-axis and groups along the x-axis. Default: false
+#' @param alphabetize Alphabetize the display order of features Default: TRUE
+#' @param pct_expr_thres Hide a feature if there is no group that expresses at or above this percentage. Default: 0
 #' @param return Return the generated data frame underlying the graph. Default: FALSE
-#' @param use_scaled Use scaled data. Default: FALSE
-#' @param use_raw Use raw data. Default: FALSE
 #' @param show_zeros Display comparison groups for which there there was no data? Default: FALSE
 #' @param add_group Add a null comparison group.  Will be initialized with zeros.
 #' @param y_label_order List of labels to use for the comparison groups.  Will be displayed in order of their index.
 #'
-#' @importFrom dplyr filter summarise group_by mutate inner_join ungroup distinct arrange mutate_if
-#' @importFrom tidyr gather
+#' @importFrom dplyr filter summarise group_by mutate inner_join
+#' ungroup distinct arrange mutate_if do
+#' @importFrom tidyr gather replace_na
 #' @importFrom tibble rownames_to_column add_row
 #' @importFrom compositions normalize
 #' @importFrom plotly plot_ly layout
@@ -44,13 +45,12 @@
 #' @return
 #' @export
 #'
-#' @examples
 BubblePlotly <- function (object,
-                          genes_plot,
-                          assay_use = "RNA",
-                          slot_use = "data",
+                          features_plot,
+                          assay = NULL,
+                          slot = "data",
                           grouping_var = "ident",
-                          colors_use = "Blues",
+                          colors = "Blues",
                           dot_min = 0,
                           dot_scale = 2,
                           plot_legend = FALSE,
@@ -72,25 +72,31 @@ BubblePlotly <- function (object,
                           add_group = NULL,
                           y_label_order = NULL){
 
-  #screen out any genes that are not in our dataset and print them
-  original_genes_to_plot <- genes_plot
-  genes_plot <- genes_plot[which(genes_plot %in% rownames(object))]
-  not_found <- original_genes_to_plot[original_genes_to_plot %nin% genes_plot]
+  #globalbindings stuff
+  cell <- NULL
+  pct.exp <- NULL
+  avg.exp <- NULL
+  n <- NULL
+
+  #screen out any features that are not in our dataset and print them
+  original_features_to_plot <- features_plot
+  features_plot <- features_plot[which(features_plot %in% rownames(object))]
+  not_found <- original_features_to_plot[original_features_to_plot %nin% features_plot]
   message(not_found)
 
-  #let the user alphabetize the list of genes.  makes it easier to find a particular gene in a big table
+  #let the user alphabetize the list of features.  makes it easier to find a particular feature in a big table
   #TODO: add more sort options
   if (isTRUE(alphabetize)){
-    genes_plot <- mixedsort(genes_plot, decreasing = TRUE)
+    features_plot <- mixedsort(features_plot, decreasing = TRUE)
   }
 
   df <- GetFeatureValues(object = object,
-                         features = genes_plot,
-                         assay_use = assay_use,
-                         slot_use = slot_use,
+                         features = features_plot,
+                         assay = assay,
+                         slot = slot,
                          bins = bins)
 
-  # Add 0 data for each gene that was not detected or failed to pass QC
+  # Add 0 data for each feature that was not detected or failed to pass QC
   if (isTRUE(show_zeros)){
     for(i in not_found){
       df[,i] <- 0
@@ -101,42 +107,42 @@ BubblePlotly <- function (object,
   colnames(ident)[1] <- "ident"
   df <- inner_join(df, rownames_to_column(ident, "cell"))
 
-  df <- df %>% gather(key = genes_plot,
+  df <- df %>% gather(key = features_plot,
                       value = expression,
                       -c(cell, ident))
 
-  df <- df %>% group_by(ident, genes_plot) %>%
+  df <- df %>% group_by(ident, features_plot) %>%
     summarise(avg.exp = mean(x = expression),
               pct.exp = PercentAbove(x = expression, threshold = 0),
               n = n())
 
   if(!is.null(pct_expr_thres)){
-    df <- df %>% group_by(genes_plot) %>% filter(max(pct.exp) > pct_expr_thres)
+    df <- df %>% group_by(features_plot) %>% filter(max(pct.exp) > pct_expr_thres)
   }
 
-  df <- df %>% ungroup() %>% group_by(genes_plot) %>%
+  df <- df %>% ungroup() %>% group_by(features_plot) %>%
     mutate(avg.exp.scale = replace_na(normalize(avg.exp), 0))
 
   if (isTRUE(show_zeros)){
-    df[["genes_plot"]] <- factor(x = df[["genes_plot"]],
+    df[["features_plot"]] <- factor(x = df[["features_plot"]],
                                       levels = rev(x = sub(pattern = "-",
                                                            replacement = ".",
-                                                           x = c(genes_plot, not_found))))
+                                                           x = c(features_plot, not_found))))
   } else {
-    df[["genes_plot"]] <- factor(x = df[["genes_plot"]],
+    df[["features_plot"]] <- factor(x = df[["features_plot"]],
                                  levels = rev(x = sub(pattern = "-",
                                                       replacement = ".",
-                                                      x = genes_plot)))
+                                                      x = features_plot)))
   }
 
   df[["pct.exp"]][df[["pct.exp"]] < dot_min] <- NA
 
   if(!is.null(add_group)){
     for(i in add_group){
-      for(j in genes_plot){
+      for(j in features_plot){
         df <- df %>%
           do(add_row(.,ident = i,
-                     genes_plot = j,
+                     features_plot = j,
                      avg.exp = 0,
                      pct.exp = 0,
                      n = 0,
@@ -146,28 +152,28 @@ BubblePlotly <- function (object,
     }
   }
 
-  pal <- PrepQualitativePalette(bins = bins, palette_use = colors_use)
+  pal <- PrepQuantitativePalette(bins = bins, palette = colors)
 
   df <- df %>% arrange(ident) %>% ungroup() %>% mutate_if(is.factor, list(~as.character(.)))
 
-  genes_plot <- df$genes_plot
+  features_plot <- df$features_plot
 
   if(flip){
     ax = ~ident
-    ay = ~genes_plot
+    ay = ~features_plot
   } else {
-    ax = ~genes_plot
+    ax = ~features_plot
     ay = ~ident
   }
 
   p <- plot_ly(data = df,
                x = ~ident,
-               y = ~genes_plot,
+               y = ~features_plot,
                # x = ax,
                # y = ay,
                hoverinfo = 'text',
                text = ~paste('Group:', ident,
-                             '<br>Gene:', genes_plot,
+                             '<br>feature:', features_plot,
                              '<br>Avg normalized expression:', round(avg.exp.scale,2),
                              '<br>% expressing:', round(pct.exp*100,2)),
                type = 'scatter',
@@ -187,7 +193,7 @@ BubblePlotly <- function (object,
     layout(title = plot_title,
            titlefont = list(size = title_font_size),
            #font = list(size = font.size),
-           xaxis = list(title = "Gene", tickangle = x_label_rotation, tickfont = list(size = x_font_size)),
+           xaxis = list(title = "feature", tickangle = x_label_rotation, tickfont = list(size = x_font_size)),
            yaxis = list(title = "Cluster", tickfont = list(size = y_font_size), type = "category", categoryorder = "array", categoryarray = y_label_order),
            margin = list(b = 100, l = 250)
     )
@@ -200,6 +206,4 @@ BubblePlotly <- function (object,
   } else {
     p
   }
-  # print(length(unique(df$id)))
-  # print(length(unique(df$genes_plot)))
 }

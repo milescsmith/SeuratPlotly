@@ -6,8 +6,10 @@
 #' object@@dr slot
 #'
 #' @param object Seurat object
-#' @param feature Variable to display. Currently only works with gene names
-#' @param reduction Dimensional reduction to display. Default: tsne
+#' @param reduction Dimensional reduction to display. Default: umap
+#' @param feature Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.
+#' @param assay Assay to pull values from for feature. Default: NULL
+#' @param slot Slot to pull values from for feature. Default: NULL
 #' @param dim_1 Dimension to display on the x-axis. Default: 1
 #' @param dim_2 Dimension to display on the y-axis. Default: 2
 #' @param pt_scale Factor by which to multiply the size of the points. Default: 5
@@ -18,31 +20,31 @@
 #' @param plot_height Plot height in pixels. Default: 900
 #' @param plot_width Plot width in pixels. Default: 900
 #' @param plot_title  Display title with the name of the feature?. Default TRUE
-#' @param pt_info Meta.data columns to add to the hoverinfo popup.. Default: ident
+#' @param pt_info Meta.data columns to add to the hoverinfo popup. Default: ident
 #' @param legend Display legend?. Default: TRUE
 #' @param legend_font_size Legend font size. Default: 12
 #' @param return Return the plot dataframe instead of displaying it. Default: FALSE
-#' @param assay_use
-#' @param slot_use
-#' @param reverse_color_scale
+#' @param reverse_color_scale Reverse the color scale. Default = FALSE
 #'
 #' @importFrom plotly plot_ly layout
-#'
+#' @importFrom dplyr mutate_at vars inner_join
+#' @importFrom tidyr unite
+
 #' @return plotly object
 #' @export
 #'
 #' @examples
 FeaturePlotly <- function(object,
+                          reduction = "umap",
                           feature = NULL,
-                          assay = "RNA",
-                          slot = "data",
+                          assay = NULL,
+                          slot = NULL,
+                          dim_1 = 1,
+                          dim_2 = 2,
                           return = FALSE,
                           pt_scale = 5,
                           pt_shape = "circle",
                           opacity = 1,
-                          reduction = "umap",
-                          dim_1 = 1,
-                          dim_2 = 2,
                           colors_use = "Red",
                           reverse_color_scale = FALSE,
                           bins = 10,
@@ -95,7 +97,7 @@ FeaturePlotly <- function(object,
   }
 
   pal <- PrepQualitativePalette(bins = binds,
-                                palette_use = colors_use)
+                                palette = colors_use)
 
   p <- plot_ly(df,
                x = ~x,

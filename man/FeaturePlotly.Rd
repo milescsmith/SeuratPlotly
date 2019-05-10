@@ -4,27 +4,27 @@
 \alias{FeaturePlotly}
 \title{FeaturePlotly}
 \usage{
-<<<<<<< HEAD
-FeaturePlotly(object, feature = NULL, assay = "RNA", slot = "data",
+FeaturePlotly(object, reduction = "umap", feature = NULL,
+  assay = NULL, slot = NULL, dim_1 = 1, dim_2 = 2,
   return = FALSE, pt_scale = 5, pt_shape = "circle", opacity = 1,
-  reduction = "tsne", dim_1 = 1, dim_2 = 2, colors = c("blue",
-  "red"), reverse.color.scale = FALSE, bins = 10, plot_height = 900,
-  plot_width = 900, plot_title = FALSE, pt_info = NULL,
-  legend = TRUE, legend_font_size = 12)
-=======
-FeaturePlotly(object, feature = NULL, assay_use = "RNA",
-  slot_use = "data", return = FALSE, pt_scale = 5,
-  pt_shape = "circle", opacity = 1, reduction = "umap", dim_1 = 1,
-  dim_2 = 2, colors_use = "Red", reverse_color_scale = FALSE,
-  bins = 10, plot_height = 900, plot_width = 900,
-  plot_title = FALSE, pt_info = NULL, legend = TRUE,
-  legend_font_size = 12)
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+  colors_use = "Red", reverse_color_scale = FALSE, bins = 10,
+  plot_height = 900, plot_width = 900, plot_title = FALSE,
+  pt_info = NULL, legend = TRUE, legend_font_size = 12)
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{feature}{Variable to display. Currently only works with gene names}
+\item{reduction}{Dimensional reduction to display. Default: umap}
+
+\item{feature}{Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
+
+\item{assay}{Assay to pull values from for feature. Default: NULL}
+
+\item{slot}{Slot to pull values from for feature. Default: NULL}
+
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
+
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
 \item{return}{Return the plot dataframe instead of displaying it. Default: FALSE}
 
@@ -34,17 +34,7 @@ FeaturePlotly(object, feature = NULL, assay_use = "RNA",
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-\item{reduction}{Dimensional reduction to display. Default: tsne}
-
-\item{dim_1}{Dimension to display on the x-axis. Default: 1}
-
-\item{dim_2}{Dimension to display on the y-axis. Default: 2}
-
-<<<<<<< HEAD
-\item{colors}{Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors. (default: Reds)}
-=======
 \item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors.. Default: Reds}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 
 \item{reverse_color_scale}{}
 

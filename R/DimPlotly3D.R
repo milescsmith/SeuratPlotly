@@ -1,8 +1,8 @@
-#' DimPlotly3D
+#' @title DimPlotly3D
 #'
 #' @param object Seurat object
 #' @param grouping_var Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident
-#' @param reduction_use Dimensional reduction to display. Default: tsne
+#' @param reduction Dimensional reduction to display. Default: umap
 #' @param dim_1 Dimension to display on the x-axis. Default: 1
 #' @param dim_2 Dimension to display on the y-axis. Default: 2
 #' @param dim_3 Dimension to display on the z-axis. Default: 3
@@ -14,27 +14,27 @@
 #' @param pt_size Size of the points in pixels. Default: 2
 #' @param pt_shape Shape to use for the points. Default: circle
 #' @param opacity Transparency level to use for the points on a 0-1 scale. Default: 1
-#' @param palette_use Color palette to use.  Must be a palette available in the Paletteer package. . Default: 'Set1'
+#' @param palette Color palette to use.  Must be a palette available in the Paletteer package. . Default: 'Set1'
 #' @param plot_height Plot height in pixels. Default: 900
 #' @param plot_width Plot width in pixels. Default: 900
 #' @param pt_info Meta.data columns to add to the hoverinfo popup.. Default: ident
 #' @param legend Display legend?. Default: TRUE
 #' @param legend_font_size Legend font size. Default: 12
-#' @param plot_title Plot title. Default: reduction_use
+#' @param plot_title Plot title. Default: reduction
 #' @param plot_axes Display the major x, y, and z axes?. Default: FALSE
 #' @param plot_grid Display the major unit tick marks?. Default: FALSE
 #'
 #' @importFrom dplyr group_by summarise
 #' @importFrom plotly plot_ly layout
-#' @importFrom glue glue
+#' @importFrom stringr str_glue
+#' @importFrom stats median
 #'
 #' @return plotly object
 #' @export
 #'
-#' @examples
-#' DimPlotly3D(object, grouping_var_var = "res.0.6", label = TRUE, show_arrow = FALSE)
 DimPlotly3d <- DimPlotly3D <- function(object,
-                                       grouping_var_var = "ident",
+                                       grouping_var = "ident",
+                                       reduction = "umap",
                                        label = FALSE,
                                        label_size = 12,
                                        label_color = "000000",
@@ -43,7 +43,6 @@ DimPlotly3d <- DimPlotly3D <- function(object,
                                        pt_size = 2,
                                        pt_shape = "circle",
                                        opacity = 1,
-                                       reduction = "tsne",
                                        dim_1 = 1,
                                        dim_2 = 2,
                                        dim_3 = 3,
@@ -56,29 +55,32 @@ DimPlotly3d <- DimPlotly3D <- function(object,
                                        legend_font_size = 12,
                                        plot_grid = FALSE,
                                        plot_axes = FALSE) {
+  ident <- NULL
+  x <- NULL
+  y <- NULL
+  z <- NULL
+  cell <- NULL
+  info <- NULL
+
   df <- PrepDr(object,
-    reduction_use,
+    reduction,
     dim_1 = dim_1,
     dim_2 = dim_2,
     dim_3 = dim_3,
-    grouping_var_var = grouping_var_var
+    grouping_var = grouping_var
   )
 
   if (label) {
-    df %>%
+    centers <- df %>%
       group_by(ident) %>%
-      centers() <- summarise(
-        x = median(x = x),
-        y = median(x = y),
-        z = median(x = z)
-    )
-    labels <- list(
-      x = centers$x,
-      y = centers$y,
-      z = centers$z,
-      text = centers$ident,
-      font = list(size = label_size)
-    )
+      summarise(x = median(x = x),
+                y = median(x = y),
+                z = median(x = z))
+    labels <- list(x = centers$x,
+                   y = centers$y,
+                   z = centers$z,
+                   text = centers$ident,
+                   font = list(size = label_size))
     compiled.labels <- list()
 
     if (isTRUE(show_arrow)) {
@@ -89,17 +91,15 @@ DimPlotly3d <- DimPlotly3D <- function(object,
       bg.color <- "FFFFFF"
     }
     for (k in 1:length(unique(ident))) {
-      tmp <- list(
-        showarrow = show_arrow,
-        x = labels$x[k],
-        y = labels$y[k],
-        z = labels$z[k],
-        text = labels$text[k],
-        font = list(size = label_size),
-        bordercolor = border.color,
-        bgcolor = bg.color,
-        opacity = 0.8
-      )
+      tmp <- list(showarrow = show_arrow,
+                  x = labels$x[k],
+                  y = labels$y[k],
+                  z = labels$z[k],
+                  text = labels$text[k],
+                  font = list(size = label_size),
+                  bordercolor = border.color,
+                  bgcolor = bg.color,
+                  opacity = 0.8)
       compiled.labels <- c(compiled.labels, list(tmp))
     }
   } else {
@@ -168,19 +168,19 @@ DimPlotly3d <- DimPlotly3D <- function(object,
         ),
         dragmode = "turnable",
         xaxis = list(
-          title = glue("{reduction}_{dim_1}"),
+          title = str_glue("{reduction}_{dim_1}"),
           type = "double",
           showgrid = plot_grid,
           visible = plot_axes
         ),
         yaxis = list(
-          title = glue("{reduction}_{dim_2}"),
+          title = str_glue("{reduction}_{dim_2}"),
           type = "double",
           showgrid = plot_grid,
           visible = plot_axes
         ),
         zaxis = list(
-          title = glue("{reduction}_{dim_3}"),
+          title = str_glue("{reduction}_{dim_3}"),
           type = "double",
           showgrid = plot_grid,
           visible = plot_axes

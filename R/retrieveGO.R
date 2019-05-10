@@ -11,8 +11,6 @@
 #' @return A list of HCGN names.
 #' @export
 #'
-#' @examples genes_to_plot <- retrieveGO('GO:0046774'
-#'
 retrieveGO <- function(term, mart = 'ensembl', dataset='hsapiens_gene_ensembl'){
   gene_data <- getBM(attributes=c('hgnc_symbol', 'ensembl_transcript_id', 'go_id'),
                      filters = 'go',

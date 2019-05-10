@@ -4,33 +4,19 @@
 \alias{GOBubblePlotly}
 \title{GOBubblePlotly}
 \usage{
-<<<<<<< HEAD
 GOBubblePlotly(object, go_term, grouping_var = "ident",
-  plot_height = 900, plot_width = 900, filter = object@var.genes,
-  ...)
-=======
-GOBubblePlotly(object, go_term, grouping = "ident", plot_height = 900,
-  plot_width = 900, gene_filter = NULL, ...)
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+  plot_height = 900, plot_width = 900, gene_filter = NULL, ...)
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{go_term}{Gene Ontology term identifier (i.e. GO:0046774}
+\item{go_term}{Gene Ontology term identifier (i.e. GO:0046774)}
 
-<<<<<<< HEAD
 \item{grouping_var}{Factor by which to group cells.  (default: ident)}
-=======
-\item{grouping}{Factor by which to group cells.  Default: ident}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 
-\item{plot_height}{Plot height in pixels. Default: 900}
+\item{plot_height}{Plot height in pixels. (default: 900)}
 
-\item{plot_width}{Plot width in pixels. Default: 900}
-
-\item{gene}{filter A list of gene names to filter the GO term members against. Default: NULL}
-
-\item{...options}{to pass to BubblePlotly}
+\item{plot_width}{Plot width in pixels. (default: 900)}
 }
 \description{
 Produces a Bubble Plot for the genes of a given GO term.

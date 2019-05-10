@@ -2,34 +2,20 @@
 % Please edit documentation in R/DimPlotly.R
 \name{DimPlotly}
 \alias{DimPlotly}
-\title{Plot dimensional reduction for a Seurat object}
+\title{DimPlotly}
 \usage{
-<<<<<<< HEAD
-DimPlotly(object, grouping_var = "ident", do.label = FALSE,
-  label.size = 12, show.arrow = FALSE, label.color = "000000",
-  return = FALSE, pt.size = 4, pt_shape = "circle", opacity = 0.75,
+DimPlotly(object, grouping_var = "ident", label = FALSE,
+  label_size = 12, show_arrow = FALSE, label_color = "000000",
+  return = FALSE, pt_size = 4, pt_shape = "circle", opacity = 0.75,
   reduction = "tsne", dim_1 = 1, dim_2 = 2,
   palette = "default_ucscgb", plot_height = 900, plot_width = 900,
   plot_title = NULL, pt_info = NULL, legend = TRUE,
   legend_font_size = 12)
-=======
-DimPlotly(object, grouping = "ident", label = FALSE, label_size = 12,
-  show_arrow = FALSE, label_color = "000000", return = FALSE,
-  pt_size = 4, pt_shape = "circle", opacity = 0.75,
-  reduction_use = "tsne", dim_1 = 1, dim_2 = 2,
-  palette_use = "default_ucscgb", plot_height = 900,
-  plot_width = 900, plot_title = NULL, pt_info = NULL,
-  legend = TRUE, legend_font_size = 12)
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 }
 \arguments{
 \item{object}{scRNA-seq object}
 
-<<<<<<< HEAD
-\item{grouping_var}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
-=======
-\item{grouping}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+\item{grouping_var}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident}
 
 \item{label}{Add a label showing thr group name to the graph. Default: FALSE}
 
@@ -47,11 +33,7 @@ DimPlotly(object, grouping = "ident", label = FALSE, label_size = 12,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-<<<<<<< HEAD
-\item{reduction}{Dimensional reduction to display (default: tsne)}
-=======
-\item{reduction_use}{Dimensional reduction to display. Default: tsne}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
+\item{reduction}{Dimensional reduction to display. Default: umap}
 
 \item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
@@ -63,7 +45,7 @@ DimPlotly(object, grouping = "ident", label = FALSE, label_size = 12,
 
 \item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{plot_title}{}
+\item{plot_title}{Plot title}
 
 \item{pt_info}{Meta.data columns to add to the hoverinfo popup.. Default: ident}
 
@@ -75,15 +57,8 @@ DimPlotly(object, grouping = "ident", label = FALSE, label_size = 12,
 plotly object
 }
 \description{
+Plot dimensional reduction for a Seurat object
+
 Create a scatterplot of a given dimensional reduction set for a scRNA-seq data object,
 coloring points by the given grouping_var variable
-}
-\examples{
-<<<<<<< HEAD
-object <- RunTSNE(object)
-DimPlotly(object, grouping_var = 'ident', pt.size = 4, opacity = 0.5, plot_title = "Test Plot", reduction = "tsne")
-=======
-object <- RunTSNE(object
-DimPlotly(object, grouping = 'ident', pt_size = 4, opacity = 0.5, plot_title = "Test Plot", reduction_use = "tsne")
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
 }

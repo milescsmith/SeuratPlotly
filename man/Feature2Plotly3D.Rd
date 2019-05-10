@@ -4,10 +4,10 @@
 \alias{Feature2Plotly3D}
 \title{Feature2Plotly3D}
 \usage{
-Feature2Plotly3D(object, feature_1 = NULL, feature_2 = NULL,
-  return = FALSE, pt_scale = 0.5, pt_shape = "circle", opacity = 1,
-  reduction = "tsne", dim_1 = 1, dim_2 = 2, dim_3 = 3,
-  colors_1 = "Reds", colors_2 = "Blues", bins = 10,
+Feature2Plotly3D(object, reduction = "umap", feature_1 = NULL,
+  feature_2 = NULL, colors_1 = "Reds", colors_2 = "Blues",
+  dim_1 = 1, dim_2 = 2, dim_3 = 3, bins = 10, return = FALSE,
+  pt_scale = 0.5, pt_shape = "circle", opacity = 1,
   plot_height = "750", plot_width = "750", pt_info = NULL,
   legend = TRUE, legend_font_size = 12, plot_grid = FALSE,
   plot_axes = FALSE)
@@ -15,9 +15,23 @@ Feature2Plotly3D(object, feature_1 = NULL, feature_2 = NULL,
 \arguments{
 \item{object}{Seurat object}
 
-\item{feature_1}{First variable to display. Currently only works with gene names}
+\item{reduction}{Dimensional reduction to display. Default: 'umap'}
 
-\item{feature_2}{Second variable to display. Currently only works with gene names}
+\item{feature_1}{First feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
+
+\item{feature_2}{Second feature values to display.}
+
+\item{colors_1}{Colors to use to display values for feature_1. Default: "Reds"}
+
+\item{colors_2}{Colors to use to display values for feature_2. Default: "Blues"}
+
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
+
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
+
+\item{dim_3}{Dimension to display on the z-axis. Default: 3}
+
+\item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 
 \item{return}{Return the plot object instead of displaying it. Default: FALSE}
 
@@ -26,30 +40,6 @@ Feature2Plotly3D(object, feature_1 = NULL, feature_2 = NULL,
 \item{pt_shape}{Shape to use for the points. Default = circle}
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
-
-<<<<<<< HEAD
-\item{reduction}{Dimensional reduction to display (default: tsne)}
-=======
-\item{reduction_use}{Dimensional reduction to display. Default: "umap"}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
-
-\item{dim_1}{Dimension to display on the x-axis. Default: 1}
-
-\item{dim_2}{Dimension to display on the y-axis. Default: 2}
-
-\item{dim_3}{Dimension to display on the z-axis. Default: 3}
-
-<<<<<<< HEAD
-\item{colors_1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)}
-
-\item{colors_2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)}
-=======
-\item{colors_use_1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis.. Default: Reds}
-
-\item{colors_use_2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis.. Default: Reds}
->>>>>>> 6f6c82c504d67862c3ae3c061af7383aa47a7f7f
-
-\item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 
 \item{plot_height}{Plot height in pixels. Default: 900}
 
@@ -64,6 +54,10 @@ Feature2Plotly3D(object, feature_1 = NULL, feature_2 = NULL,
 \item{plot_grid}{Display the major unit tick marks?. Default: FALSE}
 
 \item{plot_axes}{Display the major x, y, and z axes?. Default: FALSE}
+
+\item{assay_1}{Assay to pull values from for feature_1. Default: NULL}
+
+\item{assay_2}{Assay to pull values from for feature_2. Default: NULL}
 }
 \value{
 If return is TRUE, a plotly object.

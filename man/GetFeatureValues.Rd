@@ -2,32 +2,26 @@
 % Please edit documentation in R/common_functions.R
 \name{GetFeatureValues}
 \alias{GetFeatureValues}
-\alias{GetFeatureValues.seurat}
 \alias{GetFeatureValues.Seurat}
 \title{GetFeatureValues}
 \usage{
 GetFeatureValues(object, ...)
 
-\method{GetFeatureValues}{seurat}(object, df, feature, bins = NULL, ...)
-
 \method{GetFeatureValues}{Seurat}(object, features, df = NULL,
-  assay_use = NULL, slot_use = NULL, bins = NULL, suffix = NULL,
-  ...)
+  assay = NULL, slot = NULL, bins = NULL, suffix = NULL, ...)
 }
 \arguments{
 \item{object}{Seurat object to get feature data from}
 
 \item{df}{Plotting data frame to which to add the popup data.}
 
-\item{feature}{feature (genes expression, metadata, etc...) to retrieve data for}
+\item{assay}{Assay to pull feature data from.  Default: NULL}
 
-\item{assay}{Assay to pull feature data from.  Default: "RNA"}
+\item{slot}{Slot to pull feature data from. Default: NULL}
 
-\item{slot}{Slot to pull feature data from. Default: "data"}
+\item{feature}{Feature (genes expression, metadata, etc...) to retrieve data for}
 }
 \value{
-data.frame
-
 data.frame
 
 data.frame

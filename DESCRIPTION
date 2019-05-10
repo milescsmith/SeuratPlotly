@@ -1,4 +1,4 @@
-Package: seuratPlotly
+Package: SeuratPlotly
 Title: Plotly-based methods for displaying Seurat data
 Version: 1.0.2.0000
 Authors@R: person("Miles", "Smith", email = "miles-smith@omrf.org", role = c("aut", "cre"))

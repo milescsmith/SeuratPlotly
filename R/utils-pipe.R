@@ -31,4 +31,4 @@ NULL
 #'
 #' @importFrom purrr compose
 #'
-`%nin%`` <- compose(`!`,`%in%`)
+`%nin%` <- compose(`!`,`%in%`)

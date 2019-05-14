@@ -6,16 +6,17 @@
 #' object@@dr slot
 #'
 #' @param object Seurat object
-#' @param reduction Dimensional reduction to display. Default: umap
 #' @param feature Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.
+#' @param reduction Dimensional reduction to display. Default: umap
 #' @param assay Assay to pull values from for feature. Default: NULL
 #' @param slot Slot to pull values from for feature. Default: NULL
+#' @param filter_zeros Remove points with no expression data. Default: TRUE
 #' @param dim_1 Dimension to display on the x-axis. Default: 1
 #' @param dim_2 Dimension to display on the y-axis. Default: 2
 #' @param pt_scale Factor by which to multiply the size of the points. Default: 5
 #' @param pt_shape Shape to use for the points. Default = circle
 #' @param opacity Transparency level to use for the points, on a 0-1 scale. Default: 1
-#' @param colors_use Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors.. Default: Reds
+#' @param colors_use Color palette to use. Default: Reds
 #' @param bins Number of bins to use in dividing expression levels.. Default: 10
 #' @param plot_height Plot height in pixels. Default: 900
 #' @param plot_width Plot width in pixels. Default: 900
@@ -33,15 +34,14 @@
 #' @return plotly object
 #' @export
 #'
-#' @examples
 FeaturePlotly <- function(object,
-                          reduction = "umap",
                           feature = NULL,
+                          reduction = "umap",
                           assay = NULL,
                           slot = NULL,
+                          filter_zeros = TRUE,
                           dim_1 = 1,
                           dim_2 = 2,
-                          return = FALSE,
                           pt_scale = 5,
                           pt_shape = "circle",
                           opacity = 1,
@@ -53,7 +53,12 @@ FeaturePlotly <- function(object,
                           plot_title = FALSE,
                           pt_info = NULL,
                           legend = TRUE,
-                          legend_font_size = 12){
+                          legend_font_size = 12,
+                          return = FALSE){
+
+  # global variable binding hack
+  cell <- NULL
+  info <- NULL
 
   df <- PrepDr(object,
                reduction,
@@ -73,14 +78,15 @@ FeaturePlotly <- function(object,
                          feature = feature,
                          bins = bins,
                          use.scaled = TRUE,
-                         assay = assay)
+                         assay = assay,
+                         suffix = "expr")
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature,
-                         use.scaled = FALSE,
+                         use.scaled = TRUE,
                          assay = assay,
                          suffix = "size")
-  df[,ncol(df)] <- df[,ncol(df)] * pt_scale
+  df[[str_glue("{feature}_size")]] <- df[[str_glue("{feature}_size")]] * pt_scale
 
   md <- GetFeatureValues(object = object,
                          features = c(pt_info, "ident")) %>%
@@ -96,26 +102,25 @@ FeaturePlotly <- function(object,
     plot_title = NULL
   }
 
-  pal <- PrepQualitativePalette(bins = binds,
+  pal <- PrepQuantitativePalette(bins = bins,
                                 palette = colors_use)
+
+  if (filter_zeros){
+    df %<>% filter(get(str_glue("{feature}_size")) > 0)
+  }
 
   p <- plot_ly(df,
                x = ~x,
                y = ~y,
-               mode = 'markers',
+               mode = "markers",
                type = "scattergl",
-               size = ~get(str_glue("{feature}_size")),
-               sizes = c(0,max(df[[str_glue("{feature}_size")]])),
                marker = list(symbol = pt_shape,
                              opacity = opacity,
-                             color = ~feature,
-                             line = list(width = 0),
-                             colorscale=pal,
-                             reversescale = reverse_color_scale,
-                             cmin = 0,
-                             cmax = 1,
-                             sizemode = "diameter",
-                             colorbar = list(title = feature)),
+                             size = ~get(str_glue("{feature}_size")),
+                             sizes = c(0,max(df[[str_glue("{feature}_size")]])),
+                             color = ~get(str_glue("{feature}_expr")),
+                             colors=pal,
+                             line = list(width = 0)),
                width = plot_width,
                height = plot_height,
                showlegend = legend,
@@ -130,7 +135,7 @@ FeaturePlotly <- function(object,
   p <- p %>% layout(legend = list(
     font = list(
       size = legend_font_size)
-  )
+    )
   )
 
   if (isTRUE(return)){

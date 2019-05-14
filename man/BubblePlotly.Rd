@@ -26,7 +26,7 @@ Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
 \item{grouping_var}{Factor by which to group cells.  Default: ident}
 
-\item{colors}{Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds}
+\item{colors}{Color palette to use. Default: Reds}
 
 \item{dot_min}{Minimium marker size, in pixels. Default: 0}
 

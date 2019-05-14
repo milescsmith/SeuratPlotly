@@ -12,7 +12,7 @@
 #' @param assay Assay to pull data from.  Defaults to the object's DefaultAssay
 #' @param slot Slot to pull data from.  Default: 'data'
 #' @param grouping_var Factor by which to group cells.  Default: ident
-#' @param colors Color palette to use.  Palettes from RColorBrewer and viridis. Default: Reds
+#' @param colors Color palette to use. Default: Reds
 #' @param dot_min Minimium marker size, in pixels. Default: 0
 #' @param dot_scale Factor by which to scale markers. Default: 2
 #' @param plot_legend Display legend? Default: FALSE

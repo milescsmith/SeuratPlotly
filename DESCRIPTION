@@ -25,11 +25,11 @@ Imports:
     purrr,
     RColorBrewer,
     Seurat,
+    stats,
     stringr,
     tibble,
     tidyr,
-    utils,
-    viridis
+    utils
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1

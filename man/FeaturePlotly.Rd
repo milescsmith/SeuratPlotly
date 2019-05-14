@@ -4,29 +4,30 @@
 \alias{FeaturePlotly}
 \title{FeaturePlotly}
 \usage{
-FeaturePlotly(object, reduction = "umap", feature = NULL,
-  assay = NULL, slot = NULL, dim_1 = 1, dim_2 = 2,
-  return = FALSE, pt_scale = 5, pt_shape = "circle", opacity = 1,
+FeaturePlotly(object, feature = NULL, reduction = "umap",
+  assay = NULL, slot = NULL, filter_zeros = TRUE, dim_1 = 1,
+  dim_2 = 2, pt_scale = 5, pt_shape = "circle", opacity = 1,
   colors_use = "Red", reverse_color_scale = FALSE, bins = 10,
   plot_height = 900, plot_width = 900, plot_title = FALSE,
-  pt_info = NULL, legend = TRUE, legend_font_size = 12)
+  pt_info = NULL, legend = TRUE, legend_font_size = 12,
+  return = FALSE)
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{reduction}{Dimensional reduction to display. Default: umap}
-
 \item{feature}{Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
+
+\item{reduction}{Dimensional reduction to display. Default: umap}
 
 \item{assay}{Assay to pull values from for feature. Default: NULL}
 
 \item{slot}{Slot to pull values from for feature. Default: NULL}
 
+\item{filter_zeros}{Remove points with no expression data. Default: TRUE}
+
 \item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
 \item{dim_2}{Dimension to display on the y-axis. Default: 2}
-
-\item{return}{Return the plot dataframe instead of displaying it. Default: FALSE}
 
 \item{pt_scale}{Factor by which to multiply the size of the points. Default: 5}
 
@@ -34,9 +35,9 @@ FeaturePlotly(object, reduction = "umap", feature = NULL,
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-\item{colors_use}{Color palette to use.  Palettes from RColorBrewer and viridis or a list of colors.. Default: Reds}
+\item{colors_use}{Color palette to use. Default: Reds}
 
-\item{reverse_color_scale}{}
+\item{reverse_color_scale}{Reverse the color scale. Default = FALSE}
 
 \item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 
@@ -46,11 +47,13 @@ FeaturePlotly(object, reduction = "umap", feature = NULL,
 
 \item{plot_title}{Display title with the name of the feature?. Default TRUE}
 
-\item{pt_info}{Meta.data columns to add to the hoverinfo popup.. Default: ident}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup. Default: ident}
 
 \item{legend}{Display legend?. Default: TRUE}
 
 \item{legend_font_size}{Legend font size. Default: 12}
+
+\item{return}{Return the plot dataframe instead of displaying it. Default: FALSE}
 }
 \value{
 plotly object

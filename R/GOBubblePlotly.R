@@ -4,10 +4,10 @@
 #'
 #' @param object Seurat object
 #' @param go_term Gene Ontology term identifier (i.e. GO:0046774)
-#' @param grouping_var Factor by which to group cells.  (default: ident)
-#' @param plot_height Plot height in pixels. (default: 900)
-#' @param gene_filter
-#' @param ...
+#' @param grouping_var Factor by which to group cells.  Default: ident
+#' @param plot_height Plot height in pixels. Default: 900
+#' @param gene_filter Display only genes in this list. Default: NULL
+#' @param ... Additional arguments to pass to BubblePlotly
 #' @param plot_width Plot width in pixels. (default: 900)
 #'
 #' @importFrom dplyr select distinct filter
@@ -15,7 +15,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 GOBubblePlotly <- function(object,
                            go_term,
                            grouping_var = "ident",
@@ -23,6 +22,8 @@ GOBubblePlotly <- function(object,
                            plot_width = 900,
                            gene_filter = NULL,
                            ...){
+
+  hgnc_symbol <- NULL
 
   if(missing(go_term)){
     stop("No GO term supplied")

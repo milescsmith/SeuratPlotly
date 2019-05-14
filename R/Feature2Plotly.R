@@ -25,7 +25,6 @@
 #' @param return Return the plot dataframe instead of displaying it. Default: FALSE
 #'
 #' @importFrom RColorBrewer brewer.pal brewer.pal.info
-#' @importFrom viridis viridis
 #' @importFrom plotly plot_ly layout
 #' @importFrom grDevices colorRampPalette
 #' @importFrom stringr str_glue
@@ -33,11 +32,10 @@
 #' @return
 #' @export
 #'
-#' @examples
 Feature2Plotly <- function(object,
-                           reduction = "umap",
                            feature_1 = NULL,
                            feature_2 = NULL,
+                           reduction = "umap",
                            assay_1 = NULL,
                            assay_2 = NULL,
                            return = FALSE,
@@ -63,38 +61,41 @@ Feature2Plotly <- function(object,
                dim_1 = dim_1,
                dim_2 = dim_2)
 
-  pal1 <- PrepQuantitativePalette(bins, colors_1)
-  pal2 <- PrepQuantitativePalette(bins, colors_2)
+  pal_1 <- PrepQuantitativePalette(bins, colors_1)
+  pal_2 <- PrepQuantitativePalette(bins, colors_2)
 
+  #get feature_1 values
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature_1,
                          bins = bins,
                          use.scaled = TRUE,
-                         assay = assay_1)
+                         assay = assay_1,
+                         suffix = "expr")
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature_1,
-                         bins = bins,
-                         use.scaled = FALSE,
+                         use.scaled = TRUE,
                          assay = assay_1,
                          suffix = "size")
-  df[,ncol(df)] <- df[,ncol(df)] * pt_scale
+  df[[str_glue("{feature_1}_size")]] <- df[[str_glue("{feature_1}_size")]] * pt_scale
 
+  #get feature_2 values
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature_2,
                          bins = bins,
                          use.scaled = TRUE,
-                         assay = assay_2)
+                         assay = assay_2,
+                         suffix = "expr")
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature_2,
-                         bins = bins,
-                         use.scaled = FALSE,
+                         use.scaled = TRUE,
                          assay = assay_2,
                          suffix = "size")
-  df[,ncol(df)] <- df[,ncol(df)] * pt_scale
+  df[[str_glue("{feature_2}_size")]] <- df[[str_glue("{feature_2}_size")]] * pt_scale
+
 
   md <- GetFeatureValues(object = object,
                          features = c(pt_info, "ident")) %>%
@@ -104,47 +105,66 @@ Feature2Plotly <- function(object,
 
   df %<>% inner_join(md)
 
-  p <- plot_ly(df,
-               x = ~x,
-               y = ~y,
-               color = ~feature_1,
-               mode = 'markers',
-               colors = c(pal1, pal2),
-               size = ~get(str_glue("{feature_1}_size")),
-               sizes = c(0,max(df[[str_glue("{feature_1}_size")]])),
-               marker = list(symbol = pt_shape,
-                             opacity = opacity,
-                             sizemode = "diameter"
-               ),
-               width = plot_width,
-               height = plot_height,
-               type = 'scattergl',
-               legendgroup = 1,
-               showlegend = legend,
-               name = feature_1) %>%
-    add_trace(df,
-              x = ~x,
-              y = ~y,
-              color = ~feature_2,
-              mode = 'markers',
-              type = 'scattergl',
-              size = ~get(str_glue("{feature_2}_size")),
-              sizes = c(0,max(df[[str_glue("{feature_2}_size")]])),
-              marker = list(symbol = pt_shape,
-                            opacity = opacity,
-                            sizemode = "diameter"),
-              legendgroup = 1,
-              showlegend = legend,
-              name = feature_2) %>%
-    layout(title = str_glue("{feature_1} x {feature_2}"),
-           xaxis = list(title = dim.axes[as.numeric(dim_1)]),
-           yaxis = list(title = dim.axes[as.numeric(dim_2)]),
-           margin = c(100,NA,NA,NA)
+ p <- plot_ly(
+  filter(
+    df,
+    get(str_glue("{feature_1}_expr")) > 0
+  ),
+  x = ~x,
+  y = ~y,
+  mode = "markers",
+  type = "scattergl",
+  color = ~ get(str_glue("{feature_1}_expr")),
+  colors = pal_1,
+  marker = list(
+    symbol = pt_shape,
+    opacity = opacity,
+    size = ~ get(str_glue("{feature_1}_size")),
+    sizes = c(
+      0,
+      max(df[[str_glue("{feature_1}_size")]])
     )
+  ),
+  width = plot_width,
+  height = plot_height,
+  showlegend = legend,
+  name = feature_1
+  ) %>%
+  colorbar(
+    title = feature_1,
+    which = 1
+  ) %>%
+  add_trace(
+    data = filter(
+      df,
+      get(str_glue("{feature_2}_expr")) > 0
+    ),
+    x = ~x,
+    y = ~y,
+    color = ~ get(str_glue("{feature_2}_expr")),
+    colors = pal_2,
+    marker = list(
+      symbol = pt_shape,
+      opacity = opacity,
+      size = ~ get(str_glue("{feature_2}_size")),
+      sizes = c(0, max(df[[str_glue("{feature_2}_size")]]))
+    ),
+    name = feature_2
+  ) %>%
+  colorbar(
+    title = feature_2,
+    which = 2
+  ) %>%
+  layout(
+    title = str_glue("{feature_1} x {feature_2}"),
+    xaxis = list(title = str_glue("{reduction}_{dim_1}")),
+    yaxis = list(title = str_glue("{reduction}_{dim_2}")),
+    margin = c(100, NA, NA, NA)
+  )
 
   if(!is.null(pt_info)){
     p <- p %>% add_markers(hoverinfo = "text",
-                           hovertext = ~meta.info,
+                           hovertext = ~meta_info,
                            showlegend = FALSE
     )
   }

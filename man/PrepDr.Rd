@@ -8,10 +8,12 @@
 PrepDr(object, ...)
 
 \method{PrepDr}{Seurat}(object, reduction, dim_1 = 1, dim_2 = 2,
-  dim_3 = NULL, grouping_var = NULL)
+  dim_3 = NULL, grouping_var = NULL, ...)
 }
 \arguments{
 \item{object}{scRNA-seq data object}
+
+\item{...}{Not used}
 
 \item{reduction}{dimensional reduction to extract}
 

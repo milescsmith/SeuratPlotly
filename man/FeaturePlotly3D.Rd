@@ -4,34 +4,38 @@
 \alias{FeaturePlotly3D}
 \title{FeaturePlotly3D}
 \usage{
-FeaturePlotly3D(object, feature = NULL, return = FALSE,
-  pt_scale = 0.5, pt_shape = "circle", opacity = 1,
-  reduction = "umap", dim_1 = 1, dim_2 = 2, dim_3 = 3,
-  colors_use = "Red", bins = 10, plot_height = 900,
-  plot_width = 900, plot_title = FALSE, pt_info = NULL,
-  legend = TRUE, legend_font_size = 12, plot_grid = FALSE,
-  plot_axes = FALSE)
+FeaturePlotly3D(object, feature = NULL, reduction = "umap",
+  assay = NULL, slot = NULL, opacity = 1, filter_zeros = TRUE,
+  dim_1 = 1, dim_2 = 2, dim_3 = 3, pt_scale = 0.5,
+  pt_shape = "circle", colors_use = "Red", bins = 10,
+  plot_height = 900, plot_width = 900, plot_title = FALSE,
+  pt_info = NULL, legend = TRUE, legend_font_size = 12,
+  plot_grid = FALSE, plot_axes = FALSE, return = FALSE)
 }
 \arguments{
 \item{object}{Seurat object}
 
 \item{feature}{Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
-\item{return}{Return the plot object instead of displaying it. Default: FALSE}
+\item{reduction}{Dimensional reduction to display. Default: umap}
 
-\item{pt_scale}{Factor by which to multiply the size of the points. Default: 5}
+\item{assay}{Assay to pull values from for feature. Default: NULL}
 
-\item{pt_shape}{Shape to use for the points. Default = circle}
+\item{slot}{Slot to pull values from for feature. Default: NULL}
 
 \item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-\item{reduction}{Dimensional reduction to display. Default: umap}
+\item{filter_zeros}{Remove points with no expression data. Default: TRUE}
 
 \item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
 \item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
 \item{dim_3}{Dimension to display on the z-axis. Default: 3}
+
+\item{pt_scale}{Factor by which to multiply the size of the points. Default: 5}
+
+\item{pt_shape}{Shape to use for the points. Default = circle}
 
 \item{colors_use}{Color palette to use.  Accepts palettes available in the paletteer package.. Default: Reds}
 
@@ -52,6 +56,8 @@ FeaturePlotly3D(object, feature = NULL, return = FALSE,
 \item{plot_grid}{Display the major unit tick marks?. Default: FALSE}
 
 \item{plot_axes}{Display the major x, y, and z axes?. Default: FALSE}
+
+\item{return}{Return the plot object instead of displaying it. Default: FALSE}
 }
 \description{
 Create a scatterplot of a given dimensional reduction set for a Seurat object,

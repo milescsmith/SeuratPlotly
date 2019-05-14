@@ -13,13 +13,19 @@ GetFeatureValues(object, ...)
 \arguments{
 \item{object}{Seurat object to get feature data from}
 
+\item{...}{not used}
+
+\item{features}{Feature (genes expression, metadata, etc...) to retrieve data for}
+
 \item{df}{Plotting data frame to which to add the popup data.}
 
 \item{assay}{Assay to pull feature data from.  Default: NULL}
 
 \item{slot}{Slot to pull feature data from. Default: NULL}
 
-\item{feature}{Feature (genes expression, metadata, etc...) to retrieve data for}
+\item{bins}{If provided, divide the values in the given number of bins.}
+
+\item{suffix}{If given, add this suffix to the end of cells returned.}
 }
 \value{
 data.frame

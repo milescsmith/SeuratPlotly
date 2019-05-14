@@ -5,12 +5,12 @@
 \title{Feature2Plotly3D}
 \usage{
 Feature2Plotly3D(object, reduction = "umap", feature_1 = NULL,
-  feature_2 = NULL, colors_1 = "Reds", colors_2 = "Blues",
-  dim_1 = 1, dim_2 = 2, dim_3 = 3, bins = 10, return = FALSE,
-  pt_scale = 0.5, pt_shape = "circle", opacity = 1,
-  plot_height = "750", plot_width = "750", pt_info = NULL,
-  legend = TRUE, legend_font_size = 12, plot_grid = FALSE,
-  plot_axes = FALSE)
+  feature_2 = NULL, assay_1 = NULL, assay_2 = NULL,
+  colors_1 = "Reds", colors_2 = "Blues", dim_1 = 1, dim_2 = 2,
+  dim_3 = 3, bins = 10, return = FALSE, pt_scale = 0.5,
+  pt_shape = "circle", opacity = 1, plot_height = "750",
+  plot_width = "750", pt_info = NULL, legend = TRUE,
+  legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
 }
 \arguments{
 \item{object}{Seurat object}
@@ -20,6 +20,10 @@ Feature2Plotly3D(object, reduction = "umap", feature_1 = NULL,
 \item{feature_1}{First feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
 \item{feature_2}{Second feature values to display.}
+
+\item{assay_1}{Assay to pull values from for feature_1. Default: NULL}
+
+\item{assay_2}{Assay to pull values from for feature_2. Default: NULL}
 
 \item{colors_1}{Colors to use to display values for feature_1. Default: "Reds"}
 
@@ -54,10 +58,6 @@ Feature2Plotly3D(object, reduction = "umap", feature_1 = NULL,
 \item{plot_grid}{Display the major unit tick marks?. Default: FALSE}
 
 \item{plot_axes}{Display the major x, y, and z axes?. Default: FALSE}
-
-\item{assay_1}{Assay to pull values from for feature_1. Default: NULL}
-
-\item{assay_2}{Assay to pull values from for feature_2. Default: NULL}
 }
 \value{
 If return is TRUE, a plotly object.

@@ -4,21 +4,22 @@
 \alias{Feature2Plotly}
 \title{Feature2Plotly}
 \usage{
-Feature2Plotly(object, reduction = "umap", feature_1 = NULL,
-  feature_2 = NULL, assay_1 = NULL, assay_2 = NULL, return = FALSE,
-  pt_scale = 1.5, pt_shape = "circle", opacity = 0.5, dim_1 = 1,
-  dim_2 = 2, colors_1 = "Reds", colors_2 = "Blues", bins = 10,
-  plot_height = "750", plot_width = "750", pt_info = NULL,
-  legend = TRUE, legend_font_size = 12)
+Feature2Plotly(object, feature_1 = NULL, feature_2 = NULL,
+  reduction = "umap", assay_1 = NULL, assay_2 = NULL,
+  return = FALSE, pt_scale = 1.5, pt_shape = "circle",
+  opacity = 0.5, dim_1 = 1, dim_2 = 2, colors_1 = "Reds",
+  colors_2 = "Blues", bins = 10, plot_height = "750",
+  plot_width = "750", pt_info = NULL, legend = TRUE,
+  legend_font_size = 12)
 }
 \arguments{
 \item{object}{Seurat object}
 
-\item{reduction}{Dimensional reduction to display. Default: 'umap'}
-
 \item{feature_1}{First feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
 \item{feature_2}{Second feature values to display.}
+
+\item{reduction}{Dimensional reduction to display. Default: 'umap'}
 
 \item{assay_1}{Assay to pull values from for feature_1. Default: NULL}
 

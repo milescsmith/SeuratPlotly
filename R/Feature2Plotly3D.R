@@ -31,7 +31,7 @@
 #'
 #' @importFrom dplyr mutate_at vars inner_join
 #' @importFrom tidyr unite
-#' @importFrom plotly plot_ly layout add_trace add_markers
+#' @importFrom plotly plot_ly layout add_trace add_markers colorbar
 #' @importFrom stringr str_glue
 #'
 #' @return If return is TRUE, a plotly object.
@@ -78,7 +78,8 @@ Feature2Plotly3D<- Feature2Plotly3d<- function(object,
                          feature = feature_1,
                          bins = bins,
                          use.scaled = TRUE,
-                         assay = assay_1)
+                         assay = assay_1,
+                         suffix = "expr")
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature_1,
@@ -86,14 +87,15 @@ Feature2Plotly3D<- Feature2Plotly3d<- function(object,
                          use.scaled = FALSE,
                          assay = assay_1,
                          suffix = "size")
-  df[,ncol(df)] <- df[,ncol(df)] * pt_scale
+  df[[str_glue("{feature_1}_size")]] <- df[[str_glue("{feature_1}_size")]] * pt_scale
 
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature_2,
                          bins = bins,
                          use.scaled = TRUE,
-                         assay = assay_2)
+                         assay = assay_2,
+                         suffix = "expr")
   df <- GetFeatureValues(object = object,
                          df = df,
                          feature = feature_2,
@@ -101,7 +103,7 @@ Feature2Plotly3D<- Feature2Plotly3d<- function(object,
                          use.scaled = FALSE,
                          assay = assay_2,
                          suffix = "size")
-  df[,ncol(df)] <- df[,ncol(df)] * pt_scale
+  df[[str_glue("{feature_2}_size")]] <- df[[str_glue("{feature_2}_size")]] * pt_scale
 
   md <- GetFeatureValues(object = object,
                          features = c(pt_info, "ident")) %>%
@@ -111,38 +113,38 @@ Feature2Plotly3D<- Feature2Plotly3d<- function(object,
 
   df %<>% inner_join(md)
 
-  pal_1 <- PrepQuantitativePalette(bins, colors_1)
-  pal_2 <- PrepQuantitativePalette(bins, colors_2)
-
-  p <- plot_ly(df,
+  p <- plot_ly(filter(df, get(str_glue("{feature_1}_expr")) > 0),
                x = ~x,
                y = ~y,
                z = ~z,
-               color = ~feature_1,
                mode = 'markers',
-               colors = c(pal_1, pal_2),
-               size = ~get(str_glue("{feature_1}_size")),
-               sizes = c(0,max(df[[str_glue("{feature_1}_size")]])),
+               type = 'scatter3d',
+               color = ~get(str_glue("{feature_1}_expr")),
+               colors = pal_1,
                marker = list(symbol = pt_shape,
                              opacity = opacity,
+                             size = ~get(str_glue("{feature_1}_size")),
+                             sizes = c(0,max(df[[str_glue("{feature_1}_size")]])),
                              sizemode = "diameter"),
                width = plot_width,
                height = plot_height,
-               type = 'scatter3d',
-               showlegend = legend) %>%
-    add_trace(df,
+               showlegend = legend,
+               name = feature_1) %>%
+    colorbar(title = feature_1, which = 1) %>%
+    add_trace(data = filter(df, get(str_glue("{feature_2}_expr")) > 0),
               x = ~x,
               y = ~y,
               z = ~z,
-              color = ~feature_2,
-              mode = 'markers',
-              type = 'scatter3d',
-              size = ~get(str_glue("{feature_2}_size")),
-              sizes = c(0,max(df[[str_glue("{feature_2}_size")]])),
+              color = ~get(str_glue("{feature_2}_expr")),
+              colors = pal_2,
               marker = list(symbol = pt_shape,
                             opacity = opacity,
+                            size = ~get(str_glue("{feature_2}_size")),
+                            sizes = c(0,max(df[[str_glue("{feature_2}_size")]])),
                             sizemode = "diameter"),
-              showlegend = legend) %>%
+              showlegend = legend,
+              name = feature_2) %>%
+    colorbar(title = feature_2, which = 2) %>%
     layout(title = str_glue("{feature_1} x {feature_2}"),
            scene = list(
              aspectratio = list(x = 1,y = 1,z = 1),
@@ -158,7 +160,7 @@ Feature2Plotly3D<- Feature2Plotly3d<- function(object,
 
   if(!is.null(pt_info)){
     p %<>% add_markers(hoverinfo = "text",
-                       hovertext = ~meta.info,
+                       hovertext = ~meta_info,
                        showlegend = FALSE)
   }
   p <- p %>% layout(legend = list(

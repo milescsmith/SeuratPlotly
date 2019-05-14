@@ -12,11 +12,15 @@ GOBubblePlotly(object, go_term, grouping_var = "ident",
 
 \item{go_term}{Gene Ontology term identifier (i.e. GO:0046774)}
 
-\item{grouping_var}{Factor by which to group cells.  (default: ident)}
+\item{grouping_var}{Factor by which to group cells.  Default: ident}
 
-\item{plot_height}{Plot height in pixels. (default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
 \item{plot_width}{Plot width in pixels. (default: 900)}
+
+\item{gene_filter}{Display only genes in this list. Default: NULL}
+
+\item{...}{Additional arguments to pass to BubblePlotly}
 }
 \description{
 Produces a Bubble Plot for the genes of a given GO term.

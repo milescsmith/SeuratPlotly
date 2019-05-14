@@ -1,125 +1,126 @@
-#' DimPlotly3D
+#' @title DimPlotly3D
 #'
 #' @param object Seurat object
-#' @param group.by Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)
-#' @param reduction.use Dimensional reduction to display (default: tsne)
-#' @param dim.1 Dimension to display on the x-axis (default: 1)
-#' @param dim.2 Dimension to display on the y-axis (default: 2)
-#' @param dim.3 Dimension to display on the z-axis (default: 3)
-#' @param do.label Add a label showing thr group name to the graph (default: FALSE)
-#' @param label.size Label font size (default: 12)
-#' @param show.arrow Offset the position of the labels and instead point to each group with an arrow (default: FALSE)
-#' @param label.color Color for label border and arrow.  Need hex value. (default = '000000')
-#' @param do.return Return the plot object instead of displaying it (default: FALSE)
-#' @param pt.size Size of the points in pixels (default: 2)
-#' @param pt.shape Shape to use for the points (default: circle)
-#' @param opacity Transparency level to use for the points on a 0-1 scale (default: 1)
-#' @param palette.use Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')
-#' @param plot.height Plot height in pixels (default: 900)
-#' @param plot.width Plot width in pixels (default: 900)
-#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend? (default: TRUE)
-#' @param legend.font.size Legend font size (default: 12)
-#' @param plot.title Plot title (default: reduction.use)
-#' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
-#' @param plot.grid Display the major unit tick marks? (default: FALSE)
+#' @param grouping_var Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident
+#' @param reduction Dimensional reduction to display. Default: umap
+#' @param dim_1 Dimension to display on the x-axis. Default: 1
+#' @param dim_2 Dimension to display on the y-axis. Default: 2
+#' @param dim_3 Dimension to display on the z-axis. Default: 3
+#' @param label Add a label showing thr group name to the graph. Default: FALSE
+#' @param label_size Label font size. Default: 12
+#' @param label_color Color for label border and arrow.  Need hex value.. Default = '000000'
+#' @param show_arrow Offset the position of the labels and instead point to each group with an arrow. Default: FALSE
+#' @param return Return the plot object instead of displaying it. Default: FALSE
+#' @param pt_size Size of the points in pixels. Default: 2
+#' @param pt_shape Shape to use for the points. Default: circle
+#' @param opacity Transparency level to use for the points on a 0-1 scale. Default: 1
+#' @param palette Color palette to use.  Must be a palette available in the Paletteer package. . Default: 'Set1'
+#' @param plot_height Plot height in pixels. Default: 900
+#' @param plot_width Plot width in pixels. Default: 900
+#' @param pt_info Meta.data columns to add to the hoverinfo popup.. Default: ident
+#' @param legend Display legend?. Default: TRUE
+#' @param legend_font_size Legend font size. Default: 12
+#' @param plot_title Plot title. Default: reduction
+#' @param plot_axes Display the major x, y, and z axes?. Default: FALSE
+#' @param plot_grid Display the major unit tick marks?. Default: FALSE
 #'
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom plotly plot_ly
-#' @importFrom plotly layout
+#' @importFrom dplyr group_by summarise
+#' @importFrom plotly plot_ly layout
+#' @importFrom stringr str_glue
+#' @importFrom stats median
 #'
 #' @return plotly object
 #' @export
 #'
-#' @examples
-#' DimPlotly3D(object, group.by = "res.0.6", do.label = TRUE, show.arrow = FALSE)
 DimPlotly3d <- DimPlotly3D <- function(object,
-                                       group.by = "ident",
-                                       do.label = FALSE,
-                                       label.size = 12,
-                                       label.color = "000000",
-                                       show.arrow = FALSE,
-                                       do.return = FALSE,
-                                       pt.size = 2,
-                                       pt.shape = "circle",
+                                       grouping_var = "ident",
+                                       reduction = "umap",
+                                       label = FALSE,
+                                       label_size = 12,
+                                       label_color = "000000",
+                                       show_arrow = FALSE,
+                                       return = FALSE,
+                                       pt_size = 2,
+                                       pt_shape = "circle",
                                        opacity = 1,
-                                       reduction.use = "tsne",
-                                       dim.1 = 1,
-                                       dim.2 = 2,
-                                       dim.3 = 3,
-                                       palette.use = "Set1",
-                                       plot.height = 900,
-                                       plot.width = 900,
-                                       plot.title = NULL,
-                                       pt.info = NULL,
+                                       dim_1 = 1,
+                                       dim_2 = 2,
+                                       dim_3 = 3,
+                                       palette = "Set1",
+                                       plot_height = 900,
+                                       plot_width = 900,
+                                       plot_title = NULL,
+                                       pt_info = NULL,
                                        legend = TRUE,
-                                       legend.font.size = 12,
-                                       plot.grid = FALSE,
-                                       plot.axes = FALSE) {
-  df <- PrepDf(object,
-    reduction.use,
-    dim.1 = dim.1,
-    dim.2 = dim.2,
-    dim.3 = dim.3,
-    group.by = group.by
+                                       legend_font_size = 12,
+                                       plot_grid = FALSE,
+                                       plot_axes = FALSE) {
+  ident <- NULL
+  x <- NULL
+  y <- NULL
+  z <- NULL
+  cell <- NULL
+  info <- NULL
+
+  df <- PrepDr(object,
+    reduction,
+    dim_1 = dim_1,
+    dim_2 = dim_2,
+    dim_3 = dim_3,
+    grouping_var = grouping_var
   )
 
-  df <- PrepInfo(
-    object = object,
-    pt.info = pt.info,
-    df = df
-  )
-
-  if (do.label) {
-    df %>%
-      dplyr::group_by(ident) %>%
-      centers() <- summarize(
-      x = median(x = x),
-      y = median(x = y),
-      z = median(x = z)
-    )
-    labels <- list(
-      x = centers$x,
-      y = centers$y,
-      z = centers$z,
-      text = centers$ident,
-      font = list(size = label.size)
-    )
+  if (label) {
+    centers <- df %>%
+      group_by(ident) %>%
+      summarise(x = median(x = x),
+                y = median(x = y),
+                z = median(x = z))
+    labels <- list(x = centers$x,
+                   y = centers$y,
+                   z = centers$z,
+                   text = centers$ident,
+                   font = list(size = label_size))
     compiled.labels <- list()
 
-    if (isTRUE(show.arrow)) {
-      border.color <- label.color
+    if (isTRUE(show_arrow)) {
+      border.color <- label_color
       bg.color <- "FFFFFF"
     } else {
       border.color <- "FFFFFF"
       bg.color <- "FFFFFF"
     }
     for (k in 1:length(unique(ident))) {
-      tmp <- list(
-        showarrow = show.arrow,
-        x = labels$x[k],
-        y = labels$y[k],
-        z = labels$z[k],
-        text = labels$text[k],
-        font = list(size = label.size),
-        bordercolor = border.color,
-        bgcolor = bg.color,
-        opacity = 0.8
-      )
+      tmp <- list(showarrow = show_arrow,
+                  x = labels$x[k],
+                  y = labels$y[k],
+                  z = labels$z[k],
+                  text = labels$text[k],
+                  font = list(size = label_size),
+                  bordercolor = border.color,
+                  bgcolor = bg.color,
+                  opacity = 0.8)
       compiled.labels <- c(compiled.labels, list(tmp))
     }
   } else {
     compiled.labels <- NULL
   }
 
-  if (is.null(plot.title)) {
-    plot.title <- reduction.use
+  if (is.null(plot_title)) {
+    plot_title <- reduction
   }
+
+  md <- GetFeatureValues(object = object,
+                         features = c(pt_info, "ident")) %>%
+    mutate_at(vars(-cell),
+              list(~paste0('</br> ', substitute(.), ": ", .))) %>%
+    unite(info, -cell)
+
+  df %<>% inner_join(md)
 
   pal <- PrepPalette(
     df = df,
-    palette.use = palette.use
+    palette = palette
   )
 
   p <- plot_ly(df,
@@ -129,19 +130,19 @@ DimPlotly3d <- DimPlotly3D <- function(object,
     color = ~ident,
     colors = pal,
     marker = list(
-      symbol = pt.shape,
-      size = pt.size,
+      symbol = pt_shape,
+      size = pt_size,
       opacity = opacity,
       mode = "markers"
     ),
-    width = plot.width,
-    height = plot.height,
+    width = plot_width,
+    height = plot_height,
     type = "scatter3d",
     mode = "markers",
     showlegend = legend
   ) %>%
     layout(
-      title = plot.title,
+      title = plot_title,
       scene = list(
         aspectratio = list(
           x = 0,
@@ -167,43 +168,43 @@ DimPlotly3d <- DimPlotly3D <- function(object,
         ),
         dragmode = "turnable",
         xaxis = list(
-          title = glue("{reduction.use}_{dim.1}"),
+          title = str_glue("{reduction}_{dim_1}"),
           type = "double",
-          showgrid = plot.grid,
-          visible = plot.axes
+          showgrid = plot_grid,
+          visible = plot_axes
         ),
         yaxis = list(
-          title = glue("{reduction.use}_{dim.2}"),
+          title = str_glue("{reduction}_{dim_2}"),
           type = "double",
-          showgrid = plot.grid,
-          visible = plot.axes
+          showgrid = plot_grid,
+          visible = plot_axes
         ),
         zaxis = list(
-          title = glue("{reduction.use}_{dim.3}"),
+          title = str_glue("{reduction}_{dim_3}"),
           type = "double",
-          showgrid = plot.grid,
-          visible = plot.axes
+          showgrid = plot_grid,
+          visible = plot_axes
         ),
         annotations = compiled.labels
       )
     )
 
-  if (!is.null(pt.info)) {
+  if (!is.null(pt_info)) {
     p <- p %>% add_markers(
       hoverinfo = "text",
-      hovertext = ~meta.info,
+      hovertext = ~meta_info,
       showlegend = FALSE
     )
   }
 
   p <- p %>% layout(legend = list(
     font = list(
-      size = legend.font.size
+      size = legend_font_size
     )
   ))
 
-  if (isTRUE(do.return)) {
-    return(p)
+  if (isTRUE(return)) {
+    return(df)
   } else {
     p
   }

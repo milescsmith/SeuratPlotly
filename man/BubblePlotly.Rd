@@ -4,78 +4,73 @@
 \alias{BubblePlotly}
 \title{BubblePlotly}
 \usage{
-BubblePlotly(seuratObj, genes.plot, colors.use = "Blues", dot.min = 0,
-  dot.scale = 2, group.by, plot.legend = FALSE, do.return = FALSE,
-  x.lab.rot = -45, plot.width = 600, plot.height = 600,
-  x.font.size = 10, y.font.size = 10, title.font.size = 12,
-  legend.text.size = 10, opacity = 1, plot.title = NULL, bins = 50,
-  flip = FALSE, alphabetize = TRUE, pct.expr.thresh = NULL,
-  export.df = FALSE, use.scaled = FALSE, use.raw = FALSE,
-  show.zeros = FALSE, add.group = NULL, y.label.order = NULL)
+BubblePlotly(object, features_plot, assay = NULL, slot = "data",
+  grouping_var = "ident", colors = "Blues", dot_min = 0,
+  dot_scale = 2, plot_legend = FALSE, return = FALSE,
+  x_label_rotation = -45, plot_width = 600, plot_height = 600,
+  x_font_size = 10, y_font_size = 10, title_font_size = 12,
+  legend_text_size = 10, opacity = 1, plot_title = NULL, bins = 50,
+  flip = FALSE, alphabetize = TRUE, pct_expr_thres = NULL,
+  show_zeros = FALSE, add_group = NULL, y_label_order = NULL)
 }
 \arguments{
-\item{seuratObj}{Seurat object}
+\item{object}{Seurat object}
 
-\item{genes.plot}{A list of genes to plot for each group.}
+\item{features_plot}{Features to display values for. If trying to retrieve values from an assay
+that is not the current DefaultAssay, prefix the feature name with 'assay_'.
+Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
-\item{colors.use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{assay}{Assay to pull data from.  Defaults to the object's DefaultAssay}
 
-\item{dot.min}{Minimium marker size, in pixels. (default: 0)}
+\item{slot}{Slot to pull data from.  Default: 'data'}
 
-\item{dot.scale}{Factor by which to scale markers. (default: 2)}
+\item{grouping_var}{Factor by which to group cells.  Default: ident}
 
-\item{group.by}{Factor by which to group cells.  (default: ident)}
+\item{colors}{Color palette to use. Default: Reds}
 
-\item{do.return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{dot_min}{Minimium marker size, in pixels. Default: 0}
 
-\item{x.lab.rot}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. (default -45°)}
+\item{dot_scale}{Factor by which to scale markers. Default: 2}
 
-\item{plot.width}{Plot width in pixels. (default: 900)}
+\item{plot_legend}{Display legend? Default: FALSE}
 
-\item{plot.height}{Plot height in pixels. (default: 900)}
+\item{return}{Return the generated data frame underlying the graph. Default: FALSE}
 
-\item{x.font.size}{Size of the x-axis titles. (default: 10)}
+\item{x_label_rotation}{Angle by which to rotate the x-axis labels, in degrees relative to horizontally aligned text. Default -45°}
 
-\item{y.font.size}{Size of the y-axis titles. (default: 10)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{title.font.size}{Size of the plot title. (default: 12)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{legend.text.size}{Size of the legend text. (default: 10)}
+\item{x_font_size}{Size of the x-axis titles. Default: 10}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+\item{y_font_size}{Size of the y-axis titles. Default: 10}
 
-\item{plot.title}{Display title with the name of the feature? (default TRUE)}
+\item{title_font_size}{Size of the plot title. Default: 12}
 
-\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+\item{legend_text_size}{Size of the legend text. Default: 10}
 
-\item{flip}{Swap the x- and y-axes so that genes are on the y-axis and groups along the x-axis. (default: false)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale Default: 1}
 
-\item{alphabetize}{Alphabetize the display order of genes. (default: TRUE)}
+\item{plot_title}{Display title with the name of the feature? Default TRUE}
 
-\item{pct.expr.thresh}{Hide a gene if there is no group that expresses at or above this percentage. (default: 0)}
+\item{bins}{Number of bins to use in dividing expression levels. Default: 10}
 
-\item{export.df}{Return the generated data frame underlying the graph. (default: FALSE)}
+\item{flip}{Swap the x- and y-axes so that features are on the y-axis and groups along the x-axis. Default: false}
 
-\item{use.scaled}{Use scaled data. (default: FALSE)}
+\item{alphabetize}{Alphabetize the display order of features Default: TRUE}
 
-\item{use.raw}{Use raw data. (default: FALSE)}
+\item{pct_expr_thres}{Hide a feature if there is no group that expresses at or above this percentage. Default: 0}
 
-\item{show.zeros}{Display comparison groups for which there there was no data? (default: FALSE)}
+\item{show_zeros}{Display comparison groups for which there there was no data? Default: FALSE}
 
-\item{add.group}{Add a null comparison group.  Will be initialized with zeros.}
+\item{add_group}{Add a null comparison group.  Will be initialized with zeros.}
 
-\item{y.label.order}{List of labels to use for the comparison groups.  Will be displayed in order of their index.}
-
-\item{legend}{Display legend. (currently nonfunctional) (default TRUE)}
-}
-\value{
-if do.return is TRUE, a plotly object.
-
-if export.df is TRUE, a data frame.
+\item{y_label_order}{List of labels to use for the comparison groups.  Will be displayed in order of their index.}
 }
 \description{
-Plot average expression levels and proportion expressing a feature arranged by given grouping.
+Plot average expression levels and proportion expressing a feature arranged by given grouping_var.
 Color intensity of the markers indicates expression levels and size of the marker indicates
-the proportion of the group expressing the gene above a given threshold. By default, genes are arranged
+the proportion of the group expressing the feature above a given threshold. By default, features are arranged
 along the x-axis and groups along the y-axis.
 }

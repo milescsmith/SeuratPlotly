@@ -4,65 +4,67 @@
 \alias{Feature2Plotly3D}
 \title{Feature2Plotly3D}
 \usage{
-Feature2Plotly3D(seuratObj, feature.1.use = NULL, feature.2.use = NULL,
-  do.return = FALSE, pt.scale = 0.5, pt.shape = "circle",
-  opacity = 1, reduction.use = "tsne", dim.1 = 1, dim.2 = 2,
-  dim.3 = 3, colors.use.1 = "Reds", colors.use.2 = "Blues",
-  bins = 10, plot.height = "750", plot.width = "750",
-  pt.info = NULL, legend = TRUE, legend.font.size = 12,
-  plot.grid = FALSE, plot.axes = FALSE)
+Feature2Plotly3D(object, reduction = "umap", feature_1 = NULL,
+  feature_2 = NULL, assay_1 = NULL, assay_2 = NULL,
+  colors_1 = "Reds", colors_2 = "Blues", dim_1 = 1, dim_2 = 2,
+  dim_3 = 3, bins = 10, return = FALSE, pt_scale = 0.5,
+  pt_shape = "circle", opacity = 1, plot_height = "750",
+  plot_width = "750", pt_info = NULL, legend = TRUE,
+  legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
 }
 \arguments{
-\item{seuratObj}{Seurat object}
+\item{object}{Seurat object}
 
-\item{feature.1.use}{First variable to display. Currently only works with gene names}
+\item{reduction}{Dimensional reduction to display. Default: 'umap'}
 
-\item{feature.2.use}{Second variable to display. Currently only works with gene names}
+\item{feature_1}{First feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
-\item{do.return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{feature_2}{Second feature values to display.}
 
-\item{pt.scale}{Factor by which to multiply the size of the points (default: 5)}
+\item{assay_1}{Assay to pull values from for feature_1. Default: NULL}
 
-\item{pt.shape}{Shape to use for the points (default = circle)}
+\item{assay_2}{Assay to pull values from for feature_2. Default: NULL}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+\item{colors_1}{Colors to use to display values for feature_1. Default: "Reds"}
 
-\item{reduction.use}{Dimensional reduction to display (default: tsne)}
+\item{colors_2}{Colors to use to display values for feature_2. Default: "Blues"}
 
-\item{dim.1}{Dimension to display on the x-axis (default: 1)}
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-\item{dim.2}{Dimension to display on the y-axis (default: 2)}
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
-\item{dim.3}{Dimension to display on the z-axis (default: 3)}
+\item{dim_3}{Dimension to display on the z-axis. Default: 3}
 
-\item{colors.use.1}{Color palette to use for feature 1.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 
-\item{colors.use.2}{Color palette to use for feature 2.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{return}{Return the plot object instead of displaying it. Default: FALSE}
 
-\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+\item{pt_scale}{Factor by which to multiply the size of the points. Default: 5}
 
-\item{plot.height}{Plot height in pixels (default: 900)}
+\item{pt_shape}{Shape to use for the points. Default = circle}
 
-\item{plot.width}{Plot width in pixels (default: 900)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-\item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{legend}{Display legend? (default: TRUE)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{legend.font.size}{Legend font size (default: 12)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup.. Default: ident}
 
-\item{plot.grid}{Display the major unit tick marks? (default: FALSE)}
+\item{legend}{Display legend?. Default: TRUE}
 
-\item{plot.axes}{Display the major x, y, and z axes? (default: FALSE)}
+\item{legend_font_size}{Legend font size. Default: 12}
 
-\item{plot.title}{Display title with the name of the feature? (default TRUE)}
+\item{plot_grid}{Display the major unit tick marks?. Default: FALSE}
+
+\item{plot_axes}{Display the major x, y, and z axes?. Default: FALSE}
 }
 \value{
-If do.return is TRUE, a plotly object.
+If return is TRUE, a plotly object.
 }
 \description{
 Create a scatterplot of a given dimensional reduction set for a Seurat object,
 coloring and sizing points by the expression level of the chosen feature.
 Requrires a Seurat object with the reduction to be used in the corresponding
-seuratObj@dr slot
+object@dr slot
 }

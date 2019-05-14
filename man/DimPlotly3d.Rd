@@ -4,67 +4,64 @@
 \alias{DimPlotly3d}
 \title{DimPlotly3D}
 \usage{
-DimPlotly3d(seuratObj, group.by = "ident", do.label = FALSE,
-  label.size = 12, label.color = "000000", show.arrow = FALSE,
-  do.return = FALSE, pt.size = 2, pt.shape = "circle", opacity = 1,
-  reduction.use = "tsne", dim.1 = 1, dim.2 = 2, dim.3 = 3,
-  palette.use = "Set1", plot.height = 900, plot.width = 900,
-  plot.title = NULL, pt.info = NULL, legend = TRUE,
-  legend.font.size = 12, plot.grid = FALSE, plot.axes = FALSE)
+DimPlotly3d(object, grouping_var = "ident", reduction = "umap",
+  label = FALSE, label_size = 12, label_color = "000000",
+  show_arrow = FALSE, return = FALSE, pt_size = 2,
+  pt_shape = "circle", opacity = 1, dim_1 = 1, dim_2 = 2,
+  dim_3 = 3, palette = "Set1", plot_height = 900, plot_width = 900,
+  plot_title = NULL, pt_info = NULL, legend = TRUE,
+  legend_font_size = 12, plot_grid = FALSE, plot_axes = FALSE)
 }
 \arguments{
-\item{seuratObj}{Seurat object}
+\item{object}{Seurat object}
 
-\item{group.by}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data (default: ident)}
+\item{grouping_var}{Variable by which to group cells. Currently only works with the current ident and column names from meta.data. Default: ident}
 
-\item{do.label}{Add a label showing thr group name to the graph (default: FALSE)}
+\item{reduction}{Dimensional reduction to display. Default: umap}
 
-\item{label.size}{Label font size (default: 12)}
+\item{label}{Add a label showing thr group name to the graph. Default: FALSE}
 
-\item{label.color}{Color for label border and arrow.  Need hex value. (default = '000000')}
+\item{label_size}{Label font size. Default: 12}
 
-\item{show.arrow}{Offset the position of the labels and instead point to each group with an arrow (default: FALSE)}
+\item{label_color}{Color for label border and arrow.  Need hex value.. Default = '000000'}
 
-\item{do.return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{show_arrow}{Offset the position of the labels and instead point to each group with an arrow. Default: FALSE}
 
-\item{pt.size}{Size of the points in pixels (default: 2)}
+\item{return}{Return the plot object instead of displaying it. Default: FALSE}
 
-\item{pt.shape}{Shape to use for the points (default: circle)}
+\item{pt_size}{Size of the points in pixels. Default: 2}
 
-\item{opacity}{Transparency level to use for the points on a 0-1 scale (default: 1)}
+\item{pt_shape}{Shape to use for the points. Default: circle}
 
-\item{reduction.use}{Dimensional reduction to display (default: tsne)}
+\item{opacity}{Transparency level to use for the points on a 0-1 scale. Default: 1}
 
-\item{dim.1}{Dimension to display on the x-axis (default: 1)}
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-\item{dim.2}{Dimension to display on the y-axis (default: 2)}
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
-\item{dim.3}{Dimension to display on the z-axis (default: 3)}
+\item{dim_3}{Dimension to display on the z-axis. Default: 3}
 
-\item{palette.use}{Color palette to use.  Must be a palette available in the Paletteer package.  (default: 'Set1')}
+\item{palette}{Color palette to use.  Must be a palette available in the Paletteer package. . Default: 'Set1'}
 
-\item{plot.height}{Plot height in pixels (default: 900)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{plot.width}{Plot width in pixels (default: 900)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{plot.title}{Plot title (default: reduction.use)}
+\item{plot_title}{Plot title. Default: reduction}
 
-\item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup.. Default: ident}
 
-\item{legend}{Display legend? (default: TRUE)}
+\item{legend}{Display legend?. Default: TRUE}
 
-\item{legend.font.size}{Legend font size (default: 12)}
+\item{legend_font_size}{Legend font size. Default: 12}
 
-\item{plot.grid}{Display the major unit tick marks? (default: FALSE)}
+\item{plot_grid}{Display the major unit tick marks?. Default: FALSE}
 
-\item{plot.axes}{Display the major x, y, and z axes? (default: FALSE)}
+\item{plot_axes}{Display the major x, y, and z axes?. Default: FALSE}
 }
 \value{
 plotly object
 }
 \description{
 DimPlotly3D
-}
-\examples{
-DimPlotly3D(seuratObj, group.by = "res.0.6", do.label = TRUE, show.arrow = FALSE)
 }

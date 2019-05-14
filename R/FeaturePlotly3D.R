@@ -3,177 +3,166 @@
 #' Create a scatterplot of a given dimensional reduction set for a Seurat object,
 #' coloring and sizing points by the expression level of the chosen feature.
 #' Requrires a Seurat object with the reduction to be used in the corresponding
-#' seuratObj@@dr slot
+#' object@@dr slot
 #'
-#' @param seuratObj Seurat object
-#' @param feature.use Variable to display. Currently only works with gene names
-#' @param reduction.use Dimensional reduction to display (default: tsne)
-#' @param dim.1 Dimension to display on the x-axis (default: 1)
-#' @param dim.2 Dimension to display on the y-axis (default: 2)
-#' @param dim.3 Dimension to display on the z-axis (default: 3)
-#' @param pt.scale Factor by which to multiply the size of the points (default: 5)
-#' @param pt.shape Shape to use for the points (default = circle)
-#' @param opacity Transparency level to use for the points, on a 0-1 scale (default: 1)
-#' @param colors.use Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)
-#' @param bins Number of bins to use in dividing expression levels. (default: 10)
-#' @param plot.height Plot height in pixels (default: 900)
-#' @param plot.width Plot width in pixels (default: 900)
-#' @param plot.title  Display title with the name of the feature? (default TRUE)
-#' @param plot.axes Display the major x, y, and z axes? (default: FALSE)
-#' @param plot.grid Display the major unit tick marks? (default: FALSE)
-#' @param pt.info Meta.data columns to add to the hoverinfo popup. (default: ident)
-#' @param legend Display legend? (default: TRUE)
-#' @param legend.font.size Legend font size (default: 12)
-#' @param do.return Return the plot object instead of displaying it (default: FALSE)
+#' @param object Seurat object
+#' @param feature Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.
+#' @param reduction Dimensional reduction to display. Default: umap
+#' @param assay Assay to pull values from for feature. Default: NULL
+#' @param slot Slot to pull values from for feature. Default: NULL
+#' @param opacity Transparency level to use for the points, on a 0-1 scale. Default: 1
+#' @param filter_zeros Remove points with no expression data. Default: TRUE
+#' @param dim_1 Dimension to display on the x-axis. Default: 1
+#' @param dim_2 Dimension to display on the y-axis. Default: 2
+#' @param dim_3 Dimension to display on the z-axis. Default: 3
+#' @param pt_scale Factor by which to multiply the size of the points. Default: 5
+#' @param pt_shape Shape to use for the points. Default = circle
+#' @param colors_use Color palette to use.  Accepts palettes available in the paletteer package.. Default: Reds
+#' @param bins Number of bins to use in dividing expression levels.. Default: 10
+#' @param plot_height Plot height in pixels. Default: 900
+#' @param plot_width Plot width in pixels. Default: 900
+#' @param plot_title  Display title with the name of the feature?. Default TRUE
+#' @param plot_axes Display the major x, y, and z axes?. Default: FALSE
+#' @param plot_grid Display the major unit tick marks?. Default: FALSE
+#' @param pt_info Meta.data columns to add to the hoverinfo popup. Default: ident
+#' @param legend Display legend?. Default: TRUE
+#' @param legend_font_size Legend font size. Default: 12
+#' @param return Return the plot object instead of displaying it. Default: FALSE
 #'
-#' @import dplyr
-#' @importFrom magrittr "%>%"
-#' @importFrom Seurat GetDimReduction
-#' @importFrom Seurat FetchData
-#' @importFrom RColorBrewer brewer.pal
-#' @importFrom RColorBrewer brewer.pal.info
-#' @importFrom viridis viridis
-#' @importFrom plotly plot_ly
-#' @importFrom plotly layout
-#' @importFrom grDevices colorRampPalette
+#' @importFrom plotly plot_ly layout add_markers colorbar
+#' @importFrom stringr str_glue
+#' @importFrom dplyr mutate_at
+#' @importFrom tidyr unite
 #'
-#' @return If do.return is TRUE, a plotly object.
+#' @return
 #' @export
 #'
-#' @examples
-FeaturePlotly3D <- function(seuratObj,
-                            feature.use = NULL,
-                            do.return = FALSE,
-                            pt.scale = 0.5,
-                            pt.shape = "circle",
+FeaturePlotly3D <- FeaturePlotly3d <- function(object,
+                            feature = NULL,
+                            reduction = "umap",
+                            assay = NULL,
+                            slot = NULL,
                             opacity = 1,
-                            reduction.use = "tsne",
-                            dim.1 = 1,
-                            dim.2 = 2,
-                            dim.3 = 3,
-                            colors.use = "Reds",
+                            filter_zeros = TRUE,
+                            dim_1 = 1,
+                            dim_2 = 2,
+                            dim_3 = 3,
+                            pt_scale = 0.5,
+                            pt_shape = "circle",
+                            colors_use = "Red",
                             bins = 10,
-                            plot.height = 900,
-                            plot.width = 900,
-                            plot.title = FALSE,
-                            pt.info = NULL,
+                            plot_height = 900,
+                            plot_width = 900,
+                            plot_title = FALSE,
+                            pt_info = NULL,
                             legend = TRUE,
-                            legend.font.size = 12,
-                            plot.grid = FALSE,
-                            plot.axes = FALSE){
+                            legend_font_size = 12,
+                            plot_grid = FALSE,
+                            plot_axes = FALSE,
+                            return = FALSE){
 
-  df <- as.data.frame(GetDimReduction(object = seuratObj,
-                                      reduction.type = reduction.use,
-                                      slot = "cell.embeddings"))
-  dim.code <- GetDimReduction(
-    object = seuratObj,
-    reduction.type = reduction.use,
-    slot = "key"
-  )
+  # global variable binding hack
+  cell <- NULL
+  info <- NULL
 
-  dim.axes <- colnames(
-    GetDimReduction(
-      object = seuratObj,
-      reduction.type = reduction.use,
-      slot = "cell.embeddings"
-    )
-  )
+  df <- PrepDr(object,
+               reduction,
+               dim_1 = dim_1,
+               dim_2 = dim_2,
+               dim_3 = dim_3)
 
-  dim.code <- c(dim.axes[[dim.1]], dim.axes[[dim.2]], dim.axes[[dim.3]])
-  cell_names <- rownames(df)
+  df <- PrepInfo(object = object,
+                 pt_info = pt_info,
+                 df = df)
 
-  rownames(df) <- cell_names
-
-  df$x <- df[,1]
-  df$y <- df[,2]
-  df$z <- df[,3]
-
-  if(!is.null(pt.info)){
-    meta.info <- list()
-    # for each row
-    for(i in seq(dim(df)[1])){
-      # for each member of pt.info
-      rowinfo = ""
-      for(j in 1:length(pt.info)){
-        rowinfo <- paste0(rowinfo, " </br> ", pt.info[j], ": ", seuratObj@meta.data[i, pt.info[j]])
-      }
-      meta.info <- c(meta.info, rowinfo)
+  if (is.null(feature)){
+    stop("No gene or feature given")
     }
-    meta.info <- unlist(meta.info)
-    df$meta.info <- seuratObj@ident
+
+  if (is.null(feature)){ stop("No gene or feature given") }
+
+  df <- GetFeatureValues(object = object,
+                         df = df,
+                         feature = feature,
+                         bins = bins,
+                         use.scaled = TRUE,
+                         assay = assay,
+                         suffix = "expr")
+  df <- GetFeatureValues(object = object,
+                         df = df,
+                         feature = feature,
+                         use.scaled = TRUE,
+                         assay = assay,
+                         suffix = "size")
+  df[[str_glue("{feature}_size")]] <- df[[str_glue("{feature}_size")]] * pt_scale
+
+  md <- GetFeatureValues(object = object,
+                         features = c(pt_info, "ident")) %>%
+    mutate_at(vars(-cell),
+              list(~paste0('</br> ', substitute(.), ": ", .))) %>%
+    unite(info, -cell)
+
+  df %<>% inner_join(md)
+
+  if (isTRUE(plot_title)){
+    plot_title = feature
+  } else {
+    plot_title = NULL
   }
 
-  if (is.null(feature.use)){ stop("No gene or feature given") }
+  pal <- PrepQuantitativePalette(bins = bins,
+                                palette = colors_use)
 
-  feature.data <- FetchData(object = seuratObj,
-                            vars.all = feature.use,
-                            use.scaled = TRUE)
-  size.data <- FetchData(object = seuratObj,
-                         vars.all = feature.use,
-                         use.scaled = FALSE)
-  feature.data[,1][feature.data[,1] == 0] <- NA
-  feature.data <- as.matrix(feature.data)
-  cut.feature.data <- as.numeric(as.factor(x = cut(x = as.numeric(x = feature.data), breaks = bins)))
-  df[,"feature"] <- cut.feature.data
-  df[,"size"] <- size.data[,1] * pt.scale
-
-  viridis_palettes = c("viridis","inferno","magma","plasma","cividis")
-
-  if (colors.use %in% rownames(brewer.pal.info)){
-    pal <- colorRampPalette(brewer.pal(brewer.pal.info[colors.use,]$maxcolors,colors.use))(bins)
-  } else if (colors.use %in% viridis_palettes){
-    pal <- viridis(n = bins, option = colors.use)
+  if (isTRUE(plot_title)){
+    plot_title = feature
   } else {
-    pal <- colors.use
+    plot_title = NULL
   }
 
-  if (isTRUE(plot.title)){
-    plot.title = feature.use
-  } else {
-    plot.title = NULL
+  if (filter_zeros){
+    df %<>% filter(get(str_glue("{feature}_size")) > 0)
   }
 
   p <- plot_ly(df,
                x = ~x,
                y = ~y,
                z = ~z,
-               color = ~feature,
+               #color = ~feature,
                mode = 'markers',
                type = "scatter3d",
-               colors = pal,
-               size = ~size,
-               sizes = c(0,max(df$size)),
-               marker = list(symbol = pt.shape,
+               #colors = pal,
+               #size = ~size,
+               #sizes = c(0,max(df$size)),
+               marker = list(symbol = pt_shape,
                              opacity = opacity,
-                             sizemode = "diameter"
-               ),
-               width = plot.width,
-               height = plot.height,
+                             size = ~get(str_glue("{feature}_size")),
+                             sizes = c(0,max(df[[str_glue("{feature}_size")]])),
+                             color = ~get(str_glue("{feature}_expr")),
+                             colors=pal,
+                             line = list(width = 0)),
+               width = plot_width,
+               height = plot_height,
                showlegend = legend) %>%
-    layout(title = plot.title,
+    layout(title = plot_title,
            scene = list(
-             xaxis = list(title = dim.axes[as.numeric(dim.1)], showgrid = plot.grid, visible = plot.axes),
-             yaxis = list(title = dim.axes[as.numeric(dim.2)], showgrid = plot.grid, visible = plot.axes),
-             zaxis = list(title = dim.axes[as.numeric(dim.3)], showgrid = plot.grid, visible = plot.axes)
-           ),
-           margin = c(100,NA,NA,NA)
-    )
+             xaxis = list(title = str_glue("{reduction}_{dim_1}"), showgrid = plot_grid, visible = plot_axes),
+             yaxis = list(title = str_glue("{reduction}_{dim_2}"), showgrid = plot_grid, visible = plot_axes),
+             zaxis = list(title = str_glue("{reduction}_{dim_3}"), showgrid = plot_grid, visible = plot_axes)),
+           margin = c(100,NA,NA,NA))
 
-  if(!is.null(pt.info)){
-    p <- p %>% add_markers(hoverinfo = "text",
-                           hovertext = paste(~meta.info, ~feature),
-                           showlegend = FALSE,
-
-    )
+  if(!is.null(pt_info)){
+    p %<>% add_markers(hoverinfo = "text",
+                       hovertext = paste(~meta_info, ~feature),
+                       showlegend = FALSE)
   }
 
   p <- p %>% layout(legend = list(
     font = list(
-      size = legend.font.size)))
+      size = legend_font_size)))
 
-  if (isTRUE(do.return)){
-    return(p)
+  if (isTRUE(return)){
+    return(df)
   } else {
-    p
+    return(p)
   }
 }

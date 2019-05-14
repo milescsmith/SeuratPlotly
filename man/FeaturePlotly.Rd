@@ -4,47 +4,56 @@
 \alias{FeaturePlotly}
 \title{FeaturePlotly}
 \usage{
-FeaturePlotly(seuratObj, feature.use = NULL, do.return = TRUE,
-  pt.scale = 5, pt.shape = "circle", opacity = 1,
-  reduction.use = "tsne", dim.1 = 1, dim.2 = 2,
-  colors.use = "Reds", bins = 10, plot.height = 900,
-  plot.width = 900, plot.title = FALSE, pt.info = NULL,
-  legend = TRUE, legend.font.size = 12)
+FeaturePlotly(object, feature = NULL, reduction = "umap",
+  assay = NULL, slot = NULL, filter_zeros = TRUE, dim_1 = 1,
+  dim_2 = 2, pt_scale = 5, pt_shape = "circle", opacity = 1,
+  colors_use = "Red", reverse_color_scale = FALSE, bins = 10,
+  plot_height = 900, plot_width = 900, plot_title = FALSE,
+  pt_info = NULL, legend = TRUE, legend_font_size = 12,
+  return = FALSE)
 }
 \arguments{
-\item{seuratObj}{Seurat object}
+\item{object}{Seurat object}
 
-\item{feature.use}{Variable to display. Currently only works with gene names}
+\item{feature}{Feature values to display. Works with anything \code{Seurat::\link[Seurat]{FetchData}} can retrieve.}
 
-\item{do.return}{Return the plot object instead of displaying it (default: FALSE)}
+\item{reduction}{Dimensional reduction to display. Default: umap}
 
-\item{pt.scale}{Factor by which to multiply the size of the points (default: 5)}
+\item{assay}{Assay to pull values from for feature. Default: NULL}
 
-\item{pt.shape}{Shape to use for the points (default = circle)}
+\item{slot}{Slot to pull values from for feature. Default: NULL}
 
-\item{opacity}{Transparency level to use for the points, on a 0-1 scale (default: 1)}
+\item{filter_zeros}{Remove points with no expression data. Default: TRUE}
 
-\item{reduction.use}{Dimensional reduction to display (default: tsne)}
+\item{dim_1}{Dimension to display on the x-axis. Default: 1}
 
-\item{dim.1}{Dimension to display on the x-axis (default: 1)}
+\item{dim_2}{Dimension to display on the y-axis. Default: 2}
 
-\item{dim.2}{Dimension to display on the y-axis (default: 2)}
+\item{pt_scale}{Factor by which to multiply the size of the points. Default: 5}
 
-\item{colors.use}{Color palette to use.  Palettes from RColorBrewer and viridis. (default: Reds)}
+\item{pt_shape}{Shape to use for the points. Default = circle}
 
-\item{bins}{Number of bins to use in dividing expression levels. (default: 10)}
+\item{opacity}{Transparency level to use for the points, on a 0-1 scale. Default: 1}
 
-\item{plot.height}{Plot height in pixels (default: 900)}
+\item{colors_use}{Color palette to use. Default: Reds}
 
-\item{plot.width}{Plot width in pixels (default: 900)}
+\item{reverse_color_scale}{Reverse the color scale. Default = FALSE}
 
-\item{plot.title}{Display title with the name of the feature? (default TRUE)}
+\item{bins}{Number of bins to use in dividing expression levels.. Default: 10}
 
-\item{pt.info}{Meta.data columns to add to the hoverinfo popup. (default: ident)}
+\item{plot_height}{Plot height in pixels. Default: 900}
 
-\item{legend}{Display legend? (default: TRUE)}
+\item{plot_width}{Plot width in pixels. Default: 900}
 
-\item{legend.font.size}{Legend font size (default: 12)}
+\item{plot_title}{Display title with the name of the feature?. Default TRUE}
+
+\item{pt_info}{Meta.data columns to add to the hoverinfo popup. Default: ident}
+
+\item{legend}{Display legend?. Default: TRUE}
+
+\item{legend_font_size}{Legend font size. Default: 12}
+
+\item{return}{Return the plot dataframe instead of displaying it. Default: FALSE}
 }
 \value{
 plotly object
@@ -53,5 +62,5 @@ plotly object
 Create a scatterplot of a given dimensional reduction set for a Seurat object,
 coloring and sizing points by the expression level of the chosen feature.
 Requrires a Seurat object with the reduction to be used in the corresponding
-seuratObj@dr slot
+object@dr slot
 }

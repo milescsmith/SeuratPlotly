@@ -2,40 +2,45 @@
 #'
 #' Produces a Bubble Plot for the genes of a given GO term.
 #'
-#' @param seuratObj Seurat object
+#' @param object Seurat object
 #' @param go_term Gene Ontology term identifier (i.e. GO:0046774)
-#' @param group.by Factor by which to group cells.  (default: ident)
-#' @param plot.height Plot height in pixels. (default: 900)
-#' @param plot.width Plot width in pixels. (default: 900)
-#' @param filter A list of gene names to filter the GO term members against. (default: seuratObj@var.genes)
-#' @param ...options to pass to BubblePlotly
+#' @param grouping_var Factor by which to group cells.  Default: ident
+#' @param plot_height Plot height in pixels. Default: 900
+#' @param gene_filter Display only genes in this list. Default: NULL
+#' @param ... Additional arguments to pass to BubblePlotly
+#' @param plot_width Plot width in pixels. (default: 900)
 #'
-#' @import dplyr
-#' @importFrom magrittr "%>%"
+#' @importFrom dplyr select distinct filter
 #'
 #' @return
 #' @export
 #'
-#' @examples
-GOBubblePlotly <- function(seuratObj,
+GOBubblePlotly <- function(object,
                            go_term,
-                           group.by = "ident",
-                           plot.height = 900,
-                           plot.width = 900,
-                           filter = seuratObj@var.genes,
+                           grouping_var = "ident",
+                           plot_height = 900,
+                           plot_width = 900,
+                           gene_filter = NULL,
                            ...){
 
+  hgnc_symbol <- NULL
+
+  if(missing(go_term)){
+    stop("No GO term supplied")
+  }
   go_genes_to_plot <- retrieveGO(go_term) %>%
                       select(hgnc_symbol) %>%
                       distinct() %>%
-                      filter(hgnc_symbol %in% filter)
+  if (!is.null(gene_filter)){
+    filter(hgnc_symbol %in% gene_filter)
+  }
 
   if(length(go_genes_to_plot) > 0){
-    BubblePlotly(seuratObj,
-                 genes.plot = go_genes_to_plot$hgnc_symbol,
-                 group.by = group.by,
-                 plot.height = plot.height,
-                 plot.width = plot.width,
+    BubblePlotly(object,
+                 features_plot = go_genes_to_plot$hgnc_symbol,
+                 grouping_var = grouping_var,
+                 plot_height = plot_height,
+                 plot_width = plot_width,
                  ...)
   } else {
     print("No genes for that term are expressed in the dataset.")

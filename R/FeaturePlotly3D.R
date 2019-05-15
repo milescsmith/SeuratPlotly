@@ -51,14 +51,14 @@ FeaturePlotly3D <- FeaturePlotly3d <- function(object,
                             pt_shape = "circle",
                             colors_use = "Red",
                             bins = 10,
-                            plot_height = 900,
-                            plot_width = 900,
+                            plot_height = 750,
+                            plot_width = 750,
                             plot_title = FALSE,
                             pt_info = NULL,
                             legend = TRUE,
                             legend_font_size = 12,
                             plot_grid = FALSE,
-                            plot_axes = FALSE,
+                            plot_axes = TRUE,
                             return = FALSE){
 
   # global variable binding hack

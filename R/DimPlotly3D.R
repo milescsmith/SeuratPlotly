@@ -39,7 +39,6 @@ DimPlotly3d <- DimPlotly3D <- function(object,
                                        label_size = 12,
                                        label_color = "000000",
                                        show_arrow = FALSE,
-                                       return = FALSE,
                                        pt_size = 2,
                                        pt_shape = "circle",
                                        opacity = 1,
@@ -47,14 +46,15 @@ DimPlotly3d <- DimPlotly3D <- function(object,
                                        dim_2 = 2,
                                        dim_3 = 3,
                                        palette = "Set1",
-                                       plot_height = 900,
-                                       plot_width = 900,
+                                       plot_height = 750,
+                                       plot_width = 750,
                                        plot_title = NULL,
                                        pt_info = NULL,
                                        legend = TRUE,
                                        legend_font_size = 12,
                                        plot_grid = FALSE,
-                                       plot_axes = FALSE) {
+                                       plot_axes = TRUE,
+                                       return = FALSE) {
   ident <- NULL
   x <- NULL
   y <- NULL
@@ -145,27 +145,23 @@ DimPlotly3d <- DimPlotly3D <- function(object,
       title = plot_title,
       scene = list(
         aspectratio = list(
-          x = 0,
-          y = 0,
-          z = -1
-        ),
+          x = 1,
+          y = 1,
+          z = 1),
         camera = list(
           center = list(
             x = 0,
             y = 0,
-            z = 0
-          ),
+            z = 0),
           eye = list(
             x = 2,
             y = -1,
             z = 0.5
           ),
           up = list(
-            x = 1,
+            x = 0,
             y = 0,
-            z = 0
-          )
-        ),
+            z = 1)),
         dragmode = "turnable",
         xaxis = list(
           title = str_glue("{reduction}_{dim_1}"),
